@@ -1,0 +1,17 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Shreyash & Alisha Wedding//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:shreyash-alisha-wedding-20261204@shreyashwedsalisha
+DTSTAMP:20261125T193000Z
+DTSTART:20261204T053000Z
+DTEND:20261205T173000Z
+SUMMARY:Shreyash & Alisha Wedding Celebrations
+DESCRIPTION:Join us in celebrating the wedding of Shreyash Itankar & Alisha Tidke! Ceremonies begin 4th December 2026 at 11:00 AM, followed by Varmala & Grand Reception on 5th December 2026.
+LOCATION:Jalaram Lawns, Gondia, Maharashtra 441601
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+END:VCALENDAR
