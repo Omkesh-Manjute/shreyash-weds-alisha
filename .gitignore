@@ -1,3 +1,6 @@
 .DS_Store
 .netlify/
 *.pdf
+APIKey.csv
+*.csv
+.env*

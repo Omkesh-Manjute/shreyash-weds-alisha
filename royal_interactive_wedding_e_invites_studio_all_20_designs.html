@@ -1,0 +1,2901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>20 Royal Interactive Wedding E-Invites — Live Preview Studio</title>
+
+  <!-- Google Fonts for Landing Page + All 20 Themes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Allura&family=Amita:wght@700&family=Arapey:ital@0;1&family=Ballet:opsz@16..72&family=Berkshire+Swash&family=Birthstone+Bounce:wght@500&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600;700&family=Corinthia:wght@700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Cormorant+SC:wght@400;600;700&family=DM+Serif+Display:ital@0;1&family=Dancing+Script:wght@600;700&family=Della+Respira&family=Forum&family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Gilda+Display&family=Gloock&family=Great+Vibes&family=Imperial+Script&family=Italiana&family=Italianno&family=Kaushan+Script&family=Libre+Caslon+Display&family=Marcellus&family=Marcellus+SC&family=Montserrat:wght@300;400;500;600;700&family=Parisienne&family=Petit+Formal+Script&family=Pinyon+Script&family=Playfair+Display+SC:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Prata&family=Rozha+One&family=Sacramento&family=Tangerine:wght@700&family=WindSong:wght@500&family=Yeseva+One&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            studioIvory: '#fbf7f1',
+            studioBlush: '#f5eae3',
+            studioWine: '#6e1f2f',
+            studioWineDark: '#4a101d',
+            studioGold: '#c29b57',
+            studioGoldLight: '#ebd6a7'
+          },
+          fontFamily: {
+            display: ['"Playfair Display"', 'Georgia', 'serif'],
+            cinzel: ['"Cinzel"', 'serif'],
+            sans: ['"Montserrat"', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* =====================================================================
+       GLOBAL STUDIO & PHONE SIMULATOR STYLES
+       ===================================================================== */
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(180deg, #fbf7f1 0%, #f6ece5 45%, #fbf7f1 100%);
+      color: #3b1c22;
+      overflow-x: hidden;
+    }
+
+    /* Subtle shimmer on showcase preview stages */
+    @keyframes stageShimmer {
+      0% { transform: translateX(-120%) skewX(-18deg); }
+      100% { transform: translateX(220%) skewX(-18deg); }
+    }
+    .preview-stage::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      width: 45%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+      transform: translateX(-120%) skewX(-18deg);
+      animation: stageShimmer 5.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+    .float-slow { animation: floatSlow 3.8s ease-in-out infinite; }
+
+    /* =====================================================================
+       SMARTPHONE SIMULATOR MODAL
+       ===================================================================== */
+    #preview-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(20, 8, 12, 0.84);
+      backdrop-filter: blur(10px);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+    #preview-modal.open { display: flex; }
+
+    .phone-bezel {
+      position: relative;
+      width: 100%;
+      max-width: 394px;
+      height: min(812px, calc(100dvh - 84px));
+      background: #141112;
+      border-radius: 44px;
+      padding: 10px;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.65), 0 0 0 2px rgba(235, 214, 167, 0.35);
+      display: flex;
+      flex-direction: column;
+    }
+    @media (max-width: 520px) {
+      #preview-modal { padding: 0; }
+      .phone-bezel {
+        max-width: 100%;
+        height: calc(100dvh - 58px);
+        border-radius: 0;
+        padding: 0;
+        box-shadow: none;
+      }
+      .phone-notch { display: none !important; }
+      .phone-screen { border-radius: 0 !important; }
+    }
+
+    .phone-notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 112px;
+      height: 22px;
+      background: #141112;
+      border-radius: 0 0 14px 14px;
+      z-index: 65;
+      pointer-events: none;
+    }
+
+    .phone-screen {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 34px;
+      overflow: hidden;
+      background: var(--t-bg-1, #fbf7f1);
+      color: var(--t-text, #421f28);
+    }
+
+    /* Scrollable invite container inside phone */
+    #phone-scroll {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      background: linear-gradient(180deg, var(--t-bg-1) 0%, var(--t-bg-2) 50%, var(--t-bg-1) 100%);
+      scrollbar-width: none;
+    }
+    #phone-scroll::-webkit-scrollbar { display: none; }
+    #phone-scroll.locked { overflow: hidden; }
+
+    /* Phone internal canvas for petals & confetti */
+    #phone-fx-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 60;
+    }
+
+    /* Ambient flowers & hanging strings inside phone */
+    .phone-ambient {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 25;
+      overflow: hidden;
+    }
+    @keyframes swayGentle {
+      0%, 100% { transform: rotate(-3deg); }
+      50% { transform: rotate(3deg); }
+    }
+    .hanging-str { transform-origin: top center; animation: swayGentle 4.8s ease-in-out infinite; }
+    .corner-flw { transition: transform 0.25s ease-out; }
+
+    /* =====================================================================
+       OPENING OVERLAY & 20 UNIQUE OPENING ANIMATIONS
+       ===================================================================== */
+    #opening-stage {
+      position: absolute;
+      inset: 0;
+      z-index: 55;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+      perspective: 1200px;
+    }
+    #opening-stage.done {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    #opening-stage.zooming .open-visual-wrap {
+      transform: scale(2.15);
+      opacity: 0.2;
+    }
+    .open-visual-wrap {
+      position: relative;
+      transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1), opacity 1s ease;
+      transform-style: preserve-3d;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(0.9); opacity: 0.9; }
+      50% { transform: scale(1.28); opacity: 0.35; }
+    }
+    .pulse-ring { animation: pulseDot 1.9s ease-in-out infinite; }
+
+    /* Opening 1: Rose Gate & Opening 2: Jharokha */
+    .gate-door-l, .gate-door-r {
+      transition: transform 1.5s cubic-bezier(0.32, 0.08, 0.24, 1);
+      backface-visibility: hidden;
+    }
+    .gate-door-l { transform-origin: left center; }
+    .gate-door-r { transform-origin: right center; }
+    .opened .gate-door-l { transform: rotateY(-112deg); }
+    .opened .gate-door-r { transform: rotateY(112deg); }
+
+    /* Opening 3: Lotus Bloom */
+    .lotus-petal {
+      transform-origin: bottom center;
+      transition: transform 1.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.2s ease;
+    }
+    .opened .lotus-petal { transform: rotate(var(--ang)) translateY(-8px) scale(1.08); }
+
+    /* Opening 4: Genda Curtain */
+    .genda-str {
+      transition: transform 1.5s cubic-bezier(0.25, 0.9, 0.3, 1);
+    }
+    .opened .genda-left { transform: translateX(-145px) scaleX(0.45); }
+    .opened .genda-right { transform: translateX(145px) scaleX(0.45); }
+
+    /* Opening 5: Shagun Box */
+    .shagun-lid { transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease; }
+    .opened .shagun-lid { transform: translate(75px, -110px) rotate(26deg); opacity: 0; }
+    .shagun-card { transition: transform 1.3s cubic-bezier(0.22, 1, 0.36, 1) 0.25s, opacity 0.8s ease 0.2s; transform: translateY(45px) scale(0.82); opacity: 0; }
+    .opened .shagun-card { transform: translateY(-48px) scale(1); opacity: 1; }
+
+    /* Opening 6: Peacock Fan */
+    .peacock-feather {
+      transform-origin: bottom center;
+      transition: transform 1.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.8s ease;
+      transform: rotate(0deg) scale(0.45);
+      opacity: 0;
+    }
+    .opened .peacock-feather { transform: rotate(var(--fang)) scale(1); opacity: 1; }
+
+    /* Opening 7: Veil Lift */
+    .bridal-veil {
+      transform-origin: top center;
+      transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.3s ease;
+    }
+    .opened .bridal-veil { transform: translateY(-68%) rotateX(72deg); opacity: 0; }
+
+    /* Opening 8: Moonrise Clouds */
+    .moon-cloud { transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.4s ease; }
+    .opened .cloud-l { transform: translateX(-190px); opacity: 0; }
+    .opened .cloud-r { transform: translateX(190px); opacity: 0; }
+
+    /* Opening 9: Chunri Unfold */
+    .chunri-flap { transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease; }
+    .chunri-t { transform-origin: top center; }
+    .chunri-b { transform-origin: bottom center; }
+    .chunri-l { transform-origin: left center; }
+    .chunri-r { transform-origin: right center; }
+    .opened .chunri-t { transform: rotateX(150deg); opacity: 0; }
+    .opened .chunri-b { transform: rotateX(-150deg); opacity: 0; transition-delay: 0.18s; }
+    .opened .chunri-l { transform: rotateY(-150deg); opacity: 0; transition-delay: 0.34s; }
+    .opened .chunri-r { transform: rotateY(150deg); opacity: 0; transition-delay: 0.5s; }
+
+    /* Opening 10: Butterflies */
+    @keyframes wingFlap {
+      0%, 100% { transform: scaleX(1); }
+      50% { transform: scaleX(0.45); }
+    }
+    .bfly { transition: transform 1.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.4s ease; }
+    .bfly svg { animation: wingFlap 0.38s ease-in-out infinite; }
+    .opened .bfly { transform: translate(var(--tx), var(--ty)) rotate(var(--rot)) scale(0.35); opacity: 0; }
+
+    /* Opening 11: Black Envelope */
+    .env-flap { transform-origin: top center; transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1); }
+    .opened .env-flap { transform: rotateX(180deg); }
+    .env-card { transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s, opacity 0.7s ease 0.2s; transform: translateY(30px); opacity: 0; }
+    .opened .env-card { transform: translateY(-72px); opacity: 1; }
+
+    /* Opening 12: Theatre Curtains */
+    .curtain-l, .curtain-r { transition: transform 1.65s cubic-bezier(0.22, 1, 0.36, 1); }
+    .curtain-l { transform-origin: left center; }
+    .curtain-r { transform-origin: right center; }
+    .opened .curtain-l { transform: scaleX(0.16) translateX(-18px); }
+    .opened .curtain-r { transform: scaleX(0.16) translateX(18px); }
+
+    /* Opening 13: Shattering Frosted Glass */
+    .glass-shard { transition: transform 1.25s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.1s ease; }
+    .opened .glass-shard { transform: translate(var(--sx), var(--sy)) rotate(var(--srot)) scale(0.5); opacity: 0; }
+
+    /* Opening 14: Marble Doors */
+    .marble-l, .marble-r { transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+    .opened .marble-l { transform: translateX(-105%); }
+    .opened .marble-r { transform: translateX(105%); }
+
+    /* Opening 15: Fan of Cards */
+    .fan-card { transform-origin: bottom center; transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
+    .opened .fan-card { transform: rotate(var(--fan)) translateY(var(--fy)); }
+
+    /* Opening 16: Gold Iris */
+    .iris-blade { transform-origin: 100px 100px; transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.2s ease; }
+    .opened .iris-blade { transform: rotate(var(--irot)) translate(42px, -42px) scale(0.4); opacity: 0; }
+
+    /* Opening 17: Rangoli Draws Itself */
+    .rangoli-path { stroke-dasharray: 420; stroke-dashoffset: 420; transition: stroke-dashoffset 1.6s ease, fill-opacity 0.8s ease 0.8s; fill-opacity: 0; }
+    .opened .rangoli-path { stroke-dashoffset: 0; fill-opacity: 0.85; }
+    .opened .rangoli-spin { animation: spinSlow 14s linear infinite; }
+    @keyframes spinSlow { to { transform: rotate(360deg); } }
+
+    /* Opening 18: Oyster & Pearl */
+    .oyster-top { transform-origin: center bottom; transition: transform 1.3s cubic-bezier(0.22, 1, 0.36, 1); }
+    .opened .oyster-top { transform: rotateX(118deg) translateY(-16px); }
+    .oyster-pearl { transition: transform 1.35s cubic-bezier(0.22, 1, 0.36, 1) 0.25s, opacity 0.8s ease; transform: scale(0.35) translateY(15px); opacity: 0.4; }
+    .opened .oyster-pearl { transform: scale(1.25) translateY(-48px); opacity: 1; }
+
+    /* Opening 19: Wreath Grows */
+    .wreath-leaf { transform: scale(0); opacity: 0; transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s ease; }
+    .opened .wreath-leaf { transform: scale(1); opacity: 1; }
+
+    /* Opening 20: Glass Cloche */
+    .cloche-dome { transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.2s ease; }
+    .opened .cloche-dome { transform: translate(35px, -135px) rotate(14deg); opacity: 0; }
+
+    /* =====================================================================
+       HERO & SECTIONS INSIDE PHONE
+       ===================================================================== */
+    .invite-hero {
+      position: relative;
+      min-height: 100%;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 16px 14px 18px;
+    }
+
+    @keyframes slowKenBurns {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.1); }
+    }
+    .hero-bg-zoom { animation: slowKenBurns 16s ease-in-out infinite alternate; }
+
+    .char-pop {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(8px);
+      filter: blur(4px);
+      transition: opacity 0.55s ease, transform 0.55s ease, filter 0.55s ease;
+    }
+    .char-pop.show { opacity: 1; transform: translateY(0); filter: blur(0); }
+
+    /* Date Reveal common transitions */
+    .dr-rose-petal { transform-origin: center center; transition: transform 1.2s ease, opacity 1.1s ease; }
+    .dr-revealed .dr-rose-petal { transform: rotate(var(--ra)) translateY(-88px) scale(0.5); opacity: 0; }
+
+    .dr-page-cover { transform-origin: left center; transition: transform 1.25s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s ease 0.9s; }
+    .dr-revealed .dr-page-cover { transform: rotateY(-172deg); opacity: 0; pointer-events: none; }
+
+    .dr-door-l { transform-origin: left center; transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
+    .dr-door-r { transform-origin: right center; transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
+    .dr-revealed .dr-door-l { transform: rotateY(-108deg); }
+    .dr-revealed .dr-door-r { transform: rotateY(108deg); }
+
+    .dr-hedge-l, .dr-hedge-r { transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1); }
+    .dr-revealed .dr-hedge-l { transform: translateX(-105%); }
+    .dr-revealed .dr-hedge-r { transform: translateX(105%); }
+
+    .dr-sticker { transform-origin: top left; transition: transform 1.1s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.9s ease; }
+    .dr-revealed .dr-sticker { transform: translate(-110px, -110px) rotate(-38deg) scale(0.45); opacity: 0; pointer-events: none; }
+
+    /* 3D Flip Cards (Design 12) */
+    .flip-card-wrap { perspective: 900px; height: 172px; cursor: pointer; }
+    .flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1); transform-style: preserve-3d; }
+    .flip-card-wrap.flipped .flip-card-inner { transform: rotateY(180deg); }
+    .flip-front, .flip-back { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 16px; overflow: hidden; }
+    .flip-back { transform: rotateY(180deg); }
+
+    /* Stacked Card Deck (Design 14) */
+    .deck-card {
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease;
+      cursor: pointer;
+    }
+
+    /* Film strip snap scroll (Design 15) */
+    .film-strip {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 10px 24px 18px;
+      scrollbar-width: none;
+    }
+    .film-strip::-webkit-scrollbar { display: none; }
+
+    /* Map animated dash */
+    @keyframes dashMove { to { stroke-dashoffset: -24; } }
+    .map-route { stroke-dasharray: 6 6; animation: dashMove 1.3s linear infinite; }
+
+    /* Toast */
+    #studio-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      z-index: 250;
+      background: #4a101d;
+      color: #fbf7f1;
+      border: 1px solid rgba(235, 214, 167, 0.65);
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      white-space: nowrap;
+    }
+    #studio-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+
+<body>
+  <!-- Reusable Crisp Ganesha Vector Symbol -->
+  <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+    <defs>
+      <symbol id="ganesh-icon" viewBox="0 0 100 100">
+        <path d="M50 8 C46.5 12 46.5 16 50 18.5 C53.5 16 53.5 12 50 8 Z" fill="currentColor"/>
+        <path d="M40 22 C43 18.5 57 18.5 60 22 C57 24.5 43 24.5 40 22 Z" fill="currentColor"/>
+        <path d="M35 28 C40 23.5 60 23.5 65 28 C61 31 39 31 35 28 Z" fill="currentColor"/>
+        <path d="M31 35 C38 30 62 30 69 35 C65 37.5 35 37.5 31 35 Z" fill="currentColor"/>
+        <path d="M31 40 C19 36 11 42 13 54 C14.5 62 21 67 27 65 C22 61 21 53 27 48 C29 46 31 43 31 40 Z" fill="currentColor"/>
+        <path d="M69 40 C81 36 89 42 87 54 C85.5 62 79 67 73 65 C78 61 79 53 73 48 C71 46 69 43 69 40 Z" fill="currentColor"/>
+        <path d="M35 39 C41 36 59 36 65 39 C68 43 67 51 62 56 C57 61 52 66 53 73 C54 78 58 80 62 78 C66 76 67 71 64 68 C61.5 66 58.5 68 59.5 71 C56 72 56 66 60 64 C66 61 73 66 72 75 C71 84 61 90 51 88 C41 86 38 77 41 67 C43 61 45 58 43 54 C38 51 33 46 35 39 Z" fill="currentColor"/>
+        <path d="M44 43 Q50 40.5 56 43" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.85"/>
+        <circle cx="50" cy="48.5" r="1.5" fill="#ffffff" opacity="0.9"/>
+        <path d="M39 51.5 Q42.5 54 46 51.5" stroke="#ffffff" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+        <path d="M54 51.5 Q57.5 54 61 51.5" stroke="#ffffff" stroke-width="1.7" stroke-linecap="round" fill="none"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- Toast Notification -->
+  <div id="studio-toast" role="status" aria-live="polite"></div>
+
+  <!-- =====================================================================
+       PART 1: LUXURY LANDING PAGE & SHOWCASE STUDIO
+       ===================================================================== -->
+  <header class="relative overflow-hidden border-b border-studioGold/25 bg-[radial-gradient(ellipse_at_top,#fffdf9_0%,#f7ebe3_60%,#efe0d5_100%)]">
+    <!-- Subtle Royal Corner Ornaments -->
+    <div class="pointer-events-none absolute -top-24 -left-24 w-72 h-72 rounded-full bg-studioWine/5 blur-3xl"></div>
+    <div class="pointer-events-none absolute -bottom-24 -right-24 w-80 h-80 rounded-full bg-studioGold/15 blur-3xl"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-14 sm:pt-8 sm:pb-16 relative z-10">
+      <!-- Top Studio Brand Bar -->
+      <nav class="flex items-center justify-between mb-10 sm:mb-12">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-studioWine text-studioGoldLight flex items-center justify-center shadow-md border border-studioGold/50">
+            <svg class="w-5 h-5"><use href="#ganesh-icon"></use></svg>
+          </div>
+          <div>
+            <p class="font-cinzel text-xs sm:text-sm font-bold tracking-[0.18em] text-studioWine uppercase">Royal E-Invite Studio</p>
+            <p class="text-[10px] tracking-[0.14em] text-studioWine/65 uppercase">Interactive Luxury Collection</p>
+          </div>
+        </div>
+        <button id="hero-random-btn" type="button"
+                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-studioWine text-studioIvory text-[11px] font-semibold tracking-[0.12em] uppercase shadow-md hover:bg-studioWineDark transition-all">
+          <span>Try Random Invite</span>
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </nav>
+
+      <!-- Hero Copy -->
+      <div class="text-center max-w-3xl mx-auto">
+        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/80 border border-studioGold/45 text-[10.5px] font-semibold tracking-[0.2em] text-studioWine uppercase shadow-sm mb-5">
+          <span class="w-2 h-2 rounded-full bg-studioGold"></span>
+          10 Classic Floral &bull; 10 Luxury Editions
+        </span>
+        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold text-studioWine leading-[1.12] tracking-tight">
+          20 Royal Interactive<br />
+          <span class="italic font-normal text-studioGold">Wedding E-Invites</span>
+        </h1>
+        <p class="mt-5 text-sm sm:text-base text-studioWine/80 leading-relaxed max-w-2xl mx-auto">
+          Experience 20 bespoke mobile wedding invitations — each crafted with its own 3D interactive opening, tactile date reveal, custom function layout, live countdown, animated palace map, RSVP &amp; soothing Indian wedding music.
+        </p>
+
+        <!-- Quick Stats Bar -->
+        <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto">
+          <div class="rounded-2xl bg-white/80 backdrop-blur-sm border border-studioGold/35 px-4 py-3 shadow-sm">
+            <p class="font-display text-2xl font-bold text-studioWine">20</p>
+            <p class="text-[10.5px] tracking-[0.12em] uppercase text-studioWine/70 font-medium">Unique Themes</p>
+          </div>
+          <div class="rounded-2xl bg-white/80 backdrop-blur-sm border border-studioGold/35 px-4 py-3 shadow-sm">
+            <p class="font-display text-2xl font-bold text-studioWine">20</p>
+            <p class="text-[10.5px] tracking-[0.12em] uppercase text-studioWine/70 font-medium">3D Openings</p>
+          </div>
+          <div class="rounded-2xl bg-white/80 backdrop-blur-sm border border-studioGold/35 px-4 py-3 shadow-sm">
+            <p class="font-display text-2xl font-bold text-studioWine">20</p>
+            <p class="text-[10.5px] tracking-[0.12em] uppercase text-studioWine/70 font-medium">Date Reveals</p>
+          </div>
+          <div class="rounded-2xl bg-white/80 backdrop-blur-sm border border-studioGold/35 px-4 py-3 shadow-sm">
+            <p class="font-display text-2xl font-bold text-studioWine">10</p>
+            <p class="text-[10.5px] tracking-[0.12em] uppercase text-studioWine/70 font-medium">Function Layouts</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Filter & Live Search Toolbar -->
+  <section class="sticky top-0 z-40 bg-studioIvory/90 backdrop-blur-md border-b border-studioGold/25 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      <!-- Category Tabs -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0" role="tablist">
+        <button data-filter="all" class="filter-tab active shrink-0 px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all bg-studioWine text-studioIvory shadow-sm">
+          All Designs (20)
+        </button>
+        <button data-filter="classic" class="filter-tab shrink-0 px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all bg-white text-studioWine border border-studioGold/40 hover:bg-studioBlush">
+          Classic Floral (01–10)
+        </button>
+        <button data-filter="luxury" class="filter-tab shrink-0 px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all bg-white text-studioWine border border-studioGold/40 hover:bg-studioBlush">
+          Luxury Edition (11–20)
+        </button>
+      </div>
+
+      <!-- Live Search Input -->
+      <div class="relative w-full md:w-80">
+        <svg class="w-4 h-4 text-studioWine/50 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35" stroke-linecap="round"/>
+        </svg>
+        <input id="design-search" type="search" placeholder="Search theme, opening, date reveal..."
+               class="w-full pl-10 pr-4 py-2 rounded-full bg-white border border-studioGold/45 text-xs text-studioWine placeholder:text-studioWine/45 focus:outline-none focus:ring-2 focus:ring-studioGold/50" />
+      </div>
+    </div>
+  </section>
+
+  <!-- 20 Design Showcase Grid -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
+    <div id="design-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+    <div id="empty-search" class="hidden text-center py-16">
+      <p class="font-display text-2xl text-studioWine">No matching wedding themes found</p>
+      <p class="text-xs text-studioWine/65 mt-2">Try searching for "Rose", "Emerald", "Curtains", "Diya", or "Gong".</p>
+    </div>
+  </main>
+
+  <!-- Studio Footer -->
+  <footer class="border-t border-studioGold/25 bg-white/60 py-8 px-4 text-center">
+    <p class="font-display italic text-lg text-studioWine">Aarav Sharma &amp; Ananya Mehta &bull; Demo Showcase</p>
+    <p class="text-[11px] text-studioWine/65 mt-1 tracking-wide">
+      Tap any of the 20 designs above to launch the full interactive smartphone simulator with live motion graphics.
+    </p>
+  </footer>
+
+  <!-- =====================================================================
+       INTERACTIVE LIVE PREVIEW MODAL (SMARTPHONE SIMULATOR)
+       ===================================================================== -->
+  <div id="preview-modal" role="dialog" aria-modal="true" aria-label="Interactive Wedding Invite Simulator">
+    <!-- Top Studio Toolbar -->
+    <div class="w-full max-w-3xl flex flex-wrap items-center justify-between gap-2 px-3 py-2 mb-1 sm:mb-3 rounded-2xl bg-[#1f1216]/95 border border-studioGold/35 text-studioIvory shadow-xl">
+      <!-- Prev / Dropdown / Next -->
+      <div class="flex items-center gap-1.5 flex-1 min-w-[200px]">
+        <button id="sim-prev" type="button" title="Previous Design" class="w-8 h-8 rounded-full bg-white/10 hover:bg-studioGold/30 flex items-center justify-center transition-colors">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <select id="sim-switcher" aria-label="Switch Wedding Theme"
+                class="flex-1 max-w-[220px] bg-white/10 border border-studioGold/40 rounded-full px-3 py-1.5 text-xs font-medium text-studioIvory focus:outline-none">
+        </select>
+        <button id="sim-next" type="button" title="Next Design" class="w-8 h-8 rounded-full bg-white/10 hover:bg-studioGold/30 flex items-center justify-center transition-colors">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <!-- Actions: Replay, Sound, Close -->
+      <div class="flex items-center gap-1.5">
+        <button id="sim-replay" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/10 hover:bg-studioGold/30 text-[11px] font-medium transition-colors">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7L3 8m0-5v5h5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="hidden sm:inline">Replay Opening</span>
+        </button>
+        <button id="sim-sound" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-studioGold/25 border border-studioGold/50 hover:bg-studioGold/40 text-[11px] font-medium transition-colors">
+          <svg id="sim-sound-icon" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          <span id="sim-sound-label">Sound Off</span>
+        </button>
+        <button id="sim-close" type="button" aria-label="Close Preview" class="w-8 h-8 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-100 flex items-center justify-center transition-colors">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Smartphone Frame -->
+    <div class="phone-bezel">
+      <div class="phone-notch"></div>
+      <div id="phone-screen" class="phone-screen">
+        <!-- Internal Petals & Gold Confetti Canvas -->
+        <canvas id="phone-fx-canvas"></canvas>
+
+        <!-- Ambient Parallax Flowers & Hanging Strings -->
+        <div id="phone-ambient" class="phone-ambient"></div>
+
+        <!-- 3D Opening Stage Overlay -->
+        <div id="opening-stage"></div>
+
+        <!-- Scrollable Complete Invite Content -->
+        <div id="phone-scroll" class="locked"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       APPLICATION ENGINE: 20 THEMES, 20 OPENINGS, 20 DATE REVEALS, 10 LAYOUTS
+       ===================================================================== -->
+  <script>
+    (function () {
+      'use strict';
+
+      /* -------------------------------------------------------------------
+       * 1. TOAST NOTIFICATION & CLIPBOARD HELPER
+       * ------------------------------------------------------------------- */
+      let toastTimer = null;
+      function showToast(msg) {
+        const el = document.getElementById('studio-toast');
+        if (!el) return;
+        el.textContent = msg;
+        el.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+      }
+
+      function copyToClipboard(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          showToast('Address copied to clipboard!');
+        } catch (e) {
+          showToast(text);
+        }
+        document.body.removeChild(ta);
+      }
+
+      /* -------------------------------------------------------------------
+       * 2. WEB AUDIO GENTLE INDIAN RAGA WEDDING MELODY (NO EXTERNAL URLS)
+       * ------------------------------------------------------------------- */
+      const WeddingAudio = {
+        ctx: null,
+        master: null,
+        playing: false,
+        timer: null,
+        step: 0,
+        // Raga Yaman (Sa Re Ga Ma# Pa Dha Ni Sa') in Hz
+        notes: [261.63, 293.66, 329.63, 369.99, 392.00, 440.00, 493.88, 523.25],
+        phrase: [0, 2, 4, 5, 4, 2, 3, 2, 1, 0, 2, 4, 6, 7, 6, 4],
+        start() {
+          try {
+            if (!this.ctx) {
+              const AudioCtx = window.AudioContext || window.webkitAudioContext;
+              this.ctx = new AudioCtx();
+              this.master = this.ctx.createGain();
+              this.master.gain.value = 0.0001;
+              this.master.connect(this.ctx.destination);
+            }
+            if (this.ctx.state === 'suspended') this.ctx.resume();
+            if (this.playing) return;
+            this.playing = true;
+            this.master.gain.cancelScheduledValues(this.ctx.currentTime);
+            this.master.gain.exponentialRampToValueAtTime(0.08, this.ctx.currentTime + 1.2);
+            this.loop();
+            this.updateUI();
+          } catch (e) {}
+        },
+        loop() {
+          if (!this.playing || !this.ctx) return;
+          const now = this.ctx.currentTime;
+          const freq = this.notes[this.phrase[this.step % this.phrase.length]];
+          this.step++;
+
+          // Soft sitar/harp-like plucked tone
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, now);
+          gain.gain.setValueAtTime(0.0001, now);
+          gain.gain.linearRampToValueAtTime(0.35, now + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.45);
+          osc.connect(gain);
+          gain.connect(this.master);
+          osc.start(now);
+          osc.stop(now + 1.5);
+
+          // Gentle tanpura drone on every 4th beat
+          if (this.step % 4 === 1) {
+            const drone = this.ctx.createOscillator();
+            const dGain = this.ctx.createGain();
+            drone.type = 'sine';
+            drone.frequency.setValueAtTime(130.81, now);
+            dGain.gain.setValueAtTime(0.0001, now);
+            dGain.gain.linearRampToValueAtTime(0.14, now + 0.6);
+            dGain.gain.exponentialRampToValueAtTime(0.0001, now + 2.8);
+            drone.connect(dGain);
+            dGain.connect(this.master);
+            drone.start(now);
+            drone.stop(now + 2.9);
+          }
+
+          this.timer = setTimeout(() => this.loop(), 680);
+        },
+        stop() {
+          this.playing = false;
+          clearTimeout(this.timer);
+          if (this.ctx && this.master) {
+            this.master.gain.cancelScheduledValues(this.ctx.currentTime);
+            this.master.gain.linearRampToValueAtTime(0.0001, this.ctx.currentTime + 0.35);
+          }
+          this.updateUI();
+        },
+        toggle() {
+          if (this.playing) this.stop();
+          else this.start();
+        },
+        updateUI() {
+          const lbl = document.getElementById('sim-sound-label');
+          if (lbl) lbl.textContent = this.playing ? 'Sound On' : 'Sound Off';
+        }
+      };
+
+      /* -------------------------------------------------------------------
+       * 3. DEMO DATA (USED ACROSS ALL 20 DESIGNS)
+       * ------------------------------------------------------------------- */
+      const DEMO = {
+        groom: 'Aarav Sharma',
+        groomParents: 'Mr. Rajesh Sharma & Mrs. Sunita Sharma',
+        bride: 'Ananya Mehta',
+        brideParents: 'Mr. Vikram Mehta & Mrs. Kavita Mehta',
+        weekday: 'Friday',
+        dayNum: '12',
+        month: 'February',
+        year: '2027',
+        fullDate: 'Friday, 12 February 2027',
+        muhurat: 'Pheras at 10:30 PM',
+        venueName: 'Raj Vilas Palace',
+        venueAddress: 'Amer Road, near Jal Mahal, Jaipur 302002',
+        mapsUrl: 'https://maps.google.com/?q=Raj+Vilas+Palace+Jaipur',
+        closing: 'With love, the Sharma & Mehta families',
+        reception: {
+          date: 'Saturday, 13 February 2027',
+          time: '8:00 PM onwards \u2022 Dinner & dance',
+          place: 'Sheesh Mahal, Raj Vilas Palace',
+          dressCode: 'Black Tie & Sarees'
+        },
+        functions: [
+          { id: 'mata', dayIdx: 0, dayLabel: 'Day 1 \u2022 10 Feb', name: 'Mata Pujan', date: 'Wed, 10 Feb', time: '10:00 AM', place: 'Sharma Residence, Malviya Nagar', dress: 'Traditional wear', color: '#d8c7a3', bg: 'linear-gradient(135deg,#f59e0b,#fde68a)', icon: '\uD83E\uDE94' },
+          { id: 'haldi', dayIdx: 0, dayLabel: 'Day 1 \u2022 10 Feb', name: 'Haldi', date: 'Wed, 10 Feb', time: '3:00 PM', place: 'Garden Lawns, Raj Vilas Palace', dress: 'Wear yellow', color: '#eab308', bg: 'linear-gradient(135deg,#facc15,#fef08a)', icon: '\uD83C\uDF3C' },
+          { id: 'mehendi', dayIdx: 1, dayLabel: 'Day 2 \u2022 11 Feb', name: 'Mehendi', date: 'Thu, 11 Feb', time: '12:00 Noon', place: 'The Courtyard, Raj Vilas Palace', dress: 'Wear green', color: '#65a30d', bg: 'linear-gradient(135deg,#84cc16,#d9f99d)', icon: '\uD83C\uDF3F' },
+          { id: 'sangeet', dayIdx: 1, dayLabel: 'Day 2 \u2022 11 Feb', name: 'Sangeet', date: 'Thu, 11 Feb', time: '7:30 PM', place: 'Darbar Hall, Raj Vilas Palace', dress: 'Indo-western, purple & pink', color: '#a855f7', bg: 'linear-gradient(135deg,#7e22ce,#ec4899)', icon: '\uD83E\uDD41' },
+          { id: 'ghat', dayIdx: 2, dayLabel: 'Day 3 \u2022 12 Feb', name: 'Ghat Sthapana', date: 'Fri, 12 Feb', time: '9:00 AM', place: 'Mandir Courtyard, Raj Vilas Palace', dress: 'Orange & saffron', color: '#ea580c', bg: 'linear-gradient(135deg,#ea580c,#fdba74)', icon: '\uD83C\uDFFA' },
+          { id: 'pheras', dayIdx: 2, dayLabel: 'Day 3 \u2022 12 Feb', name: 'Baraat & Pheras', date: 'Fri, 12 Feb', time: '7:00 PM', place: 'The Mandap, Raj Vilas Palace', dress: 'Festive red & gold', color: '#991b1b', bg: 'linear-gradient(135deg,#991b1b,#d97706)', icon: '\uD83D\uDD25' }
+        ],
+        story: [
+          { title: 'First Glance', sub: 'Jaipur Courtyard', grad: 'linear-gradient(160deg,#f6d5c8,#d99890,#6e1f2f)', motif: 'arch' },
+          { title: 'Under the Stars', sub: 'Rooftop Evening', grad: 'linear-gradient(160deg,#1e1b4b,#4c1d95,#be185d)', motif: 'stars' },
+          { title: 'By the Sea', sub: 'Golden Sunset', grad: 'linear-gradient(160deg,#0e7490,#38bdf8,#fde68a)', motif: 'sea' },
+          { title: 'Racing Up Together', sub: 'Palace Steps', grad: 'linear-gradient(160deg,#b45309,#f59e0b,#fef3c7)', motif: 'steps' },
+          { title: 'Forever Begins', sub: 'The Proposal', grad: 'linear-gradient(160deg,#831843,#db2777,#fbcfe8)', motif: 'rings' }
+        ]
+      };
+
+      /* -------------------------------------------------------------------
+       * 4. ALL 20 ROYAL E-INVITE THEME DEFINITIONS
+       * ------------------------------------------------------------------- */
+      const THEMES = [
+        {
+          id: '01', name: 'Rose Garden', category: 'classic', darkTheme: false,
+          bg1: '#fbf7f1', bg2: '#fbedf0', main: '#8a1f3d', dark: '#5e0f26', gold: '#b8925a', lightGold: '#ecd6ab', accent: '#e08ea0', soft: '#f9dde3',
+          hFont: "'Playfair Display', serif", nFont: "'Pinyon Script', cursive", fontPair: 'Playfair + Pinyon Script',
+          openingType: 'rose-gate', openingName: 'Rose Gate', tapHint: 'Tap the rose gate to open',
+          dateType: 'bloom-rose', dateName: 'Let It Bloom',
+          funcType: 'carousel', funcName: '3D Carousel',
+          heroFrame: 'arch-dashed', storyFrame: 'circle', flowerTint: '#e08ea0'
+        },
+        {
+          id: '02', name: 'Royal Emerald', category: 'classic', darkTheme: false,
+          bg1: '#f9f8f1', bg2: '#eef4ee', main: '#0f5a43', dark: '#0a3d2e', gold: '#b08a3e', lightGold: '#ecd9a0', accent: '#d99a8e', soft: '#e3eee6',
+          hFont: "'Cormorant Garamond', serif", nFont: "'Cinzel Decorative', serif", fontPair: 'Cormorant + Cinzel Dec.',
+          openingType: 'jharokha', openingName: 'Jharokha Window', tapHint: 'Tap the jharokha to open',
+          dateType: 'light-diya', dateName: 'Light the Diya',
+          funcType: 'carousel', funcName: '3D Carousel',
+          heroFrame: 'mughal-dome', storyFrame: 'arch', flowerTint: '#d99a8e'
+        },
+        {
+          id: '03', name: 'Lotus Pastel', category: 'classic', darkTheme: false,
+          bg1: '#fbf8fc', bg2: '#f4ecf7', main: '#6b3a7a', dark: '#4a2556', gold: '#a98552', lightGold: '#ead7b6', accent: '#d79bc0', soft: '#efe2f3',
+          hFont: "'Marcellus', serif", nFont: "'Parisienne', cursive", fontPair: 'Marcellus + Parisienne',
+          openingType: 'lotus-bloom', openingName: 'Lotus Bloom', tapHint: 'Tap the lotus to bloom',
+          dateType: 'brush-petals', dateName: 'Brush the Petals Away',
+          funcType: 'carousel', funcName: '3D Carousel',
+          heroFrame: 'rounded-rect', storyFrame: 'polaroid', flowerTint: '#d79bc0'
+        },
+        {
+          id: '04', name: 'Marigold Mehendi', category: 'classic', darkTheme: false,
+          bg1: '#fff9ec', bg2: '#fdf0d6', main: '#8a2c0d', dark: '#5e1d08', gold: '#c27f12', lightGold: '#f5d98a', accent: '#f2a03d', soft: '#fde9c4',
+          hFont: "'Yeseva One', serif", nFont: "'Amita', cursive", fontPair: 'Yeseva One + Amita',
+          openingType: 'genda-curtain', openingName: 'Genda Curtain', tapHint: 'Tap to part the marigolds',
+          dateType: 'spin-mandala', dateName: 'Spin the Mandala',
+          funcType: 'carousel', funcName: '3D Carousel',
+          heroFrame: 'dotted-marigold', storyFrame: 'rounded', flowerTint: '#f2a03d'
+        },
+        {
+          id: '05', name: 'Midnight Gold', category: 'classic', darkTheme: false,
+          bg1: '#f7f1e4', bg2: '#f9efe9', main: '#1c2b55', dark: '#101a38', gold: '#b8924a', lightGold: '#f0dca8', accent: '#d9b6a8', soft: '#e9e4f0',
+          hFont: "'Cinzel', serif", nFont: "'Great Vibes', cursive", fontPair: 'Cinzel + Great Vibes',
+          openingType: 'shagun-box', openingName: 'Shagun Box', tapHint: 'Tap the shagun box to open',
+          dateType: 'place-ring', dateName: 'Place the Ring',
+          funcType: 'carousel', funcName: '3D Carousel',
+          heroFrame: 'double-rect', storyFrame: 'octagon', flowerTint: '#d9b6a8'
+        },
+        {
+          id: '06', name: 'Peacock Royale', category: 'classic', darkTheme: false,
+          bg1: '#f7faf8', bg2: '#e9f3f3', main: '#0b4f6c', dark: '#073449', gold: '#b08b3a', lightGold: '#ecd8a0', accent: '#6fb3a8', soft: '#e1eff0',
+          hFont: "'Prata', serif", nFont: "'Alex Brush', cursive", fontPair: 'Prata + Alex Brush',
+          openingType: 'peacock-fan', openingName: 'Peacock Fan', tapHint: 'Tap to spread the feathers',
+          dateType: 'break-seal', dateName: 'Break the Seal',
+          funcType: 'carousel', funcName: '3D Carousel',
+          heroFrame: 'arch-dashed', storyFrame: 'oval', flowerTint: '#6fb3a8'
+        },
+        {
+          id: '07', name: 'Ivory Pearl', category: 'classic', darkTheme: false,
+          bg1: '#fcfbf8', bg2: '#f6f5f0', main: '#3f5246', dark: '#2c3a31', gold: '#a38c5c', lightGold: '#e6dcc4', accent: '#c9b2a2', soft: '#eef0ea',
+          hFont: "'Gilda Display', serif", nFont: "'Italianno', cursive", fontPair: 'Gilda Display + Italianno',
+          openingType: 'veil-lift', openingName: 'Veil Lift', tapHint: 'Tap to lift the veil',
+          dateType: 'draw-heart', dateName: 'Draw a Heart',
+          funcType: 'carousel', funcName: '3D Carousel',
+          heroFrame: 'pearl-rect', storyFrame: 'gallery', flowerTint: '#c9b2a2'
+        },
+        {
+          id: '08', name: 'Twilight Lanterns', category: 'classic', darkTheme: false,
+          bg1: '#fff8f3', bg2: '#fde9e1', main: '#5a2a5c', dark: '#3c1a3e', gold: '#c0843a', lightGold: '#f6d79a', accent: '#f09a7e', soft: '#fde3d6',
+          hFont: "'Italiana', serif", nFont: "'Allura', cursive", fontPair: 'Italiana + Allura',
+          openingType: 'moonrise', openingName: 'Moonrise', tapHint: 'Tap the clouds to see the moon',
+          dateType: 'release-lanterns', dateName: 'Release the Lanterns',
+          funcType: 'carousel', funcName: '3D Carousel',
+          heroFrame: 'moon-window', storyFrame: 'circle', flowerTint: '#f09a7e'
+        },
+        {
+          id: '09', name: 'Kumkum Red', category: 'classic', darkTheme: false,
+          bg1: '#fffaf3', bg2: '#fdeee4', main: '#a3122a', dark: '#6e0a1b', gold: '#c08a24', lightGold: '#f6dc95', accent: '#e2725b', soft: '#fbe3d8',
+          hFont: "'Rozha One', serif", nFont: "'Berkshire Swash', cursive", fontPair: 'Rozha One + Berkshire',
+          openingType: 'chunri-unfold', openingName: 'Chunri Unfold', tapHint: 'Tap to unfold the chunri',
+          dateType: 'turn-page', dateName: 'Turn the Page',
+          funcType: 'carousel', funcName: '3D Carousel',
+          heroFrame: 'double-rect', storyFrame: 'gold-frame', flowerTint: '#e2725b'
+        },
+        {
+          id: '10', name: 'Spring Butterfly', category: 'classic', darkTheme: false,
+          bg1: '#fbfdf9', bg2: '#eef7f1', main: '#3d6b5a', dark: '#284a3e', gold: '#c0944a', lightGold: '#f0dfae', accent: '#f4a98c', soft: '#e6f3ec',
+          hFont: "'DM Serif Display', serif", nFont: "'Dancing Script', cursive", fontPair: 'DM Serif + Dancing Script',
+          openingType: 'butterflies', openingName: 'Butterflies Fly Away', tapHint: 'Tap to set the butterflies free',
+          dateType: 'open-garden', dateName: 'Open the Garden',
+          funcType: 'carousel', funcName: '3D Carousel',
+          heroFrame: 'arch-dashed', storyFrame: 'oval', flowerTint: '#f4a98c'
+        },
+        {
+          id: '11', name: 'Noir Champagne', category: 'luxury', darkTheme: true,
+          bg1: '#0b0a09', bg2: '#151311', main: '#1c1a17', dark: '#0e0d0b', gold: '#c8a96a', lightGold: '#ecd9b0', accent: '#d9c3a0', soft: '#efe6d6',
+          hFont: "'Bodoni Moda', serif", nFont: "'Petit Formal Script', cursive", fontPair: 'Bodoni Moda + Petit Formal',
+          openingType: 'black-envelope', openingName: 'Black Envelope', tapHint: 'Tap the envelope to open',
+          dateType: 'scratch-gold', dateName: 'Scratch the Gold',
+          funcType: 'timeline', funcName: 'Vertical Timeline',
+          heroFrame: 'double-rect', storyFrame: 'gold-frame', flowerTint: '#d9c3a0'
+        },
+        {
+          id: '12', name: 'Burgundy Opulence', category: 'luxury', darkTheme: true,
+          bg1: '#2a0610', bg2: '#4a0b1d', main: '#5c0f22', dark: '#3a0816', gold: '#c9906b', lightGold: '#f0cdb4', accent: '#e8a0a8', soft: '#f6e1dc',
+          hFont: "'Cormorant SC', serif", nFont: "'Tangerine', cursive", fontPair: 'Cormorant SC + Tangerine',
+          openingType: 'theatre-curtains', openingName: 'Theatre Curtains', tapHint: 'Tap to raise the curtains',
+          dateType: 'pop-champagne', dateName: 'Pop the Champagne',
+          funcType: 'flip-grid', funcName: '3D Flip Cards',
+          heroFrame: 'arch-dashed', storyFrame: 'oval', flowerTint: '#e8a0a8'
+        },
+        {
+          id: '13', name: 'Sapphire Silver', category: 'luxury', darkTheme: true,
+          bg1: '#06132e', bg2: '#10295c', main: '#0f2a5c', dark: '#08193a', gold: '#aeb8c8', lightGold: '#e3e9f2', accent: '#8fb0e8', soft: '#e6edf8',
+          hFont: "'Marcellus SC', serif", nFont: "'Sacramento', cursive", fontPair: 'Marcellus SC + Sacramento',
+          openingType: 'shatter-glass', openingName: 'Shattering Frosted Glass', tapHint: 'Tap the glass to shatter it',
+          dateType: 'connect-stars', dateName: 'Connect the Stars',
+          funcType: 'day-tabs', funcName: 'Day Tabs',
+          heroFrame: 'mughal-dome', storyFrame: 'gold-frame', flowerTint: '#8fb0e8'
+        },
+        {
+          id: '14', name: 'Ivory Marble', category: 'luxury', darkTheme: false,
+          bg1: '#f8f6f2', bg2: '#ece8e1', main: '#2b2b2b', dark: '#111111', gold: '#b8945a', lightGold: '#ead9b4', accent: '#c9b28f', soft: '#f2eee8',
+          hFont: "'Playfair Display SC', serif", nFont: "'Italiana', serif", fontPair: 'Playfair SC + Italiana',
+          openingType: 'marble-doors', openingName: 'Sliding Marble Doors', tapHint: 'Tap to slide the marble doors',
+          dateType: 'turn-hourglass', dateName: 'Turn the Hourglass',
+          funcType: 'card-deck', funcName: 'Stacked Card Deck',
+          heroFrame: 'double-rect', storyFrame: 'gallery', flowerTint: '#c9b28f'
+        },
+        {
+          id: '15', name: 'Blush Rose Gold', category: 'luxury', darkTheme: false,
+          bg1: '#fbeae8', bg2: '#f8dedb', main: '#8a4b55', dark: '#5e2d36', gold: '#c8896f', lightGold: '#f2cdbd', accent: '#e9a7a7', soft: '#fbe4e2',
+          hFont: "'Della Respira', serif", nFont: "'Corinthia', cursive", fontPair: 'Della Respira + Corinthia',
+          openingType: 'fan-cards', openingName: 'Fan of Cards', tapHint: 'Tap to fan out the cards',
+          dateType: 'peel-sticker', dateName: 'Peel the Sticker',
+          funcType: 'film-strip', funcName: 'Film Strip Polaroids',
+          heroFrame: 'oval-frame', storyFrame: 'circle', flowerTint: '#e9a7a7'
+        },
+        {
+          id: '16', name: 'Plum Amethyst', category: 'luxury', darkTheme: true,
+          bg1: '#1d0a29', bg2: '#3a1652', main: '#3e1a52', dark: '#250d33', gold: '#c9a24a', lightGold: '#f0dca0', accent: '#b98be0', soft: '#efe4f7',
+          hFont: "'Gloock', serif", nFont: "'Imperial Script', cursive", fontPair: 'Gloock + Imperial Script',
+          openingType: 'gold-iris', openingName: 'Gold Iris', tapHint: 'Tap to open the iris',
+          dateType: 'flashlight-dark', dateName: 'Find It in the Dark',
+          funcType: 'accordion', funcName: 'Accordion List',
+          heroFrame: 'rounded-rect', storyFrame: 'circle', flowerTint: '#b98be0'
+        },
+        {
+          id: '17', name: 'Sandstone Sunset', category: 'luxury', darkTheme: false,
+          bg1: '#fbefe0', bg2: '#f6dfc6', main: '#7a2a1a', dark: '#521a0f', gold: '#c08a2e', lightGold: '#f3d79a', accent: '#e2895a', soft: '#f7e2cc',
+          hFont: "'Arapey', serif", nFont: "'Kaushan Script', cursive", fontPair: 'Arapey + Kaushan Script',
+          openingType: 'rangoli-draw', openingName: 'Rangoli Draws Itself', tapHint: 'Tap to draw the rangoli',
+          dateType: 'raise-sun', dateName: 'Raise the Sun',
+          funcType: 'tickets', funcName: 'Boarding-Pass Tickets',
+          heroFrame: 'mughal-dome', storyFrame: 'arch', flowerTint: '#e2895a'
+        },
+        {
+          id: '18', name: 'Ocean Pearl', category: 'luxury', darkTheme: true,
+          bg1: '#04232a', bg2: '#0b4651', main: '#0b4a55', dark: '#062f37', gold: '#c9b98f', lightGold: '#f1ead6', accent: '#7fd0cf', soft: '#e3f3f2',
+          hFont: "'Fraunces', serif", nFont: "'Ballet', cursive", fontPair: 'Fraunces + Ballet',
+          openingType: 'oyster-pearl', openingName: 'Oyster and Pearl', tapHint: 'Tap to open the oyster',
+          dateType: 'wave-wash', dateName: 'Let the Wave Wash',
+          funcType: 'envelopes', funcName: 'Wax-Sealed Envelopes',
+          heroFrame: 'oval-frame', storyFrame: 'oval', flowerTint: '#7fd0cf'
+        },
+        {
+          id: '19', name: 'Sage and Gold', category: 'luxury', darkTheme: false,
+          bg1: '#eef3ea', bg2: '#e2ece0', main: '#3f5a45', dark: '#2a3e2f', gold: '#b4975a', lightGold: '#e9dcb5', accent: '#9cb89a', soft: '#e7efe5',
+          hFont: "'Libre Caslon Display', serif", nFont: "'WindSong', cursive", fontPair: 'Libre Caslon + WindSong',
+          openingType: 'wreath-grows', openingName: 'Wreath Grows', tapHint: 'Tap to grow the wreath',
+          dateType: 'unfold-card', dateName: 'Unfold the Card',
+          funcType: 'medallions', funcName: 'Medallion Switcher',
+          heroFrame: 'rounded-rect', storyFrame: 'rounded', flowerTint: '#9cb89a'
+        },
+        {
+          id: '20', name: 'Jade Palace', category: 'luxury', darkTheme: true,
+          bg1: '#04261d', bg2: '#0b4637', main: '#0d4a3a', dark: '#072e24', gold: '#d1a84a', lightGold: '#f3dd9c', accent: '#e07a6a', soft: '#e2f1ea',
+          hFont: "'Forum', serif", nFont: "'Birthstone Bounce', cursive", fontPair: 'Forum + Birthstone Bounce',
+          openingType: 'glass-cloche', openingName: 'Glass Cloche', tapHint: 'Tap to lift the glass dome',
+          dateType: 'strike-gong', dateName: 'Strike the Gong',
+          funcType: 'carousel', funcName: '3D Carousel',
+          heroFrame: 'mughal-dome', storyFrame: 'arch', flowerTint: '#e07a6a'
+        }
+      ];
+
+      /* -------------------------------------------------------------------
+       * 5. RENDER LANDING PAGE 20-DESIGN SHOWCASE GRID & FILTERS
+       * ------------------------------------------------------------------- */
+      const gridEl = document.getElementById('design-grid');
+      const switcherEl = document.getElementById('sim-switcher');
+      let currentFilter = 'all';
+      let currentSearch = '';
+
+      // Populate theme switcher dropdown
+      THEMES.forEach((t, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = `${t.id}. ${t.name} (${t.category === 'classic' ? 'Classic' : 'Luxury'})`;
+        opt.style.color = '#1c1215';
+        switcherEl.appendChild(opt);
+      });
+
+      function getMiniMotifSvg(t) {
+        const g = t.lightGold;
+        const m = t.main;
+        const a = t.accent;
+        const map = {
+          'rose-gate': `<path d="M22 68V34a22 22 0 0 1 44 0v34Z" fill="${m}" stroke="${g}" stroke-width="2"/><line x1="44" y1="12" x2="44" y2="68" stroke="${g}" stroke-width="1.5"/><circle cx="44" cy="40" r="8" fill="${g}"/><circle cx="24" cy="24" r="5" fill="${a}"/><circle cx="64" cy="24" r="5" fill="${a}"/>`,
+          'jharokha': `<path d="M20 68V34a24 24 0 0 1 48 0v34Z" fill="${m}" stroke="${g}" stroke-width="2"/><path d="M28 68V36a16 16 0 0 1 32 0v32" fill="none" stroke="${g}" stroke-dasharray="3 3"/><circle cx="44" cy="40" r="7" fill="${g}"/><rect x="16" y="66" width="56" height="5" rx="2" fill="${g}"/>`,
+          'lotus-bloom': `<ellipse cx="44" cy="64" rx="28" ry="7" fill="${a}" opacity="0.45"/><path d="M44 18 C32 34 32 52 44 60 C56 52 56 34 44 18Z" fill="${a}" stroke="${g}" stroke-width="1.2"/><path d="M44 60 C24 54 20 36 28 24 C36 32 38 48 44 60Z" fill="${m}" opacity="0.75"/><path d="M44 60 C64 54 68 36 60 24 C52 32 50 48 44 60Z" fill="${m}" opacity="0.75"/>`,
+          'genda-curtain': `<rect x="14" y="10" width="60" height="8" rx="3" fill="#2f7d32"/><g fill="${a}">${[20,30,40,50,60,70].map(x => `<circle cx="${x}" cy="26" r="3.5"/><circle cx="${x}" cy="36" r="3.5"/><circle cx="${x}" cy="46" r="3.5"/><circle cx="${x}" cy="56" r="3.5"/>`).join('')}</g>`,
+          'shagun-box': `<rect x="20" y="30" width="48" height="36" rx="4" fill="${m}" stroke="${g}" stroke-width="1.8"/><rect x="18" y="24" width="52" height="10" rx="3" fill="${m}" stroke="${g}" stroke-width="1.5"/><rect x="41" y="24" width="6" height="42" fill="${g}"/><path d="M44 24 C34 12 26 22 44 24 C62 22 54 12 44 24Z" fill="${g}"/>`,
+          'peacock-fan': `<g stroke="${g}" stroke-width="1.2">${[-60,-35,-12,12,35,60].map(d => `<ellipse cx="44" cy="30" rx="6" ry="22" fill="${a}" opacity="0.75" transform="rotate(${d} 44 58)"/>`).join('')}</g><path d="M30 68V42a14 14 0 0 1 28 0v26Z" fill="#fffdf9" stroke="${m}" stroke-width="2"/>`,
+          'veil-lift': `<path d="M24 68V34a20 20 0 0 1 40 0v34Z" fill="#ffffff" stroke="${g}" stroke-width="1.8"/><path d="M22 24 Q44 12 66 24 L62 66 Q44 58 26 66 Z" fill="${a}" opacity="0.35" stroke="${g}" stroke-dasharray="2 2"/>`,
+          'moonrise': `<circle cx="44" cy="38" r="18" fill="${g}" opacity="0.9"/><ellipse cx="30" cy="48" rx="16" ry="9" fill="#ffe6df" opacity="0.9"/><ellipse cx="56" cy="52" rx="18" ry="10" fill="#ffe6df" opacity="0.88"/>`,
+          'chunri-unfold': `<rect x="20" y="18" width="48" height="48" rx="4" fill="${m}" stroke="${g}" stroke-width="2"/><path d="M20 18 L68 66 M68 18 L20 66" stroke="${g}" stroke-width="1.6"/><circle cx="44" cy="42" r="9" fill="${g}"/>`,
+          'butterflies': `<path d="M26 68V36a18 18 0 0 1 36 0v32Z" fill="#ffffff" stroke="${m}" stroke-dasharray="3 2"/><g fill="${a}"><ellipse cx="34" cy="32" rx="6" ry="4"/><ellipse cx="54" cy="42" rx="6" ry="4"/><ellipse cx="40" cy="52" rx="5" ry="3.5"/></g>`,
+          'black-envelope': `<rect x="16" y="24" width="56" height="38" rx="4" fill="#181614" stroke="${g}" stroke-width="1.8"/><path d="M16 24 L44 45 L72 24" fill="none" stroke="${g}" stroke-width="1.5"/><circle cx="44" cy="45" r="5" fill="${g}"/>`,
+          'theatre-curtains': `<rect x="16" y="14" width="26" height="54" rx="2" fill="${m}" stroke="${g}" stroke-width="1.2"/><rect x="46" y="14" width="26" height="54" rx="2" fill="${m}" stroke="${g}" stroke-width="1.2"/><path d="M14 14 Q44 24 74 14" fill="${t.dark}" stroke="${g}" stroke-width="1.5"/>`,
+          'shatter-glass': `<rect x="22" y="16" width="44" height="52" rx="4" fill="#dce7f7" opacity="0.85" stroke="${g}" stroke-width="1.8"/><path d="M44 42 L24 20 M44 42 L64 24 M44 42 L62 64 M44 42 L26 62" stroke="#ffffff" stroke-width="1.4"/>`,
+          'marble-doors': `<rect x="20" y="16" width="23" height="52" fill="#fcfbf8" stroke="${g}" stroke-width="1.8"/><rect x="45" y="16" width="23" height="52" fill="#fcfbf8" stroke="${g}" stroke-width="1.8"/><line x1="39" y1="36" x2="39" y2="48" stroke="${g}" stroke-width="2.5"/><line x1="49" y1="36" x2="49" y2="48" stroke="${g}" stroke-width="2.5"/>`,
+          'fan-cards': `<rect x="26" y="20" width="36" height="46" rx="5" fill="#fff5f4" stroke="${g}" stroke-width="1.4" transform="rotate(-14 44 60)"/><rect x="26" y="20" width="36" height="46" rx="5" fill="#fff5f4" stroke="${g}" stroke-width="1.4" transform="rotate(14 44 60)"/><rect x="26" y="20" width="36" height="46" rx="5" fill="#ffffff" stroke="${g}" stroke-width="1.8"/>`,
+          'gold-iris': `<circle cx="44" cy="42" r="24" fill="${m}" stroke="${g}" stroke-width="3"/><circle cx="44" cy="42" r="10" fill="${t.dark}" stroke="${g}" stroke-width="1.2"/>`,
+          'rangoli-draw': `<circle cx="44" cy="42" r="24" fill="none" stroke="${g}" stroke-dasharray="3 3" stroke-width="1.8"/><circle cx="44" cy="42" r="15" fill="${a}" opacity="0.5"/><circle cx="44" cy="42" r="8" fill="#fffdf9" stroke="${m}" stroke-width="1.5"/>`,
+          'oyster-pearl': `<ellipse cx="44" cy="48" rx="24" ry="15" fill="#cfe9e9" stroke="${g}" stroke-width="1.5"/><circle cx="44" cy="40" r="8" fill="#ffffff" stroke="${g}" stroke-width="1.2"/>`,
+          'wreath-grows': `<circle cx="44" cy="42" r="22" fill="none" stroke="${m}" stroke-width="2.2" stroke-dasharray="5 3"/><circle cx="44" cy="42" r="14" fill="#ffffff" stroke="${g}" stroke-width="1.5"/>`,
+          'glass-cloche': `<path d="M24 58V38a20 20 0 0 1 40 0v20Z" fill="rgba(255,255,255,0.18)" stroke="${g}" stroke-width="1.8"/><circle cx="44" cy="15" r="3.5" fill="${g}"/><rect x="20" y="58" width="48" height="6" rx="3" fill="${g}"/>`
+        };
+        return `<svg viewBox="0 0 88 80" class="w-24 h-20 drop-shadow-md float-slow">${map[t.openingType] || ''}</svg>`;
+      }
+
+      function renderGrid() {
+        const q = currentSearch.trim().toLowerCase();
+        const filtered = THEMES.filter(t => {
+          const catOk = currentFilter === 'all' || t.category === currentFilter;
+          const qOk = !q ||
+            t.name.toLowerCase().includes(q) ||
+            t.id.includes(q) ||
+            t.openingName.toLowerCase().includes(q) ||
+            t.dateName.toLowerCase().includes(q) ||
+            t.funcName.toLowerCase().includes(q);
+          return catOk && qOk;
+        });
+
+        gridEl.innerHTML = '';
+        document.getElementById('empty-search').classList.toggle('hidden', filtered.length > 0);
+
+        filtered.forEach(t => {
+          const idx = THEMES.indexOf(t);
+          const card = document.createElement('article');
+          card.className = 'group rounded-3xl bg-white border border-studioGold/30 shadow-[0_10px_30px_rgba(110,31,47,0.06)] hover:shadow-[0_18px_45px_rgba(110,31,47,0.14)] hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col';
+
+          const stageBg = t.darkTheme
+            ? `linear-gradient(150deg, ${t.bg1} 0%, ${t.bg2} 100%)`
+            : `linear-gradient(150deg, ${t.bg1} 0%, ${t.soft} 100%)`;
+
+          card.innerHTML = `
+            <!-- Mini Animated Preview Stage -->
+            <div class="preview-stage relative h-44 flex flex-col items-center justify-center p-4 overflow-hidden cursor-pointer"
+                 style="background: ${stageBg};" data-launch="${idx}">
+              <!-- Top Badges -->
+              <div class="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-widest ${t.darkTheme ? 'bg-black/45 text-white border border-white/20' : 'bg-white/90 text-studioWine border border-studioGold/35'}">
+                  ${t.id}
+                </span>
+                <span class="px-2.5 py-0.5 rounded-full text-[9.5px] font-semibold tracking-wider uppercase ${t.category === 'luxury' ? 'bg-[#1c1317]/85 text-[#f0dca8] border border-[#c8a96a]/45' : 'bg-white/90 text-studioWine border border-studioGold/35'}">
+                  ${t.category === 'luxury' ? 'Luxury' : 'Classic'}
+                </span>
+              </div>
+
+              ${getMiniMotifSvg(t)}
+
+              <p class="mt-1 text-[11px] font-medium tracking-wide z-10"
+                 style="font-family:${t.nFont}; font-size: 20px; color: ${t.darkTheme ? t.lightGold : t.main};">
+                Aarav &amp; Ananya
+              </p>
+            </div>
+
+            <!-- Card Metadata -->
+            <div class="p-4 flex flex-col flex-1 justify-between">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2.5">
+                  <h2 class="font-display text-lg font-semibold text-studioWine leading-tight">${t.name}</h2>
+                  <!-- 4 Palette Swatches -->
+                  <div class="flex items-center -space-x-1" title="Theme Color Palette">
+                    <span class="w-4 h-4 rounded-full border border-white shadow-sm" style="background:${t.main}"></span>
+                    <span class="w-4 h-4 rounded-full border border-white shadow-sm" style="background:${t.gold}"></span>
+                    <span class="w-4 h-4 rounded-full border border-white shadow-sm" style="background:${t.accent}"></span>
+                    <span class="w-4 h-4 rounded-full border border-gray-200 shadow-sm" style="background:${t.bg1}"></span>
+                  </div>
+                </div>
+
+                <!-- Compact Spec Badges -->
+                <div class="grid grid-cols-2 gap-1.5 text-[10.5px] mb-4">
+                  <div class="rounded-xl bg-studioIvory px-2.5 py-1.5 border border-studioGold/20">
+                    <p class="text-[8.5px] uppercase tracking-wider text-studioWine/55 font-semibold">Opening</p>
+                    <p class="font-medium text-studioWine truncate">${t.openingName}</p>
+                  </div>
+                  <div class="rounded-xl bg-studioIvory px-2.5 py-1.5 border border-studioGold/20">
+                    <p class="text-[8.5px] uppercase tracking-wider text-studioWine/55 font-semibold">Date Reveal</p>
+                    <p class="font-medium text-studioWine truncate">${t.dateName}</p>
+                  </div>
+                  <div class="rounded-xl bg-studioIvory px-2.5 py-1.5 border border-studioGold/20">
+                    <p class="text-[8.5px] uppercase tracking-wider text-studioWine/55 font-semibold">Functions</p>
+                    <p class="font-medium text-studioWine truncate">${t.funcName}</p>
+                  </div>
+                  <div class="rounded-xl bg-studioIvory px-2.5 py-1.5 border border-studioGold/20">
+                    <p class="text-[8.5px] uppercase tracking-wider text-studioWine/55 font-semibold">Fonts</p>
+                    <p class="font-medium text-studioWine truncate">${t.fontPair}</p>
+                  </div>
+                </div>
+              </div>
+
+              <button type="button" data-launch="${idx}"
+                      class="w-full py-2.5 px-4 rounded-full bg-studioWine text-studioIvory text-[11px] font-semibold tracking-[0.14em] uppercase hover:bg-studioWineDark transition-colors flex items-center justify-center gap-2 shadow-sm">
+                <span>Launch Live Preview</span>
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          `;
+          gridEl.appendChild(card);
+        });
+      }
+
+      // Filter & Search Listeners
+      document.querySelectorAll('.filter-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentFilter = btn.dataset.filter;
+          document.querySelectorAll('.filter-tab').forEach(b => {
+            const active = b === btn;
+            b.className = `filter-tab shrink-0 px-4 py-2 rounded-full text-xs font-semibold tracking-wide transition-all ${active ? 'bg-studioWine text-studioIvory shadow-sm' : 'bg-white text-studioWine border border-studioGold/40 hover:bg-studioBlush'}`;
+          });
+          renderGrid();
+        });
+      });
+
+      document.getElementById('design-search').addEventListener('input', e => {
+        currentSearch = e.target.value;
+        renderGrid();
+      });
+
+      gridEl.addEventListener('click', e => {
+        const trigger = e.target.closest('[data-launch]');
+        if (trigger) launchSimulator(Number(trigger.dataset.launch));
+      });
+
+      document.getElementById('hero-random-btn').addEventListener('click', () => {
+        launchSimulator(Math.floor(Math.random() * THEMES.length));
+      });
+
+      renderGrid();
+
+      /* -------------------------------------------------------------------
+       * 6. PHONE SIMULATOR PETALS & CONFETTI BURST ENGINE
+       * ------------------------------------------------------------------- */
+      const fxCanvas = document.getElementById('phone-fx-canvas');
+      const fxCtx = fxCanvas.getContext('2d');
+      let fxParticles = [];
+      let fxRaf = null;
+
+      function resizePhoneFx() {
+        const screen = document.getElementById('phone-screen');
+        if (!screen) return;
+        fxCanvas.width = screen.clientWidth || 374;
+        fxCanvas.height = screen.clientHeight || 760;
+      }
+
+      function burstPhoneFx(theme, count = 48) {
+        resizePhoneFx();
+        const cx = fxCanvas.width / 2;
+        const cy = fxCanvas.height * 0.42;
+        const colors = [theme.accent, theme.lightGold, theme.gold, '#ffffff', theme.main];
+        for (let i = 0; i < count; i++) {
+          const ang = Math.random() * Math.PI * 2;
+          const spd = 1.4 + Math.random() * 4.5;
+          fxParticles.push({
+            x: cx + (Math.random() - 0.5) * 60,
+            y: cy + (Math.random() - 0.5) * 40,
+            vx: Math.cos(ang) * spd,
+            vy: Math.sin(ang) * spd - 2.2,
+            g: 0.055 + Math.random() * 0.03,
+            sz: 4 + Math.random() * 5,
+            rot: Math.random() * 6.28,
+            vr: (Math.random() - 0.5) * 0.16,
+            col: colors[Math.floor(Math.random() * colors.length)],
+            life: 0,
+            max: 95 + Math.random() * 45,
+            rect: Math.random() > 0.5
+          });
+        }
+        if (!fxRaf) tickPhoneFx();
+      }
+
+      function tickPhoneFx() {
+        fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+        for (let i = fxParticles.length - 1; i >= 0; i--) {
+          const p = fxParticles[i];
+          p.life++;
+          p.vy += p.g;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          const alpha = Math.max(0, 1 - p.life / p.max);
+          fxCtx.save();
+          fxCtx.globalAlpha = alpha;
+          fxCtx.translate(p.x, p.y);
+          fxCtx.rotate(p.rot);
+          fxCtx.fillStyle = p.col;
+          if (p.rect) fxCtx.fillRect(-p.sz / 2, -p.sz / 3, p.sz, p.sz * 0.65);
+          else {
+            fxCtx.beginPath();
+            fxCtx.ellipse(0, 0, p.sz, p.sz * 0.55, 0, 0, Math.PI * 2);
+            fxCtx.fill();
+          }
+          fxCtx.restore();
+          if (p.life >= p.max || p.y > fxCanvas.height + 20) fxParticles.splice(i, 1);
+        }
+        if (fxParticles.length > 0) fxRaf = requestAnimationFrame(tickPhoneFx);
+        else fxRaf = null;
+      }
+
+      /* -------------------------------------------------------------------
+       * 7. LIVE SIMULATOR ENGINE
+       * ------------------------------------------------------------------- */
+      const modal = document.getElementById('preview-modal');
+      const phoneScreen = document.getElementById('phone-screen');
+      const phoneAmbient = document.getElementById('phone-ambient');
+      const openingStage = document.getElementById('opening-stage');
+      const phoneScroll = document.getElementById('phone-scroll');
+
+      let activeThemeIndex = 0;
+      let countdownInterval = null;
+      let openingTimers = [];
+
+      function clearTimers() {
+        openingTimers.forEach(t => clearTimeout(t));
+        openingTimers = [];
+        clearInterval(countdownInterval);
+      }
+
+      function launchSimulator(idx) {
+        activeThemeIndex = (idx + THEMES.length) % THEMES.length;
+        switcherEl.value = activeThemeIndex;
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        renderInvite(THEMES[activeThemeIndex]);
+      }
+
+      function closeSimulator() {
+        clearTimers();
+        WeddingAudio.stop();
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+
+      document.getElementById('sim-close').addEventListener('click', closeSimulator);
+      document.getElementById('sim-prev').addEventListener('click', () => launchSimulator(activeThemeIndex - 1));
+      document.getElementById('sim-next').addEventListener('click', () => launchSimulator(activeThemeIndex + 1));
+      switcherEl.addEventListener('change', e => launchSimulator(Number(e.target.value)));
+      document.getElementById('sim-replay').addEventListener('click', () => renderInvite(THEMES[activeThemeIndex]));
+      document.getElementById('sim-sound').addEventListener('click', () => WeddingAudio.toggle());
+
+      modal.addEventListener('click', e => {
+        if (e.target === modal) closeSimulator();
+      });
+
+      /* -------------------------------------------------------------------
+       * 8. BUILD ALL 20 UNIQUE OPENINGS
+       * ------------------------------------------------------------------- */
+      function buildOpeningHTML(t) {
+        const bgStyle = t.darkTheme || ['shagun-box', 'moonrise', 'theatre-curtains', 'shatter-glass', 'gold-iris', 'oyster-pearl', 'glass-cloche'].includes(t.openingType)
+          ? `radial-gradient(circle at 50% 42%, ${t.main} 0%, ${t.dark} 78%)`
+          : `radial-gradient(circle at 50% 42%, ${t.bg1} 0%, ${t.soft} 75%)`;
+
+        const hintTextColor = (t.darkTheme || ['shagun-box', 'moonrise', 'theatre-curtains', 'shatter-glass', 'gold-iris', 'oyster-pearl', 'glass-cloche'].includes(t.openingType))
+          ? t.lightGold
+          : t.main;
+
+        const innerCard = `
+          <div class="w-48 h-64 rounded-t-full rounded-b-2xl flex flex-col items-center justify-center p-4 text-center shadow-xl border-2"
+               style="background:${t.darkTheme ? '#181415' : '#fffdf9'}; border-color:${t.gold};">
+            <svg class="w-10 h-10 mb-2" style="color:${t.gold}"><use href="#ganesh-icon"></use></svg>
+            <p style="font-family:${t.hFont}; color:${t.darkTheme ? t.lightGold : t.main};" class="text-lg italic tracking-wide">Shubh Vivaah</p>
+            <p class="text-[8px] tracking-[0.25em] uppercase mt-1 opacity-75" style="color:${t.gold};">You Are Invited</p>
+          </div>
+        `;
+
+        let visual = '';
+        switch (t.openingType) {
+          case 'rose-gate':
+            visual = `
+              <div class="relative w-60 h-80 flex items-center justify-center">
+                <div class="absolute inset-2 rounded-t-[120px] rounded-b-xl flex flex-col items-center justify-center shadow-inner" style="background:radial-gradient(circle,#fff9f5,${t.soft}); border:2px solid ${t.gold};">
+                  <svg class="w-11 h-11 mb-2" style="color:${t.gold}"><use href="#ganesh-icon"></use></svg>
+                  <p style="font-family:${t.hFont}; color:${t.main};" class="text-lg italic">Shubh Vivaah</p>
+                </div>
+                <div class="gate-door-l absolute left-2 top-2 bottom-2 w-[calc(50%-8px)] rounded-tl-[118px] rounded-bl-lg border-r border-yellow-200/40 shadow-lg flex items-center justify-end pr-2"
+                     style="background:linear-gradient(145deg,${t.main},${t.dark});">
+                  <span class="w-2.5 h-2.5 rounded-full" style="background:${t.lightGold}"></span>
+                </div>
+                <div class="gate-door-r absolute right-2 top-2 bottom-2 w-[calc(50%-8px)] rounded-tr-[118px] rounded-br-lg border-l border-yellow-200/40 shadow-lg flex items-center justify-start pl-2"
+                     style="background:linear-gradient(215deg,${t.main},${t.dark});">
+                  <span class="w-2.5 h-2.5 rounded-full" style="background:${t.lightGold}"></span>
+                </div>
+                <!-- Crown of Roses -->
+                <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 240 320">
+                  <path d="M12 310 V120 A108 108 0 0 1 228 120 V310" fill="none" stroke="${t.gold}" stroke-width="4"/>
+                  ${[20,45,75,110,145,175,205,220].map((x,i)=>`<circle cx="${x}" cy="${i<4?115-i*28:32+(i-4)*28}" r="11" fill="${i%2?t.accent:'#f7d6dc'}" stroke="#fff" stroke-width="1"/>`).join('')}
+                </svg>
+                <div class="open-medallion relative z-20 w-14 h-14 rounded-full flex items-center justify-center shadow-lg border-2 transition-opacity duration-500" style="background:${t.bg1}; border-color:${t.gold};">
+                  <svg class="w-8 h-8" style="color:${t.main}"><use href="#ganesh-icon"></use></svg>
+                </div>
+              </div>`;
+            break;
+
+          case 'jharokha':
+            visual = `
+              <div class="relative w-60 h-80 flex items-center justify-center">
+                <div class="absolute inset-2 rounded-t-[120px] rounded-b-lg flex flex-col items-center justify-center" style="background:radial-gradient(circle,#fff9e6,${t.lightGold}); border:3px solid ${t.gold};">
+                  <svg class="w-11 h-11 mb-2" style="color:${t.main}"><use href="#ganesh-icon"></use></svg>
+                  <p style="font-family:${t.hFont}; color:${t.dark};" class="text-lg font-semibold">Shubh Vivaah</p>
+                </div>
+                <div class="gate-door-l absolute left-2 top-2 bottom-4 w-[calc(50%-8px)] rounded-tl-[116px] shadow-lg"
+                     style="background:repeating-linear-gradient(45deg,${t.main} 0 8px,${t.dark} 8px 10px); border:2px solid ${t.gold};"></div>
+                <div class="gate-door-r absolute right-2 top-2 bottom-4 w-[calc(50%-8px)] rounded-tr-[116px] shadow-lg"
+                     style="background:repeating-linear-gradient(-45deg,${t.main} 0 8px,${t.dark} 8px 10px); border:2px solid ${t.gold};"></div>
+                <div class="open-medallion relative z-20 w-14 h-14 rounded-full flex items-center justify-center shadow-lg border-2" style="background:#fffdf7; border-color:${t.gold};">
+                  <svg class="w-8 h-8" style="color:${t.main}"><use href="#ganesh-icon"></use></svg>
+                </div>
+                <!-- Ledge with Jasmine & Roses -->
+                <div class="absolute bottom-0 inset-x-0 h-5 rounded-full flex items-center justify-around px-2 shadow-md" style="background:${t.gold};">
+                  ${Array(9).fill(0).map((_,i)=>`<span class="w-3.5 h-3.5 rounded-full ${i%2?'bg-white':'bg-rose-400'} border border-yellow-100 -mt-3 shadow"></span>`).join('')}
+                </div>
+              </div>`;
+            break;
+
+          case 'lotus-bloom':
+            visual = `
+              <div class="relative w-64 h-72 flex flex-col items-center justify-center">
+                <div class="absolute bottom-8 w-56 h-20 rounded-full opacity-55" style="background:radial-gradient(circle,${t.accent},transparent 70%);"></div>
+                <div class="relative w-44 h-44 flex items-end justify-center">
+                  <div class="absolute bottom-6 w-20 h-20 rounded-full flex items-center justify-center z-10 shadow-lg" style="background:radial-gradient(circle,#fff7d6,${t.lightGold});">
+                    <svg class="w-11 h-11" style="color:${t.main}"><use href="#ganesh-icon"></use></svg>
+                  </div>
+                  ${[-68,-48,-28,-10,10,28,48,68].map((ang,i)=>`
+                    <div class="lotus-petal absolute bottom-4 w-12 h-32 rounded-t-full rounded-b-xl border border-white/60 shadow-md z-20"
+                         style="--ang:${ang}deg; background:linear-gradient(180deg,${i%2?t.accent:'#f7c7dc'} 0%,#ffffff 100%);"></div>
+                  `).join('')}
+                </div>
+                <p class="mt-4 text-xl italic" style="font-family:${t.hFont}; color:${t.main};">Shubh Vivaah</p>
+                <p class="text-[9px] tracking-[0.22em] uppercase mt-0.5" style="color:${t.gold};">You Are Invited</p>
+              </div>`;
+            break;
+
+          case 'genda-curtain':
+            visual = `
+              <div class="relative w-72 h-80 flex items-center justify-center overflow-hidden rounded-2xl">
+                ${innerCard}
+                <!-- Mango Leaf Toran -->
+                <div class="absolute top-0 inset-x-0 h-6 z-30 flex justify-around items-center" style="background:linear-gradient(90deg,#1b5e20,#2e7d32,#1b5e20); border-bottom:2px solid ${t.gold};">
+                  ${Array(10).fill(0).map(()=>`<span class="w-3 h-4 rounded-b-full bg-green-700 border border-yellow-300/50"></span>`).join('')}
+                </div>
+                <!-- Full-height Marigold Strings -->
+                <div class="absolute inset-0 top-5 z-20 flex justify-between px-1 pointer-events-none">
+                  ${Array(12).fill(0).map((_,i)=>`
+                    <div class="genda-str ${i<6?'genda-left':'genda-right'} flex flex-col items-center gap-1" style="transition-delay:${Math.abs(5.5-i)*50}ms">
+                      ${Array(14).fill(0).map((_,j)=>`<span class="w-4 h-4 rounded-full shadow-sm" style="background:${(i+j)%2?'#f59e0b':'#ea580c'}; border:1px solid #fde68a;"></span>`).join('')}
+                    </div>
+                  `).join('')}
+                </div>
+              </div>`;
+            break;
+
+          case 'shagun-box':
+            visual = `
+              <div class="relative w-64 h-72 flex items-center justify-center">
+                <div class="shagun-card absolute z-10">${innerCard}</div>
+                <div class="relative z-20 mt-14">
+                  <div class="shagun-lid relative w-52 h-12 rounded-lg border-2 flex items-center justify-center shadow-xl z-30"
+                       style="background:linear-gradient(135deg,${t.main},${t.dark}); border-color:${t.gold};">
+                    <div class="absolute -top-6 flex items-center gap-1">
+                      <span class="w-8 h-5 rounded-full border-4" style="border-color:${t.lightGold}"></span>
+                      <span class="w-8 h-5 rounded-full border-4" style="border-color:${t.lightGold}"></span>
+                    </div>
+                    <div class="w-6 h-full" style="background:linear-gradient(90deg,${t.gold},${t.lightGold},${t.gold});"></div>
+                  </div>
+                  <div class="w-48 mx-auto h-36 -mt-1 rounded-b-xl border-2 border-t-0 flex flex-col items-center justify-center relative shadow-2xl"
+                       style="background:linear-gradient(155deg,${t.main},${t.dark}); border-color:${t.gold};">
+                    <div class="absolute inset-y-0 w-6" style="background:linear-gradient(90deg,${t.gold},${t.lightGold},${t.gold});"></div>
+                    <p class="relative z-10 font-cinzel text-lg tracking-[0.22em] px-2 py-0.5 rounded" style="color:${t.lightGold}; background:${t.dark}cc;">SHAGUN</p>
+                    <p class="relative z-10 text-[8px] tracking-[0.2em] uppercase mt-1" style="color:${t.lightGold};">With Love &amp; Blessings</p>
+                  </div>
+                </div>
+              </div>`;
+            break;
+
+          case 'peacock-fan':
+            visual = `
+              <div class="relative w-72 h-72 flex items-center justify-center">
+                <div class="absolute inset-0 flex items-center justify-center">
+                  ${[-76,-62,-48,-34,-20,-8,0,8,20,34,48,62,76].map((ang,i)=>`
+                    <div class="peacock-feather absolute bottom-12 w-10 h-44 rounded-t-full flex flex-col items-center pt-3 shadow"
+                         style="--fang:${ang}deg; transition-delay:${Math.abs(6-i)*45}ms; background:linear-gradient(180deg,#0f766e,#0b4f6c 60%,transparent);">
+                      <div class="w-6 h-8 rounded-full flex items-center justify-center" style="background:${t.gold};">
+                        <div class="w-3.5 h-5 rounded-full bg-[#0b4f6c] flex items-center justify-center">
+                          <div class="w-2 h-2.5 rounded-full bg-[#1e1b4b]"></div>
+                        </div>
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+                <div class="relative z-20">${innerCard}</div>
+              </div>`;
+            break;
+
+          case 'veil-lift':
+            visual = `
+              <div class="relative w-60 h-72 flex items-center justify-center">
+                ${innerCard}
+                <div class="bridal-veil absolute -inset-2 rounded-t-[110px] rounded-b-xl z-20 flex flex-col items-center justify-between p-4 backdrop-blur-[2px]"
+                     style="background:repeating-linear-gradient(90deg,rgba(255,255,255,0.68) 0 12px,rgba(246,240,232,0.5) 12px 24px); border:2px dashed ${t.gold};">
+                  <div class="flex gap-1.5 mt-1">${Array(5).fill(0).map(()=>`<span class="w-2.5 h-2.5 rounded-full bg-white border border-yellow-600/40 shadow-sm"></span>`).join('')}</div>
+                  <div class="w-full h-3 border-b-4 border-dotted" style="border-color:${t.gold};"></div>
+                </div>
+              </div>`;
+            break;
+
+          case 'moonrise':
+            visual = `
+              <div class="relative w-72 h-72 flex items-center justify-center">
+                <div class="w-44 h-44 rounded-full flex flex-col items-center justify-center text-center shadow-[0_0_50px_rgba(246,215,154,0.65)]"
+                     style="background:radial-gradient(circle at 35% 35%,#fffdf5,${t.lightGold});">
+                  <svg class="w-10 h-10 mb-1" style="color:${t.main}"><use href="#ganesh-icon"></use></svg>
+                  <p style="font-family:${t.hFont}; color:${t.main};" class="text-lg">Shubh Vivaah</p>
+                </div>
+                <div class="moon-cloud cloud-l absolute top-14 left-2 w-36 h-16 rounded-full bg-[#ffe8e0]/95 shadow-lg"></div>
+                <div class="moon-cloud cloud-r absolute top-20 right-2 w-36 h-16 rounded-full bg-[#ffdcd2]/95 shadow-lg"></div>
+                <div class="moon-cloud cloud-l absolute bottom-16 left-4 w-40 h-16 rounded-full bg-[#ffe5dc]/95 shadow-lg" style="transition-delay:0.12s"></div>
+                <div class="moon-cloud cloud-r absolute bottom-14 right-4 w-36 h-16 rounded-full bg-[#ffd8cc]/95 shadow-lg" style="transition-delay:0.12s"></div>
+              </div>`;
+            break;
+
+          case 'chunri-unfold':
+            visual = `
+              <div class="relative w-60 h-60 flex items-center justify-center">
+                <div class="absolute inset-0 rounded-xl flex flex-col items-center justify-center shadow-lg border-2" style="background:#fffdf8; border-color:${t.gold};">
+                  <svg class="w-11 h-11 mb-2" style="color:${t.main}"><use href="#ganesh-icon"></use></svg>
+                  <p style="font-family:${t.hFont}; color:${t.main};" class="text-xl">Shubh Vivaah</p>
+                </div>
+                <!-- 4 Triangular Bandhani Flaps -->
+                <div class="chunri-flap chunri-t absolute inset-0" style="clip-path:polygon(0 0,100% 0,50% 50%); background:radial-gradient(${t.lightGold} 1px,transparent 1px) 0 0/12px 12px, ${t.main};"></div>
+                <div class="chunri-flap chunri-b absolute inset-0" style="clip-path:polygon(0 100%,100% 100%,50% 50%); background:radial-gradient(${t.lightGold} 1px,transparent 1px) 0 0/12px 12px, ${t.dark};"></div>
+                <div class="chunri-flap chunri-l absolute inset-0" style="clip-path:polygon(0 0,0 100%,50% 50%); background:radial-gradient(${t.lightGold} 1px,transparent 1px) 0 0/12px 12px, ${t.main};"></div>
+                <div class="chunri-flap chunri-r absolute inset-0" style="clip-path:polygon(100% 0,100% 100%,50% 50%); background:radial-gradient(${t.lightGold} 1px,transparent 1px) 0 0/12px 12px, ${t.dark};"></div>
+                <div class="open-medallion relative z-20 w-14 h-14 rounded-full flex items-center justify-center border-2 shadow-xl" style="background:#fffaf2; border-color:${t.gold};">
+                  <svg class="w-8 h-8" style="color:${t.main}"><use href="#ganesh-icon"></use></svg>
+                </div>
+              </div>`;
+            break;
+
+          case 'butterflies': {
+            const bColors = ['#f4a98c', '#fde047', '#c4b5fd', '#7dd3fc'];
+            visual = `
+              <div class="relative w-64 h-72 flex items-center justify-center">
+                ${innerCard}
+                <div class="absolute inset-0 z-20 pointer-events-none">
+                  ${Array(18).fill(0).map((_,i)=>{
+                    const x = 18 + (i % 4) * 52 + (Math.random()*14-7);
+                    const y = 24 + Math.floor(i / 4) * 48;
+                    const tx = (Math.random() - 0.5) * 320;
+                    const ty = -100 - Math.random() * 180;
+                    const c = bColors[i % 4];
+                    return `<div class="bfly absolute" style="left:${x}px; top:${y}px; --tx:${tx}px; --ty:${ty}px; --rot:${(Math.random()-0.5)*120}deg; transition-delay:${i*35}ms">
+                      <svg class="w-7 h-7 drop-shadow" viewBox="0 0 32 32"><ellipse cx="10" cy="13" rx="8" ry="6" fill="${c}"/><ellipse cx="22" cy="13" rx="8" ry="6" fill="${c}"/><ellipse cx="11" cy="21" rx="5" ry="4" fill="${c}" opacity="0.85"/><ellipse cx="21" cy="21" rx="5" ry="4" fill="${c}" opacity="0.85"/><rect x="15" y="9" width="2" height="14" rx="1" fill="#3d6b5a"/></svg>
+                    </div>`;
+                  }).join('')}
+                </div>
+              </div>`;
+            break;
+          }
+
+          case 'black-envelope':
+            visual = `
+              <div class="relative w-64 h-64 flex items-center justify-center">
+                <div class="env-card absolute z-10">${innerCard}</div>
+                <div class="relative z-20 w-60 h-40 rounded-lg shadow-2xl border overflow-visible" style="background:#141311; border-color:${t.gold};">
+                  <div class="env-flap absolute top-0 left-0 right-0 h-24 z-30" style="clip-path:polygon(0 0,100% 0,50% 100%); background:linear-gradient(180deg,#23201b,#141311); border-top:2px solid ${t.gold};"></div>
+                  <div class="absolute inset-0 flex items-end justify-center pb-5 z-20">
+                    <svg class="w-8 h-8" style="color:${t.gold}"><use href="#ganesh-icon"></use></svg>
+                  </div>
+                </div>
+              </div>`;
+            break;
+
+          case 'theatre-curtains':
+            visual = `
+              <div class="relative w-72 h-80 flex items-center justify-center overflow-hidden rounded-2xl border" style="border-color:${t.gold}; background:#1b050a;">
+                ${innerCard}
+                <div class="curtain-l absolute inset-y-0 left-0 w-1/2 z-20 shadow-2xl"
+                     style="background:repeating-linear-gradient(90deg,${t.dark} 0 12px,${t.main} 12px 24px); border-bottom:6px dotted ${t.lightGold};"></div>
+                <div class="curtain-r absolute inset-y-0 right-0 w-1/2 z-20 shadow-2xl"
+                     style="background:repeating-linear-gradient(90deg,${t.main} 0 12px,${t.dark} 12px 24px); border-bottom:6px dotted ${t.lightGold};"></div>
+                <div class="absolute top-0 inset-x-0 h-9 z-30 rounded-b-[40%]" style="background:${t.dark}; border-bottom:2px solid ${t.lightGold};"></div>
+              </div>`;
+            break;
+
+          case 'shatter-glass':
+            visual = `
+              <div class="relative w-60 h-72 flex items-center justify-center">
+                ${innerCard}
+                <div class="absolute inset-0 z-20 grid grid-cols-4 grid-rows-5 gap-[1px] pointer-events-none">
+                  ${Array(20).fill(0).map((_,i)=>{
+                    const sx = ((i%4)-1.5)*95;
+                    const sy = (Math.floor(i/4)-2)*85;
+                    return `<div class="glass-shard backdrop-blur-md border border-white/50"
+                                 style="--sx:${sx}px; --sy:${sy}px; --srot:${(Math.random()-0.5)*160}deg; background:linear-gradient(135deg,rgba(227,233,242,0.82),rgba(143,176,232,0.5)); transition-delay:${Math.random()*140}ms"></div>`;
+                  }).join('')}
+                </div>
+              </div>`;
+            break;
+
+          case 'marble-doors':
+            visual = `
+              <div class="relative w-64 h-76 flex items-center justify-center overflow-hidden rounded-xl border-4 shadow-2xl" style="border-color:${t.gold}; height:290px;">
+                ${innerCard}
+                <div class="marble-l absolute inset-y-0 left-0 w-1/2 z-20 border-r flex items-center justify-end pr-2.5"
+                     style="background:linear-gradient(125deg,#ffffff 0%,#ece8e1 52%,#f9f7f3 100%); border-color:${t.gold};">
+                  <div class="w-1.5 h-14 rounded-full" style="background:${t.gold};"></div>
+                </div>
+                <div class="marble-r absolute inset-y-0 right-0 w-1/2 z-20 border-l flex items-center justify-start pl-2.5"
+                     style="background:linear-gradient(235deg,#ffffff 0%,#ece8e1 52%,#f9f7f3 100%); border-color:${t.gold};">
+                  <div class="w-1.5 h-14 rounded-full" style="background:${t.gold};"></div>
+                </div>
+              </div>`;
+            break;
+
+          case 'fan-cards':
+            visual = `
+              <div class="relative w-64 h-72 flex items-center justify-center">
+                ${[-34,-17,0,17,34].map((deg,i)=>`
+                  <div class="fan-card absolute w-44 h-60 rounded-2xl border-2 shadow-xl flex flex-col items-center justify-center p-4"
+                       style="--fan:${deg}deg; --fy:${i===2?'-22px':'0px'}; z-index:${i===2?30:10+i}; background:#fff8f7; border-color:${t.gold};">
+                    ${i===2 ? `<svg class="w-10 h-10 mb-2" style="color:${t.gold}"><use href="#ganesh-icon"></use></svg><p style="font-family:${t.hFont}; color:${t.main};" class="text-lg">Shubh Vivaah</p><p class="text-[8px] tracking-[0.2em] uppercase mt-1" style="color:${t.gold};">You Are Invited</p>` : ''}
+                  </div>
+                `).join('')}
+              </div>`;
+            break;
+
+          case 'gold-iris':
+            visual = `
+              <div class="relative w-60 h-60 rounded-full flex items-center justify-center border-[6px] shadow-2xl overflow-hidden" style="border-color:${t.gold}; background:${t.dark};">
+                <div class="flex flex-col items-center justify-center text-center">
+                  <svg class="w-10 h-10 mb-1" style="color:${t.lightGold}"><use href="#ganesh-icon"></use></svg>
+                  <p style="font-family:${t.hFont}; color:${t.lightGold};" class="text-lg">Shubh Vivaah</p>
+                </div>
+                <svg class="absolute inset-0 w-full h-full z-20" viewBox="0 0 200 200">
+                  ${Array(8).fill(0).map((_,i)=>`
+                    <path class="iris-blade" style="--irot:${i*45-65}deg; transition-delay:${i*45}ms"
+                          d="M100 100 L100 0 A100 100 0 0 1 171 29 Z"
+                          transform="rotate(${i*45} 100 100)" fill="${i%2?t.main:'#4d2266'}" stroke="${t.gold}" stroke-width="1.2"/>
+                  `).join('')}
+                </svg>
+              </div>`;
+            break;
+
+          case 'rangoli-draw':
+            visual = `
+              <div class="relative w-64 h-64 flex items-center justify-center">
+                <svg class="rangoli-spin absolute inset-0 w-full h-full" viewBox="0 0 240 240">
+                  <circle cx="120" cy="120" r="102" fill="none" stroke="${t.gold}" stroke-dasharray="4 6" stroke-width="1.5"/>
+                  ${Array(12).fill(0).map((_,i)=>{
+                    const colors = ['#c0392b','#f39c12','#16a085','#e84393','#2980b9'];
+                    return `<path class="rangoli-path" d="M120 120 Q100 50 120 20 Q140 50 120 120 Z" transform="rotate(${i*30} 120 120)"
+                                  stroke="${t.gold}" stroke-width="1.5" fill="${colors[i%5]}"/>`;
+                  }).join('')}
+                </svg>
+                <div class="relative z-20 w-28 h-28 rounded-full flex flex-col items-center justify-center border-2 shadow-xl" style="background:#fffaf2; border-color:${t.gold};">
+                  <svg class="w-9 h-9" style="color:${t.main}"><use href="#ganesh-icon"></use></svg>
+                  <p style="font-family:${t.hFont}; color:${t.main};" class="text-xs font-semibold mt-0.5">Shubh Vivaah</p>
+                </div>
+              </div>`;
+            break;
+
+          case 'oyster-pearl':
+            visual = `
+              <div class="relative w-64 h-64 flex flex-col items-center justify-center">
+                <div class="oyster-pearl relative z-20 w-28 h-28 rounded-full flex flex-col items-center justify-center text-center shadow-[0_0_35px_rgba(255,255,255,0.75)]"
+                     style="background:radial-gradient(circle at 35% 30%,#ffffff,#e3f3f2);">
+                  <svg class="w-8 h-8" style="color:${t.main}"><use href="#ganesh-icon"></use></svg>
+                  <p style="font-family:${t.hFont}; color:${t.dark};" class="text-xs font-semibold">Shubh Vivaah</p>
+                </div>
+                <div class="relative -mt-12 w-52 h-28 flex flex-col items-center">
+                  <div class="oyster-top w-52 h-20 rounded-t-full border-2 shadow-xl z-30"
+                       style="background:repeating-linear-gradient(90deg,#d9f0ef 0 10px,#b8dfdf 10px 20px); border-color:${t.lightGold};"></div>
+                  <div class="w-48 h-12 -mt-3 rounded-b-full border-2 shadow-inner z-10"
+                       style="background:linear-gradient(180deg,#8ec9c8,#4a8f96); border-color:${t.lightGold};"></div>
+                </div>
+              </div>`;
+            break;
+
+          case 'wreath-grows':
+            visual = `
+              <div class="relative w-64 h-64 flex items-center justify-center">
+                <div class="absolute inset-4 rounded-full border" style="border-color:${t.main}44;"></div>
+                ${Array(20).fill(0).map((_,i)=>{
+                  const ang = (i / 20) * Math.PI * 2;
+                  const x = 128 + Math.cos(ang) * 96 - 10;
+                  const y = 128 + Math.sin(ang) * 96 - 10;
+                  return `<span class="wreath-leaf absolute w-5 h-5 rounded-full border border-white shadow-sm flex items-center justify-center"
+                                style="left:${x}px; top:${y}px; transition-delay:${i*45}ms; background:${i%3===0?'#ffffff':t.main};">
+                                ${i%3===0?`<span class="w-2 h-2 rounded-full bg-yellow-400"></span>`:''}
+                          </span>`;
+                }).join('')}
+                <div class="relative z-20 w-32 h-32 rounded-full flex flex-col items-center justify-center border-2 shadow-lg" style="background:#ffffff; border-color:${t.gold};">
+                  <svg class="w-9 h-9" style="color:${t.gold}"><use href="#ganesh-icon"></use></svg>
+                  <p style="font-family:${t.hFont}; color:${t.main};" class="text-sm mt-1">Shubh Vivaah</p>
+                </div>
+              </div>`;
+            break;
+
+          case 'glass-cloche':
+            visual = `
+              <div class="relative w-60 h-72 flex flex-col items-center justify-end pb-4">
+                <div class="cloche-dome absolute top-2 w-52 h-60 rounded-t-[110px] z-30 border-2 flex justify-center"
+                     style="background:linear-gradient(135deg,rgba(255,255,255,0.28),rgba(255,255,255,0.06)); border-color:rgba(243,221,156,0.75); box-shadow:inset 8px 0 18px rgba(255,255,255,0.22);">
+                  <span class="w-5 h-5 rounded-full -mt-3 shadow-md" style="background:${t.gold};"></span>
+                </div>
+                <div class="relative z-20 w-36 h-48 rounded-t-full border-2 flex flex-col items-center justify-center text-center p-3 shadow-lg"
+                     style="background:#fffdf7; border-color:${t.gold};">
+                  <svg class="w-9 h-9 mb-1" style="color:${t.gold}"><use href="#ganesh-icon"></use></svg>
+                  <p style="font-family:${t.hFont}; color:${t.main};" class="text-base">Shubh Vivaah</p>
+                  <p class="text-[8px] uppercase tracking-widest mt-1" style="color:${t.gold};">You Are Invited</p>
+                </div>
+                <div class="relative z-20 w-56 h-5 rounded-full shadow-xl" style="background:linear-gradient(90deg,${t.gold},${t.lightGold},${t.gold});"></div>
+                <div class="w-12 h-5 -mt-1 rounded-b-lg" style="background:${t.gold};"></div>
+              </div>`;
+            break;
+        }
+
+        return `
+          <div class="w-full h-full flex flex-col items-center justify-center px-5 cursor-pointer select-none" style="background:${bgStyle};" id="opening-tap-target">
+            <div class="open-visual-wrap">${visual}</div>
+            <div class="mt-8 flex flex-col items-center open-hint-wrap transition-opacity duration-300">
+              <span class="relative flex items-center justify-center w-9 h-9 mb-2">
+                <span class="pulse-ring absolute inset-0 rounded-full border" style="border-color:${hintTextColor};"></span>
+                <span class="w-3 h-3 rounded-full" style="background:${hintTextColor};"></span>
+              </span>
+              <span class="text-[10px] font-semibold tracking-[0.22em] uppercase text-center" style="color:${hintTextColor};">${t.tapHint}</span>
+            </div>
+          </div>
+        `;
+      }
+
+      /* -------------------------------------------------------------------
+       * 9. BUILD ALL 20 UNIQUE DATE REVEALS
+       * ------------------------------------------------------------------- */
+      function buildDateCardInner(t) {
+        return `
+          <div class="flex flex-col items-center justify-center text-center p-4 h-full">
+            <svg class="w-8 h-8 mb-1.5" style="color:${t.gold}"><use href="#ganesh-icon"></use></svg>
+            <p class="text-[9px] tracking-[0.26em] uppercase font-semibold" style="color:${t.gold};">${DEMO.weekday}</p>
+            <p style="font-family:${t.hFont}; color:${t.darkTheme ? t.lightGold : t.main};" class="text-5xl font-bold leading-none my-1">${DEMO.dayNum}</p>
+            <p style="font-family:${t.hFont}; color:${t.darkTheme ? '#ffffff' : t.dark};" class="text-xl italic">${DEMO.month}</p>
+            <p class="text-[11px] tracking-[0.28em] mt-0.5" style="color:${t.gold};">${DEMO.year}</p>
+            <div class="w-12 h-[1px] my-2.5" style="background:${t.gold}; opacity:0.5;"></div>
+            <p class="text-[10px] opacity-85" style="color:${t.darkTheme ? '#f5efe6' : t.dark};">${DEMO.muhurat} &bull; ${DEMO.venueName}</p>
+          </div>
+        `;
+      }
+
+      function buildDateRevealHTML(t) {
+        const cardBg = t.darkTheme ? `linear-gradient(155deg,${t.main},${t.dark})` : '#fffdf9';
+        const borderC = t.gold;
+        const inner = buildDateCardInner(t);
+
+        let interactiveBox = '';
+        let tip = 'Tap to reveal the wedding date';
+
+        switch (t.dateType) {
+          case 'bloom-rose':
+            tip = 'Press & hold (or tap) the rose';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-64 mx-auto rounded-full border-2 flex items-center justify-center overflow-hidden shadow-lg cursor-pointer" style="background:${cardBg}; border-color:${borderC};">
+                ${inner}
+                <div id="dr-cover" class="absolute inset-0 flex items-center justify-center bg-[#f9dde3]/95 transition-opacity duration-700">
+                  ${Array(16).fill(0).map((_,i)=>`
+                    <div class="dr-rose-petal absolute w-20 h-28 rounded-full border border-white/40 shadow"
+                         style="--ra:${i*22.5}deg; transform:rotate(${i*22.5}deg) translateY(-18px); background:${i%2?'#e08ea0':'#b83b5e'};"></div>
+                  `).join('')}
+                  <div class="relative z-10 w-12 h-12 rounded-full bg-[#8a1f3d] border-2 border-[#ecd6ab] flex items-center justify-center text-[9px] text-white font-semibold uppercase">Hold</div>
+                </div>
+              </div>`;
+            break;
+
+          case 'light-diya':
+            tip = 'Tap or drag flame to light the diya';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-72 mx-auto rounded-t-[130px] rounded-b-2xl border-2 overflow-hidden shadow-lg cursor-pointer" style="background:#0a2e22; border-color:${borderC};">
+                <div id="dr-date-layer" class="h-full transition-all duration-1000" style="opacity:0.06; filter:blur(8px);">${buildDateCardInner({...t, darkTheme:true})}</div>
+                <div id="dr-diya-glow" class="pointer-events-none absolute inset-0 transition-opacity duration-1000 opacity-0" style="background:radial-gradient(circle at 50% 78%,rgba(255,215,100,0.45),transparent 65%);"></div>
+                <div class="absolute bottom-3 inset-x-0 flex flex-col items-center">
+                  <div id="dr-flame" class="w-4 h-6 rounded-full bg-gradient-to-t from-orange-500 via-yellow-300 to-white opacity-0 transition-all duration-500 shadow-[0_0_16px_#facc15] -mb-1"></div>
+                  <div class="w-14 h-6 rounded-b-full bg-[#b45309] border-t-2 border-yellow-300 shadow"></div>
+                </div>
+              </div>`;
+            break;
+
+          case 'brush-petals':
+            tip = 'Swipe or tap to brush petals away';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-72 mx-auto rounded-t-[130px] rounded-b-2xl border-2 overflow-hidden shadow-lg cursor-pointer" style="background:${cardBg}; border-color:${borderC};">
+                ${inner}
+                <div id="dr-petals-bed" class="absolute inset-0 bg-[#efe2f3]/90 transition-opacity duration-700">
+                  ${Array(36).fill(0).map((_,i)=>`
+                    <span class="dr-loose-petal absolute w-9 h-6 rounded-full shadow-sm transition-all duration-500"
+                          style="left:${(i%6)*40+4}px; top:${Math.floor(i/6)*44+6}px; transform:rotate(${i*31}deg); background:${i%3===0?'#d79bc0':(i%3===1?'#f3c6df':'#ffffff')};"></span>
+                  `).join('')}
+                </div>
+              </div>`;
+            break;
+
+          case 'spin-mandala':
+            tip = 'Tap or drag to spin the mandala';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-64 mx-auto rounded-full border-2 overflow-hidden shadow-lg cursor-pointer flex items-center justify-center" style="background:${cardBg}; border-color:${borderC};">
+                ${inner}
+                <div id="dr-dial" class="absolute inset-0 rounded-full flex items-center justify-center transition-all duration-1000"
+                     style="background:conic-gradient(from 0deg,#f59e0b,#d97706,#0f766e,#f59e0b); border:4px solid #8a2c0d;">
+                  <div class="w-36 h-36 rounded-full bg-[#0f766e] border-2 border-dashed border-[#f5d98a] flex flex-col items-center justify-center text-[#f5d98a]">
+                    <span class="text-xs font-bold tracking-widest uppercase">SPIN</span>
+                    <span class="text-[9px] opacity-80">360&deg;</span>
+                  </div>
+                </div>
+              </div>`;
+            break;
+
+          case 'place-ring':
+            tip = 'Tap ring to place it in the circle';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-72 mx-auto rounded-t-[130px] rounded-b-2xl border-2 overflow-hidden shadow-lg cursor-pointer" style="background:${cardBg}; border-color:${borderC}; perspective:900px;">
+                ${inner}
+                <div class="dr-door-l absolute inset-y-0 left-0 w-1/2 border-r" style="background:${t.main}; border-color:${t.gold};"></div>
+                <div class="dr-door-r absolute inset-y-0 right-0 w-1/2 border-l" style="background:${t.main}; border-color:${t.gold};"></div>
+                <div id="dr-ring-ui" class="absolute inset-0 flex flex-col items-center justify-center gap-6 z-20 transition-opacity duration-500">
+                  <div class="w-14 h-14 rounded-full border-2 border-dashed animate-pulse" style="border-color:${t.lightGold};"></div>
+                  <div class="w-10 h-10 rounded-full border-4 flex items-start justify-center shadow-lg" style="border-color:${t.lightGold};">
+                    <span class="w-3 h-3 rotate-45 bg-white -mt-2 shadow"></span>
+                  </div>
+                </div>
+              </div>`;
+            break;
+
+          case 'break-seal':
+            tip = 'Tap the wax seal 3 times to break it';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-64 mx-auto rounded-2xl border-2 overflow-hidden shadow-lg cursor-pointer" style="background:${cardBg}; border-color:${borderC};">
+                ${inner}
+                <div id="dr-seal-env" class="absolute inset-0 flex items-center justify-center transition-all duration-700" style="background:${t.main};">
+                  <div class="absolute top-0 inset-x-0 h-32" style="clip-path:polygon(0 0,100% 0,50% 100%); background:${t.dark}; border-bottom:1px solid ${t.gold};"></div>
+                  <div id="dr-wax" class="relative z-10 w-16 h-16 rounded-full bg-[#b91c1c] border-2 border-[#f6dc95] flex flex-col items-center justify-center shadow-xl transition-transform">
+                    <svg class="w-8 h-8 text-[#f6dc95]"><use href="#ganesh-icon"></use></svg>
+                    <span id="dr-seal-cnt" class="text-[8px] text-white font-bold">3 TAPS</span>
+                  </div>
+                </div>
+              </div>`;
+            break;
+
+          case 'draw-heart':
+            tip = 'Tap or trace the heart to reveal';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-72 mx-auto rounded-t-[130px] rounded-b-2xl border-2 overflow-hidden shadow-lg cursor-pointer" style="background:${cardBg}; border-color:${borderC};">
+                <div id="dr-heart-date" class="h-full transition-all duration-1000" style="filter:blur(8px); opacity:0.2;">${inner}</div>
+                <svg id="dr-heart-svg" class="absolute inset-0 w-full h-full p-8 transition-opacity duration-700" viewBox="0 0 120 120">
+                  <path d="M60 100 C20 72 12 42 30 28 C44 17 56 28 60 38 C64 28 76 17 90 28 C108 42 100 72 60 100 Z"
+                        fill="none" stroke="${t.gold}" stroke-width="2.5" stroke-dasharray="4 4"/>
+                  <path id="dr-heart-fill" d="M60 100 C20 72 12 42 30 28 C44 17 56 28 60 38 C64 28 76 17 90 28 C108 42 100 72 60 100 Z"
+                        fill="none" stroke="#e06377" stroke-width="4" stroke-dasharray="300" stroke-dashoffset="300" style="transition:stroke-dashoffset 1s ease;"/>
+                </svg>
+              </div>`;
+            break;
+
+          case 'release-lanterns':
+            tip = 'Tap each glowing lantern to release it';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-72 mx-auto rounded-t-[130px] rounded-b-2xl border-2 overflow-hidden shadow-lg" style="background:linear-gradient(180deg,#2e1042,#7c2d48,#f09a7e); border-color:${borderC};">
+                <div id="dr-lan-date" class="h-full transition-all duration-700" style="filter:blur(9px); opacity:0.15;">${buildDateCardInner({...t, darkTheme:true})}</div>
+                <div class="absolute bottom-4 inset-x-0 flex justify-center gap-5 z-20">
+                  ${[0,1,2].map(i=>`
+                    <button type="button" class="dr-lantern w-9 h-12 rounded-t-xl rounded-b-md bg-gradient-to-b from-amber-200 via-orange-400 to-amber-600 shadow-[0_0_16px_#fbbf24] transition-all duration-1000 cursor-pointer border border-yellow-100"></button>
+                  `).join('')}
+                </div>
+              </div>`;
+            break;
+
+          case 'turn-page':
+            tip = 'Swipe left or tap to turn the page';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-68 mx-auto rounded-2xl border-2 overflow-hidden shadow-lg cursor-pointer" style="height:265px; background:${cardBg}; border-color:${borderC}; perspective:1000px;">
+                ${inner}
+                <div class="dr-page-cover absolute inset-0 rounded-2xl flex flex-col items-center justify-center p-5 text-center border-2"
+                     style="background:radial-gradient(${t.lightGold} 1px,transparent 1px) 0 0/12px 12px, ${t.main}; border-color:${t.gold};">
+                  <svg class="w-10 h-10 mb-2" style="color:${t.lightGold}"><use href="#ganesh-icon"></use></svg>
+                  <p style="font-family:${t.hFont}; color:${t.lightGold};" class="text-lg">Turn the Page</p>
+                  <p class="text-[9px] tracking-widest uppercase mt-2 text-white/80">&larr; Swipe Left</p>
+                </div>
+              </div>`;
+            break;
+
+          case 'open-garden':
+            tip = 'Slide (or tap) butterfly to open garden';
+            interactiveBox = `
+              <div id="dr-box" class="max-w-[260px] mx-auto">
+                <div class="relative w-64 h-64 mx-auto rounded-t-[130px] rounded-b-2xl border-2 overflow-hidden shadow-lg" style="background:${cardBg}; border-color:${borderC};">
+                  ${inner}
+                  <div class="dr-hedge-l absolute inset-y-0 left-0 w-1/2 border-r border-white/40" style="background:repeating-linear-gradient(45deg,#3d6b5a 0 10px,#4f8470 10px 20px);"></div>
+                  <div class="dr-hedge-r absolute inset-y-0 right-0 w-1/2 border-l border-white/40" style="background:repeating-linear-gradient(-45deg,#3d6b5a 0 10px,#4f8470 10px 20px);"></div>
+                </div>
+                <input id="dr-garden-slider" type="range" min="0" max="100" value="0" class="w-full mt-3 accent-[#3d6b5a] cursor-pointer" />
+              </div>`;
+            break;
+
+          case 'scratch-gold':
+            tip = 'Scratch the gold foil (or tap) to reveal';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-72 mx-auto rounded-t-[130px] rounded-b-2xl border-2 overflow-hidden shadow-lg select-none" style="background:#fdf8ef; border-color:${borderC};">
+                ${buildDateCardInner({...t, darkTheme:false, main:'#1c1a17', dark:'#1c1a17'})}
+                <canvas id="dr-scratch-canvas" width="256" height="288" class="absolute inset-0 w-full h-full z-20 cursor-pointer touch-none"></canvas>
+              </div>`;
+            break;
+
+          case 'pop-champagne':
+            tip = 'Tap champagne bottle to pop the cork';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-72 mx-auto flex flex-col items-center cursor-pointer">
+                <div class="relative w-60 h-56 rounded-t-[120px] rounded-b-2xl border-2 overflow-hidden shadow-lg" style="background:#fffdf9; border-color:${borderC};">
+                  <div id="dr-champ-date" class="h-full transition-all duration-1000" style="filter:blur(8px); opacity:0.22;">${buildDateCardInner({...t, darkTheme:false, main:'#5c0f22', dark:'#3a0816'})}</div>
+                </div>
+                <div id="dr-bottle" class="-mt-10 relative z-20 flex flex-col items-center transition-transform">
+                  <div id="dr-cork" class="w-4 h-5 rounded-t bg-[#d4a373] transition-all duration-700"></div>
+                  <div class="w-5 h-7 bg-[#c9906b]"></div>
+                  <div class="w-12 h-14 rounded-t-xl rounded-b-md bg-[#14532d] border border-[#f0cdb4]/50 flex items-center justify-center">
+                    <span class="w-7 h-5 rounded-sm bg-[#f0cdb4] text-[7px] text-[#3a0816] font-bold flex items-center justify-center">POP</span>
+                  </div>
+                </div>
+              </div>`;
+            break;
+
+          case 'connect-stars':
+            tip = 'Tap the glowing stars (or tap card) to connect';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-72 mx-auto rounded-t-[130px] rounded-b-2xl border-2 overflow-hidden shadow-lg cursor-pointer" style="background:radial-gradient(circle at 50% 30%,#17387a,#06132e); border-color:${borderC};">
+                <div id="dr-star-date" class="h-full transition-all duration-1000" style="filter:blur(9px); opacity:0.12;">${buildDateCardInner({...t, darkTheme:true})}</div>
+                <svg id="dr-star-svg" class="absolute inset-0 w-full h-full z-20" viewBox="0 0 256 288">
+                  <polyline id="dr-constellation" points="" fill="none" stroke="#e3e9f2" stroke-width="2" stroke-dasharray="4 4"/>
+                  ${[[46,210],[58,132],[96,74],[160,74],[198,132],[210,210]].map(([x,y],i)=>`
+                    <circle class="dr-star-pt cursor-pointer" data-si="${i}" cx="${x}" cy="${y}" r="8" fill="${i===0?'#ffffff':'#8fb0e8'}" stroke="#ffffff" stroke-width="1.5"/>
+                  `).join('')}
+                </svg>
+              </div>`;
+            break;
+
+          case 'turn-hourglass':
+            tip = 'Tap the hourglass to turn it over';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 mx-auto flex flex-col items-center cursor-pointer">
+                <div class="w-60 h-56 rounded-2xl border-2 overflow-hidden shadow-lg" style="background:#ffffff; border-color:${borderC};">
+                  <div id="dr-hg-date" class="h-full transition-all duration-1000" style="filter:blur(8px); opacity:0.2;">${inner}</div>
+                </div>
+                <div id="dr-hourglass" class="-mt-5 z-20 w-12 h-14 rounded-full bg-white border-2 flex items-center justify-center shadow-lg transition-transform duration-700" style="border-color:${t.gold};">
+                  <span class="text-xl">&#8987;</span>
+                </div>
+              </div>`;
+            break;
+
+          case 'peel-sticker':
+            tip = 'Tap or drag the corner to peel sticker';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-64 mx-auto rounded-full border-2 overflow-hidden shadow-lg cursor-pointer" style="background:${cardBg}; border-color:${borderC};">
+                ${inner}
+                <div class="dr-sticker absolute inset-0 rounded-full flex flex-col items-center justify-center shadow-xl"
+                     style="background:linear-gradient(135deg,#f2cdbd,#c8896f,#e9a7a7);">
+                  <p style="font-family:${t.hFont};" class="text-xl text-[#5e2d36]">Peel me</p>
+                  <p class="text-[8px] tracking-widest uppercase text-[#5e2d36]/80 mt-1">Tap to peel off</p>
+                  <span class="absolute bottom-5 right-5 w-8 h-8 rounded-tl-xl bg-white/85 shadow-md"></span>
+                </div>
+              </div>`;
+            break;
+
+          case 'flashlight-dark':
+            tip = 'Move finger (or tap) to shine golden light';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-72 mx-auto rounded-t-[130px] rounded-b-2xl border-2 overflow-hidden shadow-lg cursor-pointer" style="background:#14071d; border-color:${borderC};">
+                ${buildDateCardInner({...t, darkTheme:true})}
+                <div id="dr-dark-mask" class="absolute inset-0 z-20 transition-opacity duration-700"
+                     style="background:radial-gradient(circle 54px at 50% 50%, transparent 0%, rgba(16,5,24,0.96) 100%);"></div>
+              </div>`;
+            break;
+
+          case 'raise-sun':
+            tip = 'Slide or tap sun to raise golden sunrise';
+            interactiveBox = `
+              <div id="dr-box" class="max-w-[260px] mx-auto">
+                <div id="dr-sky" class="relative w-64 h-64 mx-auto rounded-t-[130px] rounded-b-2xl border-2 overflow-hidden shadow-lg transition-all duration-700 cursor-pointer"
+                     style="background:linear-gradient(180deg,#2b1510,#7a2a1a); border-color:${borderC};">
+                  <div id="dr-sun-date" class="h-full transition-all duration-700" style="opacity:0.15; filter:blur(6px);">${buildDateCardInner({...t, darkTheme:true})}</div>
+                  <div id="dr-sun-orb" class="absolute w-10 h-10 rounded-full bg-gradient-to-br from-yellow-200 to-orange-500 shadow-[0_0_24px_#fbbf24] transition-all duration-500" style="left:16px; bottom:30px;"></div>
+                </div>
+                <input id="dr-sun-slider" type="range" min="0" max="100" value="0" class="w-full mt-3 accent-[#c08a2e] cursor-pointer" />
+              </div>`;
+            break;
+
+          case 'wave-wash':
+            tip = 'Swipe right or tap to wash sand away';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-72 mx-auto rounded-t-[130px] rounded-b-2xl border-2 overflow-hidden shadow-lg cursor-pointer" style="background:${cardBg}; border-color:${borderC};">
+                ${buildDateCardInner({...t, darkTheme:true})}
+                <div id="dr-sand" class="absolute inset-0 z-20 flex flex-col items-center justify-center transition-transform duration-1000"
+                     style="background:linear-gradient(180deg,#0e7490 0 22%,#e6d5b8 22% 100%);">
+                  <p class="mt-10 text-xs font-semibold tracking-widest uppercase text-[#062f37]">Swipe Right &rarr;</p>
+                </div>
+              </div>`;
+            break;
+
+          case 'unfold-card':
+            tip = 'Tap PULL tab to unfold the 4-panel card';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 h-64 mx-auto flex items-center justify-center cursor-pointer">
+                <div id="dr-fold-wrap" class="w-24 h-60 rounded-xl border-2 overflow-hidden shadow-xl transition-all duration-1000 flex items-center justify-center relative"
+                     style="background:${cardBg}; border-color:${borderC};">
+                  <div id="dr-fold-inner" class="opacity-0 transition-opacity duration-700 w-64">${inner}</div>
+                  <span id="dr-pull-tab" class="absolute px-3 py-1.5 rounded-full text-[10px] font-bold tracking-widest text-white shadow" style="background:${t.main};">PULL &rarr;</span>
+                </div>
+              </div>`;
+            break;
+
+          case 'strike-gong':
+            tip = 'Tap to strike the golden gong';
+            interactiveBox = `
+              <div id="dr-box" class="relative w-64 mx-auto flex flex-col items-center cursor-pointer">
+                <div class="w-60 h-56 rounded-t-[120px] rounded-b-2xl border-2 overflow-hidden shadow-lg" style="background:${cardBg}; border-color:${borderC};">
+                  <div id="dr-gong-date" class="h-full transition-all duration-1000" style="opacity:0.08; filter:blur(8px);">${buildDateCardInner({...t, darkTheme:true})}</div>
+                </div>
+                <div id="dr-gong-disc" class="-mt-7 z-20 w-16 h-16 rounded-full border-4 flex items-center justify-center shadow-xl transition-transform duration-500"
+                     style="background:radial-gradient(circle,#f3dd9c,#d1a84a,#8a661a); border-color:#5c3a18;">
+                  <span class="text-[9px] font-bold text-[#3a2208] uppercase">GONG</span>
+                </div>
+              </div>`;
+            break;
+        }
+
+        return `
+          <section class="px-5 py-12 text-center relative">
+            <p class="text-[9.5px] tracking-[0.26em] uppercase font-semibold" style="color:${t.gold};">Save the Date</p>
+            <h2 style="font-family:${t.hFont}; color:${t.darkTheme ? t.lightGold : t.main};" class="text-3xl mt-1 mb-5">${t.dateName}</h2>
+            ${interactiveBox}
+            <p id="dr-tip" class="mt-3 text-[10.5px] font-medium opacity-75" style="color:${t.darkTheme ? '#f5efe6' : t.main};">${tip}</p>
+
+            <!-- Live Countdown -->
+            <div class="mt-6 inline-flex items-baseline gap-2.5 px-4 py-2.5 rounded-2xl border shadow-sm"
+                 style="background:${t.darkTheme ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.82)'}; border-color:${t.gold}55;">
+              <div><span id="sim-cd-d" style="font-family:${t.hFont}; color:${t.darkTheme ? t.lightGold : t.main};" class="text-xl font-bold">00</span><span class="text-[8px] uppercase ml-0.5 opacity-70">Days</span></div>
+              <span style="color:${t.gold}">&bull;</span>
+              <div><span id="sim-cd-h" style="font-family:${t.hFont}; color:${t.darkTheme ? t.lightGold : t.main};" class="text-xl font-bold">00</span><span class="text-[8px] uppercase ml-0.5 opacity-70">Hrs</span></div>
+              <span style="color:${t.gold}">&bull;</span>
+              <div><span id="sim-cd-m" style="font-family:${t.hFont}; color:${t.darkTheme ? t.lightGold : t.main};" class="text-xl font-bold">00</span><span class="text-[8px] uppercase ml-0.5 opacity-70">Min</span></div>
+              <span style="color:${t.gold}">&bull;</span>
+              <div><span id="sim-cd-s" style="font-family:${t.hFont}; color:${t.darkTheme ? t.lightGold : t.main};" class="text-xl font-bold">00</span><span class="text-[8px] uppercase ml-0.5 opacity-70">Sec</span></div>
+            </div>
+
+            <div class="mt-4">
+              <button id="sim-ics-btn" type="button" class="px-5 py-2 rounded-full border text-[10px] font-semibold tracking-[0.18em] uppercase transition-colors"
+                      style="border-color:${t.gold}; color:${t.darkTheme ? t.lightGold : t.main}; background:${t.darkTheme ? 'rgba(255,255,255,0.05)' : '#ffffff'};">
+                + Add to Calendar
+              </button>
+            </div>
+          </section>
+        `;
+      }
+
+      function wireDateReveal(t) {
+        const box = document.getElementById('dr-box');
+        const tip = document.getElementById('dr-tip');
+        if (!box) return;
+        let revealed = false;
+
+        function completeReveal() {
+          if (revealed) return;
+          revealed = true;
+          box.classList.add('dr-revealed');
+          if (tip) tip.textContent = `See you on ${DEMO.fullDate}`;
+          burstPhoneFx(t, 44);
+        }
+
+        switch (t.dateType) {
+          case 'bloom-rose':
+            box.addEventListener('click', () => {
+              completeReveal();
+              const cov = document.getElementById('dr-cover');
+              if (cov) { cov.style.opacity = '0'; cov.style.pointerEvents = 'none'; }
+            });
+            break;
+
+          case 'light-diya':
+            box.addEventListener('click', () => {
+              completeReveal();
+              document.getElementById('dr-flame').style.opacity = '1';
+              document.getElementById('dr-diya-glow').style.opacity = '1';
+              const dl = document.getElementById('dr-date-layer');
+              dl.style.opacity = '1'; dl.style.filter = 'blur(0px)';
+            });
+            break;
+
+          case 'brush-petals': {
+            const scatter = () => {
+              box.querySelectorAll('.dr-loose-petal').forEach(p => {
+                p.style.transform = `translate(${(Math.random()-0.5)*260}px, ${-80-Math.random()*140}px) rotate(180deg)`;
+                p.style.opacity = '0';
+              });
+              const bed = document.getElementById('dr-petals-bed');
+              if (bed) { bed.style.opacity = '0'; bed.style.pointerEvents = 'none'; }
+              completeReveal();
+            };
+            box.addEventListener('click', scatter);
+            box.addEventListener('pointermove', e => { if (e.buttons) scatter(); });
+            break;
+          }
+
+          case 'spin-mandala':
+            box.addEventListener('click', () => {
+              const dial = document.getElementById('dr-dial');
+              dial.style.transform = 'rotate(360deg) scale(1.25)';
+              dial.style.opacity = '0';
+              dial.style.pointerEvents = 'none';
+              completeReveal();
+            });
+            break;
+
+          case 'place-ring':
+            box.addEventListener('click', () => {
+              const ui = document.getElementById('dr-ring-ui');
+              if (ui) { ui.style.opacity = '0'; ui.style.pointerEvents = 'none'; }
+              completeReveal();
+            });
+            break;
+
+          case 'break-seal': {
+            let taps = 0;
+            box.addEventListener('click', () => {
+              taps++;
+              const wax = document.getElementById('dr-wax');
+              const cnt = document.getElementById('dr-seal-cnt');
+              if (taps < 3) {
+                wax.style.transform = `scale(${1 + taps*0.08}) rotate(${taps%2?10:-10}deg)`;
+                cnt.textContent = `${3 - taps} LEFT`;
+                if (tip) tip.textContent = taps === 1 ? 'It cracked! Tap again...' : 'One more tap!';
+              } else {
+                const env = document.getElementById('dr-seal-env');
+                env.style.opacity = '0';
+                env.style.transform = 'translateY(40px)';
+                env.style.pointerEvents = 'none';
+                completeReveal();
+              }
+            });
+            break;
+          }
+
+          case 'draw-heart':
+            box.addEventListener('click', () => {
+              document.getElementById('dr-heart-fill').style.strokeDashoffset = '0';
+              setTimeout(() => {
+                document.getElementById('dr-heart-svg').style.opacity = '0';
+                const hd = document.getElementById('dr-heart-date');
+                hd.style.filter = 'blur(0px)'; hd.style.opacity = '1';
+                completeReveal();
+              }, 700);
+            });
+            break;
+
+          case 'release-lanterns': {
+            let released = 0;
+            box.querySelectorAll('.dr-lantern').forEach(btn => {
+              btn.addEventListener('click', () => {
+                if (btn.dataset.gone) return;
+                btn.dataset.gone = '1';
+                btn.style.transform = 'translateY(-280px) scale(0.5)';
+                btn.style.opacity = '0';
+                released++;
+                const ld = document.getElementById('dr-lan-date');
+                ld.style.filter = `blur(${Math.max(0, 9 - released * 3)}px)`;
+                ld.style.opacity = String(0.15 + released * 0.28);
+                if (released >= 3) completeReveal();
+              });
+            });
+            break;
+          }
+
+          case 'turn-page':
+          case 'peel-sticker':
+            box.addEventListener('click', completeReveal);
+            break;
+
+          case 'open-garden': {
+            const sl = document.getElementById('dr-garden-slider');
+            const openH = () => { sl.value = 100; completeReveal(); };
+            sl.addEventListener('input', () => { if (Number(sl.value) > 60) completeReveal(); });
+            box.addEventListener('click', openH);
+            break;
+          }
+
+          case 'scratch-gold': {
+            const c = document.getElementById('dr-scratch-canvas');
+            const ctx = c.getContext('2d');
+            const grad = ctx.createLinearGradient(0, 0, c.width, c.height);
+            grad.addColorStop(0, '#c8a96a');
+            grad.addColorStop(0.5, '#f2dfa8');
+            grad.addColorStop(1, '#a8843f');
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, c.width, c.height);
+            ctx.fillStyle = '#3a2a0e';
+            ctx.font = 'bold 13px Montserrat, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('SCRATCH HERE', c.width / 2, c.height / 2);
+
+            let scratched = 0;
+            const scratchAt = (e) => {
+              const r = c.getBoundingClientRect();
+              const x = (e.clientX - r.left) * (c.width / r.width);
+              const y = (e.clientY - r.top) * (c.height / r.height);
+              ctx.globalCompositeOperation = 'destination-out';
+              ctx.beginPath();
+              ctx.arc(x, y, 26, 0, Math.PI * 2);
+              ctx.fill();
+              scratched++;
+              if (scratched > 18) { c.style.opacity = '0'; c.style.pointerEvents = 'none'; completeReveal(); }
+            };
+            c.addEventListener('pointermove', e => { if (e.buttons) scratchAt(e); });
+            c.addEventListener('click', () => { c.style.transition = 'opacity 0.6s'; c.style.opacity = '0'; c.style.pointerEvents = 'none'; completeReveal(); });
+            break;
+          }
+
+          case 'pop-champagne':
+            box.addEventListener('click', () => {
+              document.getElementById('dr-cork').style.transform = 'translateY(-140px) rotate(45deg)';
+              document.getElementById('dr-cork').style.opacity = '0';
+              const cd = document.getElementById('dr-champ-date');
+              cd.style.filter = 'blur(0px)'; cd.style.opacity = '1';
+              completeReveal();
+            });
+            break;
+
+          case 'connect-stars': {
+            const pts = [[46,210],[58,132],[96,74],[160,74],[198,132],[210,210]];
+            let nextIdx = 0;
+            const poly = document.getElementById('dr-constellation');
+            const revealAll = () => {
+              poly.setAttribute('points', pts.map(p => p.join(',')).join(' '));
+              const sd = document.getElementById('dr-star-date');
+              sd.style.filter = 'blur(0px)'; sd.style.opacity = '1';
+              setTimeout(() => { document.getElementById('dr-star-svg').style.opacity = '0'; }, 600);
+              completeReveal();
+            };
+            box.addEventListener('click', () => {
+              nextIdx++;
+              if (nextIdx < pts.length) {
+                poly.setAttribute('points', pts.slice(0, nextIdx + 1).map(p => p.join(',')).join(' '));
+              } else {
+                revealAll();
+              }
+            });
+            break;
+          }
+
+          case 'turn-hourglass':
+            box.addEventListener('click', () => {
+              document.getElementById('dr-hourglass').style.transform = 'rotate(180deg)';
+              const hd = document.getElementById('dr-hg-date');
+              hd.style.filter = 'blur(0px)'; hd.style.opacity = '1';
+              completeReveal();
+            });
+            break;
+
+          case 'flashlight-dark': {
+            const mask = document.getElementById('dr-dark-mask');
+            box.addEventListener('pointermove', e => {
+              if (revealed) return;
+              const r = box.getBoundingClientRect();
+              const x = ((e.clientX - r.left) / r.width) * 100;
+              const y = ((e.clientY - r.top) / r.height) * 100;
+              mask.style.background = `radial-gradient(circle 68px at ${x}% ${y}%, transparent 0%, rgba(16,5,24,0.95) 100%)`;
+            });
+            box.addEventListener('click', () => {
+              mask.style.opacity = '0';
+              mask.style.pointerEvents = 'none';
+              completeReveal();
+            });
+            break;
+          }
+
+          case 'raise-sun': {
+            const sl = document.getElementById('dr-sun-slider');
+            const sky = document.getElementById('dr-sky');
+            const orb = document.getElementById('dr-sun-orb');
+            const sd = document.getElementById('dr-sun-date');
+            const setSun = (val) => {
+              const p = val / 100;
+              orb.style.left = `${16 + p * 180}px`;
+              orb.style.bottom = `${30 + Math.sin(p * Math.PI) * 150}px`;
+              sd.style.opacity = String(0.15 + p * 0.85);
+              sd.style.filter = `blur(${Math.max(0, 6 - p * 6)}px)`;
+              if (p > 0.75) {
+                sky.style.background = 'linear-gradient(180deg,#c08a2e,#7a2a1a)';
+                completeReveal();
+              }
+            };
+            sl.addEventListener('input', () => setSun(Number(sl.value)));
+            sky.addEventListener('click', () => { sl.value = 100; setSun(100); });
+            break;
+          }
+
+          case 'wave-wash':
+            box.addEventListener('click', () => {
+              document.getElementById('dr-sand').style.transform = 'translateX(105%)';
+              completeReveal();
+            });
+            break;
+
+          case 'unfold-card':
+            box.addEventListener('click', () => {
+              const fw = document.getElementById('dr-fold-wrap');
+              fw.style.width = '256px';
+              document.getElementById('dr-pull-tab').style.display = 'none';
+              document.getElementById('dr-fold-inner').style.opacity = '1';
+              completeReveal();
+            });
+            break;
+
+          case 'strike-gong':
+            box.addEventListener('click', () => {
+              const g = document.getElementById('dr-gong-disc');
+              g.style.transform = 'scale(1.16) rotate(8deg)';
+              setTimeout(() => g.style.transform = 'scale(1)', 350);
+              const gd = document.getElementById('dr-gong-date');
+              gd.style.opacity = '1'; gd.style.filter = 'blur(0px)';
+              completeReveal();
+            });
+            break;
+        }
+      }
+
+      /* -------------------------------------------------------------------
+       * 10. BUILD ALL 10 UNIQUE FUNCTIONS LAYOUTS
+       * ------------------------------------------------------------------- */
+      function buildFunctionsHTML(t) {
+        const cardSurface = t.darkTheme ? `rgba(255,255,255,0.06)` : `#ffffff`;
+        const textMain = t.darkTheme ? t.lightGold : t.main;
+        const textSub = t.darkTheme ? '#e8dfd5' : '#5e3a42';
+
+        let body = '';
+        switch (t.funcType) {
+          case 'timeline': // 11 Noir Champagne
+            body = `
+              <div class="relative pl-6 space-y-3 text-left">
+                <div class="absolute left-2 top-2 bottom-2 w-[1.5px]" style="background:${t.gold}; opacity:0.6;"></div>
+                ${DEMO.functions.map(f => `
+                  <div class="relative rounded-2xl p-3 border flex items-center gap-3" style="background:${cardSurface}; border-color:${t.gold}55;">
+                    <span class="absolute -left-[22px] w-3 h-3 rounded-full border-2" style="background:${t.bg1}; border-color:${t.gold};"></span>
+                    <div class="w-12 h-12 rounded-xl shrink-0 flex items-center justify-center text-xl shadow" style="background:${f.bg};">${f.icon}</div>
+                    <div class="min-w-0 flex-1">
+                      <p class="text-[8.5px] uppercase tracking-wider font-semibold" style="color:${t.gold};">${f.date} &bull; ${f.time}</p>
+                      <h3 style="font-family:${t.hFont}; color:${textMain};" class="text-base leading-tight">${f.name}</h3>
+                      <p class="text-[10px] opacity-80 truncate" style="color:${textSub};">${f.place}</p>
+                      <div class="flex items-center gap-1.5 mt-1">
+                        <span class="w-3 h-3 rounded-full border border-white/60" style="background:${f.color}"></span>
+                        <span class="text-[9px] opacity-85" style="color:${textSub};">${f.dress}</span>
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>`;
+            break;
+
+          case 'flip-grid': // 12 Burgundy Opulence
+            body = `
+              <p class="text-[10px] mb-3 opacity-75" style="color:${t.lightGold};">Tap any card to flip in 3D</p>
+              <div class="grid grid-cols-2 gap-3">
+                ${DEMO.functions.map(f => `
+                  <div class="flip-card-wrap">
+                    <div class="flip-card-inner">
+                      <div class="flip-front border flex flex-col items-center justify-center p-3 text-center" style="background:${f.bg}; border-color:${t.gold};">
+                        <span class="text-2xl mb-1">${f.icon}</span>
+                        <p class="text-[9px] font-bold uppercase tracking-wider text-black/70">${f.date}</p>
+                        <h3 style="font-family:${t.hFont};" class="text-base font-bold text-black/90">${f.name}</h3>
+                        <span class="mt-2 px-2 py-0.5 rounded-full bg-black/20 text-[8px] text-white uppercase tracking-wider">Tap to Flip</span>
+                      </div>
+                      <div class="flip-back border p-3 flex flex-col items-center justify-center text-center" style="background:${t.dark}; border-color:${t.gold};">
+                        <p class="text-[9px] font-semibold" style="color:${t.lightGold};">${f.time}</p>
+                        <p class="text-[10px] text-white/90 mt-1 leading-snug">${f.place}</p>
+                        <div class="mt-2 flex items-center gap-1.5 px-2 py-1 rounded-full bg-white/10">
+                          <span class="w-3 h-3 rounded-full" style="background:${f.color}"></span>
+                          <span class="text-[8.5px] text-white/90">${f.dress}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>`;
+            break;
+
+          case 'day-tabs': // 13 Sapphire Silver
+            body = `
+              <div class="flex justify-center gap-2 mb-4">
+                ${['Day 1 (10 Feb)', 'Day 2 (11 Feb)', 'Day 3 (12 Feb)'].map((lbl, i) => `
+                  <button type="button" data-day="${i}" class="day-tab-btn px-3 py-1.5 rounded-full text-[10px] font-semibold border transition-all"
+                          style="border-color:${t.gold}; background:${i===0?t.lightGold:'transparent'}; color:${i===0?t.dark:t.lightGold};">${lbl}</button>
+                `).join('')}
+              </div>
+              <div id="day-tab-cards" class="space-y-3"></div>`;
+            break;
+
+          case 'card-deck': // 14 Ivory Marble
+            body = `
+              <p class="text-[10px] mb-2 opacity-70" style="color:${textSub};">Tap top card to cycle the deck</p>
+              <div id="deck-stage" class="relative w-64 h-64 mx-auto"></div>`;
+            break;
+
+          case 'film-strip': // 15 Blush Rose Gold
+            body = `
+              <div class="film-strip">
+                ${DEMO.functions.map((f, i) => `
+                  <div class="shrink-0 w-52 bg-white p-2.5 pb-4 rounded-xl shadow-md border snap-center"
+                       style="border-color:${t.gold}55; transform:rotate(${i%2?'-2deg':'2deg'});">
+                    <div class="h-24 rounded-lg flex items-center justify-center text-3xl mb-2" style="background:${f.bg};">${f.icon}</div>
+                    <p class="text-[8.5px] uppercase tracking-wider font-semibold" style="color:${t.gold};">${f.date} &bull; ${f.time}</p>
+                    <h3 style="font-family:${t.hFont}; color:${t.main};" class="text-lg mt-0.5">${f.name}</h3>
+                    <p class="text-[10px] text-gray-600 mt-0.5">${f.place}</p>
+                    <div class="mt-2 flex items-center gap-1.5 text-[9.5px] text-gray-700">
+                      <span class="w-3 h-3 rounded-full" style="background:${f.color}"></span><span>${f.dress}</span>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>`;
+            break;
+
+          case 'accordion': // 16 Plum Amethyst
+            body = `
+              <div class="space-y-2.5 text-left">
+                ${DEMO.functions.map((f, i) => `
+                  <div class="acc-item rounded-2xl border overflow-hidden" style="background:${cardSurface}; border-color:${t.gold}55;">
+                    <button type="button" class="acc-trigger w-full px-4 py-3 flex items-center justify-between text-left">
+                      <div class="flex items-center gap-2.5">
+                        <span class="text-lg">${f.icon}</span>
+                        <div>
+                          <h3 style="font-family:${t.hFont}; color:${t.lightGold};" class="text-base leading-tight">${f.name}</h3>
+                          <p class="text-[9px] opacity-75 text-white">${f.date} &bull; ${f.time}</p>
+                        </div>
+                      </div>
+                      <span class="text-xs" style="color:${t.gold};">+</span>
+                    </button>
+                    <div class="acc-body ${i===0?'':'hidden'} px-4 pb-3 pt-1 border-t border-white/10 text-[10.5px] text-white/85">
+                      <p>${f.place}</p>
+                      <div class="mt-1.5 flex items-center gap-2">
+                        <span class="w-3.5 h-3.5 rounded-full border border-white/60" style="background:${f.color}"></span>
+                        <span>Dress Code: ${f.dress}</span>
+                      </div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>`;
+            break;
+
+          case 'tickets': // 17 Sandstone Sunset
+            body = `
+              <div class="space-y-3 text-left">
+                ${DEMO.functions.map(f => `
+                  <div class="rounded-2xl border flex overflow-hidden shadow-sm" style="background:#fffaf2; border-color:${t.gold};">
+                    <div class="p-3 flex-1">
+                      <p class="text-[8.5px] uppercase tracking-widest font-semibold" style="color:${t.gold};">Boarding Pass</p>
+                      <h3 style="font-family:${t.hFont}; color:${t.main};" class="text-lg leading-tight">${f.name}</h3>
+                      <p class="text-[10px] text-amber-950/75 mt-0.5">${f.place}</p>
+                      <div class="mt-1.5 flex items-center gap-1.5 text-[9px] text-amber-950/85">
+                        <span class="w-3 h-3 rounded-full" style="background:${f.color}"></span><span>${f.dress}</span>
+                      </div>
+                    </div>
+                    <div class="w-24 border-l-2 border-dashed p-2.5 flex flex-col items-center justify-center text-center" style="border-color:${t.gold}; background:${t.soft};">
+                      <span class="text-lg">${f.icon}</span>
+                      <p class="text-[9px] font-bold mt-1" style="color:${t.main};">${f.date}</p>
+                      <p class="text-[8.5px]" style="color:${t.dark};">${f.time}</p>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>`;
+            break;
+
+          case 'envelopes': // 18 Ocean Pearl
+            body = `
+              <p class="text-[10px] mb-3 opacity-80" style="color:${t.lightGold};">Tap any wax-sealed envelope to open</p>
+              <div class="grid grid-cols-2 gap-3">
+                ${DEMO.functions.map(f => `
+                  <div class="env-fn-card rounded-2xl border p-3 text-center cursor-pointer transition-all" style="background:${cardSurface}; border-color:${t.gold}66;">
+                    <div class="env-fn-closed">
+                      <div class="w-10 h-10 mx-auto rounded-full flex items-center justify-center text-lg border mb-1.5" style="background:${t.dark}; border-color:${t.gold};">${f.icon}</div>
+                      <h3 style="font-family:${t.hFont}; color:${t.lightGold};" class="text-sm">${f.name}</h3>
+                      <p class="text-[8.5px] uppercase tracking-wider mt-1 opacity-75 text-white">Tap Seal</p>
+                    </div>
+                    <div class="env-fn-open hidden text-left">
+                      <p class="text-[8.5px] font-bold uppercase" style="color:${t.lightGold};">${f.date} &bull; ${f.time}</p>
+                      <h3 style="font-family:${t.hFont}; color:#ffffff;" class="text-sm mt-0.5">${f.name}</h3>
+                      <p class="text-[9.5px] text-white/80 mt-0.5">${f.place}</p>
+                      <p class="text-[9px] mt-1" style="color:${t.accent};">${f.dress}</p>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>`;
+            break;
+
+          case 'medallions': // 19 Sage and Gold
+            body = `
+              <div class="flex flex-wrap justify-center gap-2 mb-4">
+                ${DEMO.functions.map((f, i) => `
+                  <button type="button" data-med="${i}" class="med-btn w-12 h-12 rounded-full border-2 flex items-center justify-center text-lg transition-all shadow-sm"
+                          style="border-color:${t.gold}; background:${i===0?t.main:'#ffffff'};">${f.icon}</button>
+                `).join('')}
+              </div>
+              <div id="med-card-slot"></div>`;
+            break;
+
+          default: // 3D Swipeable Carousel (01-10 & 20)
+            body = `
+              <div id="sim-carousel-slot" class="relative px-2"></div>
+              <div class="flex items-center justify-center gap-4 mt-3">
+                <button id="sim-c-prev" type="button" class="w-8 h-8 rounded-full border flex items-center justify-center text-xs" style="border-color:${t.gold}; color:${textMain};">&larr;</button>
+                <span id="sim-c-ind" class="text-[10px] tracking-widest uppercase" style="color:${t.gold};">1 / 6</span>
+                <button id="sim-c-next" type="button" class="w-8 h-8 rounded-full border flex items-center justify-center text-xs" style="border-color:${t.gold}; color:${textMain};">&rarr;</button>
+              </div>`;
+            break;
+        }
+
+        return `
+          <section class="px-5 py-10 text-center relative">
+            <p class="text-[9.5px] tracking-[0.26em] uppercase font-semibold" style="color:${t.gold};">Celebrations</p>
+            <h2 style="font-family:${t.hFont}; color:${textMain};" class="text-3xl mt-1 mb-5">Wedding Festivities</h2>
+            ${body}
+          </section>
+        `;
+      }
+
+      function wireFunctions(t) {
+        const textMain = t.darkTheme ? t.lightGold : t.main;
+        const textSub = t.darkTheme ? '#e8dfd5' : '#5e3a42';
+
+        if (t.funcType === 'carousel') {
+          let cIdx = 0;
+          const slot = document.getElementById('sim-carousel-slot');
+          const ind = document.getElementById('sim-c-ind');
+          const renderC = () => {
+            const f = DEMO.functions[cIdx];
+            ind.textContent = `${cIdx + 1} / ${DEMO.functions.length}`;
+            slot.innerHTML = `
+              <div class="w-64 mx-auto rounded-t-[110px] rounded-b-3xl border overflow-hidden shadow-lg transition-all"
+                   style="background:${t.darkTheme ? t.dark : '#ffffff'}; border-color:${t.gold};">
+                <div class="h-28 flex items-center justify-center text-4xl" style="background:${f.bg};">${f.icon}</div>
+                <div class="p-4 text-center">
+                  <p class="text-[9px] uppercase tracking-widest font-semibold" style="color:${t.gold};">${f.date} &bull; ${f.time}</p>
+                  <h3 style="font-family:${t.hFont}; color:${textMain};" class="text-2xl mt-1">${f.name}</h3>
+                  <p class="text-[11px] mt-1 opacity-80" style="color:${textSub};">${f.place}</p>
+                  <div class="mt-3 px-3 py-2 rounded-xl border flex items-center gap-2.5 text-left"
+                       style="border-color:${t.gold}44; background:${t.darkTheme ? 'rgba(255,255,255,0.05)' : t.bg1};">
+                    <span class="w-6 h-6 rounded-lg shrink-0 border border-white" style="background:${f.color};"></span>
+                    <div>
+                      <p class="text-[8px] uppercase tracking-wider font-semibold" style="color:${t.gold};">Dress Code</p>
+                      <p class="text-[10.5px]" style="color:${textSub};">${f.dress}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>`;
+          };
+          renderC();
+          document.getElementById('sim-c-prev').addEventListener('click', () => { cIdx = (cIdx - 1 + DEMO.functions.length) % DEMO.functions.length; renderC(); });
+          document.getElementById('sim-c-next').addEventListener('click', () => { cIdx = (cIdx + 1) % DEMO.functions.length; renderC(); });
+        }
+
+        if (t.funcType === 'flip-grid') {
+          phoneScroll.querySelectorAll('.flip-card-wrap').forEach(el => {
+            el.addEventListener('click', () => el.classList.toggle('flipped'));
+          });
+        }
+
+        if (t.funcType === 'day-tabs') {
+          const slot = document.getElementById('day-tab-cards');
+          const renderDay = (d) => {
+            slot.innerHTML = DEMO.functions.filter(f => f.dayIdx === d).map(f => `
+              <div class="rounded-2xl border p-3.5 flex items-center gap-3 text-left" style="background:rgba(255,255,255,0.06); border-color:${t.gold}66;">
+                <div class="w-12 h-12 rounded-xl shrink-0 flex items-center justify-center text-2xl" style="background:${f.bg};">${f.icon}</div>
+                <div>
+                  <p class="text-[9px] font-semibold uppercase" style="color:${t.lightGold};">${f.time}</p>
+                  <h3 style="font-family:${t.hFont}; color:#ffffff;" class="text-lg leading-tight">${f.name}</h3>
+                  <p class="text-[10px] text-white/75">${f.place}</p>
+                  <p class="text-[9.5px] mt-1" style="color:${t.accent};">Dress: ${f.dress}</p>
+                </div>
+              </div>
+            `).join('');
+          };
+          renderDay(0);
+          phoneScroll.querySelectorAll('.day-tab-btn').forEach(b => {
+            b.addEventListener('click', () => {
+              const d = Number(b.dataset.day);
+              phoneScroll.querySelectorAll('.day-tab-btn').forEach(x => {
+                const act = x === b;
+                x.style.background = act ? t.lightGold : 'transparent';
+                x.style.color = act ? t.dark : t.lightGold;
+              });
+              renderDay(d);
+            });
+          });
+        }
+
+        if (t.funcType === 'card-deck') {
+          const stage = document.getElementById('deck-stage');
+          let order = [...DEMO.functions];
+          const renderDeck = () => {
+            stage.innerHTML = order.slice(0, 3).reverse().map((f, revIdx, arr) => {
+              const depth = arr.length - 1 - revIdx;
+              return `
+                <div class="deck-card border p-4 bg-white shadow-lg flex flex-col justify-between text-center"
+                     style="border-color:${t.gold}; transform:translateY(${depth*10}px) scale(${1 - depth*0.05}); opacity:${1 - depth*0.18}; z-index:${10 - depth};">
+                  <div class="h-24 rounded-xl flex items-center justify-center text-3xl" style="background:${f.bg};">${f.icon}</div>
+                  <div>
+                    <p class="text-[9px] uppercase tracking-widest font-semibold" style="color:${t.gold};">${f.date} &bull; ${f.time}</p>
+                    <h3 style="font-family:${t.hFont}; color:${t.main};" class="text-xl mt-0.5">${f.name}</h3>
+                    <p class="text-[10px] text-gray-600">${f.place}</p>
+                    <p class="text-[9.5px] mt-1 font-medium" style="color:${t.gold};">${f.dress}</p>
+                  </div>
+                </div>`;
+            }).join('');
+          };
+          renderDeck();
+          stage.addEventListener('click', () => {
+            order.push(order.shift());
+            renderDeck();
+          });
+        }
+
+        if (t.funcType === 'accordion') {
+          phoneScroll.querySelectorAll('.acc-trigger').forEach(btn => {
+            btn.addEventListener('click', () => {
+              btn.nextElementSibling.classList.toggle('hidden');
+            });
+          });
+        }
+
+        if (t.funcType === 'envelopes') {
+          phoneScroll.querySelectorAll('.env-fn-card').forEach(card => {
+            card.addEventListener('click', () => {
+              card.querySelector('.env-fn-closed').classList.toggle('hidden');
+              card.querySelector('.env-fn-open').classList.toggle('hidden');
+            });
+          });
+        }
+
+        if (t.funcType === 'medallions') {
+          const slot = document.getElementById('med-card-slot');
+          const renderMed = (i) => {
+            const f = DEMO.functions[i];
+            slot.innerHTML = `
+              <div class="rounded-2xl bg-white border p-4 shadow-md text-center" style="border-color:${t.gold};">
+                <div class="h-24 rounded-xl flex items-center justify-center text-3xl mb-2.5" style="background:${f.bg};">${f.icon}</div>
+                <p class="text-[9px] uppercase tracking-widest font-semibold" style="color:${t.gold};">${f.date} &bull; ${f.time}</p>
+                <h3 style="font-family:${t.hFont}; color:${t.main};" class="text-xl mt-0.5">${f.name}</h3>
+                <p class="text-[10.5px] text-gray-600 mt-0.5">${f.place}</p>
+                <p class="text-[10px] mt-1.5 font-medium" style="color:${t.main};">Dress Code: ${f.dress}</p>
+              </div>`;
+          };
+          renderMed(0);
+          phoneScroll.querySelectorAll('.med-btn').forEach(b => {
+            b.addEventListener('click', () => {
+              const i = Number(b.dataset.med);
+              phoneScroll.querySelectorAll('.med-btn').forEach(x => x.style.background = x === b ? t.main : '#ffffff');
+              renderMed(i);
+            });
+          });
+        }
+      }
+
+      /* -------------------------------------------------------------------
+       * 11. RENDER COMPLETE INVITE INSIDE PHONE SIMULATOR
+       * ------------------------------------------------------------------- */
+      function renderInvite(t) {
+        clearTimers();
+        phoneScreen.style.setProperty('--t-bg-1', t.bg1);
+        phoneScreen.style.setProperty('--t-bg-2', t.bg2);
+        phoneScreen.style.setProperty('--t-text', t.darkTheme ? '#f5efe6' : t.dark);
+
+        const textMain = t.darkTheme ? t.lightGold : t.main;
+        const textSub = t.darkTheme ? '#e8dfd5' : '#4a262f';
+
+        // 1. Ambient Corner Flowers & Hanging Strings
+        phoneAmbient.innerHTML = `
+          <svg class="hanging-str absolute -top-1 left-2 w-8 h-20 opacity-85" viewBox="0 0 36 90">
+            <line x1="12" y1="0" x2="12" y2="66" stroke="${t.gold}" stroke-width="1"/>
+            <circle cx="12" cy="18" r="5" fill="${t.flowerTint}"/>
+            <circle cx="12" cy="36" r="4.5" fill="${t.lightGold}"/>
+            <circle cx="12" cy="54" r="5" fill="${t.flowerTint}"/>
+            <circle cx="12" cy="68" r="3.5" fill="${t.gold}"/>
+          </svg>
+          <svg class="hanging-str absolute -top-1 right-2 w-8 h-20 opacity-85" style="animation-delay:-2s" viewBox="0 0 36 90">
+            <line x1="24" y1="0" x2="24" y2="66" stroke="${t.gold}" stroke-width="1"/>
+            <circle cx="24" cy="18" r="5" fill="${t.flowerTint}"/>
+            <circle cx="24" cy="36" r="4.5" fill="${t.lightGold}"/>
+            <circle cx="24" cy="54" r="5" fill="${t.flowerTint}"/>
+            <circle cx="24" cy="68" r="3.5" fill="${t.gold}"/>
+          </svg>
+          <svg class="corner-flw absolute -bottom-5 -left-5 w-20 h-20 opacity-75" viewBox="0 0 80 80">
+            <circle cx="32" cy="48" r="18" fill="${t.flowerTint}"/>
+            <circle cx="32" cy="48" r="10" fill="${t.main}" opacity="0.6"/>
+            <circle cx="52" cy="60" r="10" fill="${t.lightGold}"/>
+          </svg>
+          <svg class="corner-flw absolute -bottom-5 -right-5 w-20 h-20 opacity-75" viewBox="0 0 80 80">
+            <circle cx="48" cy="48" r="18" fill="${t.flowerTint}"/>
+            <circle cx="48" cy="48" r="10" fill="${t.main}" opacity="0.6"/>
+            <circle cx="28" cy="60" r="10" fill="${t.lightGold}"/>
+          </svg>
+        `;
+
+        // 2. Hero Frame Radius by Theme
+        const frameRadius = {
+          'arch-dashed': 'rounded-t-[170px] rounded-b-3xl',
+          'mughal-dome': 'rounded-t-[150px] rounded-b-2xl',
+          'rounded-rect': 'rounded-3xl',
+          'dotted-marigold': 'rounded-2xl',
+          'double-rect': 'rounded-xl',
+          'pearl-rect': 'rounded-xl',
+          'moon-window': 'rounded-t-full rounded-b-3xl',
+          'oval-frame': 'rounded-full'
+        }[t.heroFrame] || 'rounded-t-[160px] rounded-b-2xl';
+
+        // 3. Build Full Scrollable Invite HTML
+        phoneScroll.scrollTop = 0;
+        phoneScroll.classList.add('locked');
+
+        phoneScroll.innerHTML = `
+          <!-- FIRST PAGE HERO -->
+          <section class="invite-hero">
+            <div class="w-full border-[1.5px] p-1.5 flex ${frameRadius}" style="border-color:${t.gold}; background:${t.darkTheme ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.55)'};">
+              <div class="relative w-full border border-dashed overflow-hidden flex flex-col items-center justify-between py-6 px-4 text-center ${frameRadius}" style="border-color:${t.gold}88;">
+                <div class="hero-bg-zoom absolute -inset-4 opacity-35 pointer-events-none"
+                     style="background:radial-gradient(circle at 30% 25%,${t.lightGold},transparent 45%),radial-gradient(circle at 75% 70%,${t.accent},transparent 50%);"></div>
+
+                <div class="relative z-10 flex flex-col items-center">
+                  <div class="w-12 h-12 rounded-full border flex items-center justify-center mb-2 shadow-sm" style="border-color:${t.gold}; background:${t.darkTheme ? t.dark : '#fffdf9'};">
+                    <svg class="w-7 h-7" style="color:${t.gold};"><use href="#ganesh-icon"></use></svg>
+                  </div>
+                  <p class="text-[8.5px] tracking-[0.24em] uppercase font-semibold" style="color:${t.gold};">Together With Their Families</p>
+                </div>
+
+                <div class="relative z-10 my-auto py-3">
+                  <h1 id="sim-groom" style="font-family:${t.nFont}; color:${textMain};" class="text-[36px] leading-tight">${DEMO.groom}</h1>
+                  <p class="text-[8px] tracking-[0.22em] uppercase opacity-75 mt-1" style="color:${textSub};">Son of</p>
+                  <p class="text-[10.5px] mt-0.5" style="color:${textSub};">${DEMO.groomParents}</p>
+
+                  <p style="font-family:${t.hFont}; color:${t.gold};" class="text-2xl italic my-2">&amp;</p>
+
+                  <h2 id="sim-bride" style="font-family:${t.nFont}; color:${textMain};" class="text-[36px] leading-tight">${DEMO.bride}</h2>
+                  <p class="text-[8px] tracking-[0.22em] uppercase opacity-75 mt-1" style="color:${textSub};">Daughter of</p>
+                  <p class="text-[10.5px] mt-0.5" style="color:${textSub};">${DEMO.brideParents}</p>
+
+                  <p style="font-family:${t.hFont}; color:${textSub};" class="italic text-xs mt-4 max-w-[230px] mx-auto">
+                    request the pleasure of your company at their wedding
+                  </p>
+                </div>
+
+                <div class="relative z-10 text-[8.5px] tracking-[0.24em] uppercase opacity-75" style="color:${textMain};">
+                  Scroll &darr;
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SAVE THE DATE -->
+          ${buildDateRevealHTML(t)}
+
+          <!-- WEDDING FESTIVITIES -->
+          ${buildFunctionsHTML(t)}
+
+          <!-- OUR STORY PHOTO CAROUSEL -->
+          <section class="px-5 py-10 text-center">
+            <p class="text-[9.5px] tracking-[0.26em] uppercase font-semibold" style="color:${t.gold};">Moments</p>
+            <h2 style="font-family:${t.hFont}; color:${textMain};" class="text-3xl mt-1 mb-5">Our Story</h2>
+            <div id="sim-story-slot"></div>
+            <div class="flex items-center justify-center gap-3 mt-3">
+              <button id="sim-st-prev" type="button" class="w-8 h-8 rounded-full border text-xs" style="border-color:${t.gold}; color:${textMain};">&larr;</button>
+              <span id="sim-st-dots" class="flex gap-1.5"></span>
+              <button id="sim-st-next" type="button" class="w-8 h-8 rounded-full border text-xs" style="border-color:${t.gold}; color:${textMain};">&rarr;</button>
+            </div>
+          </section>
+
+          <!-- GRAND RECEPTION -->
+          <section class="px-5 py-10">
+            <div class="rounded-3xl p-2 shadow-2xl" style="background:linear-gradient(155deg,${t.main},${t.dark});">
+              <div class="rounded-2xl border px-4 py-8 text-center relative overflow-hidden" style="border-color:${t.lightGold}66;">
+                <p class="text-[9px] tracking-[0.26em] uppercase" style="color:${t.lightGold};">You Are Invited To The</p>
+                <h2 style="font-family:${t.hFont}; color:${t.lightGold};" class="text-3xl mt-1">Grand Reception</h2>
+                <div class="my-4 text-2xl">&#129346;</div>
+                <p style="font-family:${t.hFont};" class="text-lg text-white">${DEMO.reception.date}</p>
+                <p class="text-[11px] mt-1" style="color:${t.lightGold};">${DEMO.reception.time}</p>
+                <p class="text-[11px] text-white/85 mt-0.5">${DEMO.reception.place}</p>
+                <div class="mt-4 inline-block px-3.5 py-1.5 rounded-full border text-[9px] tracking-[0.16em] uppercase" style="border-color:${t.lightGold}66; color:${t.lightGold};">
+                  Dress Code: ${DEMO.reception.dressCode}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- LOCATION MAP -->
+          <section class="px-5 py-10 text-center">
+            <p class="text-[9.5px] tracking-[0.26em] uppercase font-semibold" style="color:${t.gold};">Location</p>
+            <h2 style="font-family:${t.hFont}; color:${textMain};" class="text-3xl mt-1 mb-4">How to Reach</h2>
+            <a href="${DEMO.mapsUrl}" target="_blank" rel="noopener noreferrer"
+               class="block relative rounded-2xl overflow-hidden border shadow-md mb-4" style="border-color:${t.gold}66;">
+              <svg class="w-full h-40 block" viewBox="0 0 360 160" preserveAspectRatio="xMidYMid slice">
+                <rect width="360" height="160" fill="#f5ede3"/>
+                <ellipse cx="250" cy="82" rx="68" ry="36" fill="#d8e5d4"/>
+                <path d="M-10 120 Q120 105 180 80 T370 55" stroke="#ffffff" stroke-width="11" fill="none"/>
+                <path class="map-route" d="M52 114 Q145 104 252 72" stroke="${t.main}" stroke-width="2.6" fill="none"/>
+                <circle cx="52" cy="114" r="4.5" fill="${t.gold}"/>
+                <path d="M252 40c-8 0-14 6-14 14 0 10 14 22 14 22s14-12 14-22c0-8-6-14-14-14z" fill="${t.main}"/>
+                <circle cx="252" cy="54" r="5" fill="#ffffff"/>
+              </svg>
+              <div class="absolute bottom-2.5 left-2.5 bg-white/95 px-3 py-1.5 rounded-xl text-left shadow">
+                <p class="text-[11px] font-bold text-gray-900">${DEMO.venueName}</p>
+                <p class="text-[9px] text-gray-500">Tap to open in Maps</p>
+              </div>
+            </a>
+            <h3 style="font-family:${t.hFont}; color:${textMain};" class="text-xl">${DEMO.venueName}</h3>
+            <p class="text-[11px] opacity-80 mt-0.5" style="color:${textSub};">${DEMO.venueAddress}</p>
+            <div class="mt-4 flex flex-col gap-2">
+              <a href="${DEMO.mapsUrl}" target="_blank" rel="noopener noreferrer"
+                 class="py-2.5 rounded-full text-[10px] font-semibold tracking-[0.2em] uppercase text-white shadow" style="background:${t.main};">
+                Get Directions
+              </a>
+              <button id="sim-copy-addr" type="button" class="py-2.5 rounded-full border text-[10px] font-semibold tracking-[0.2em] uppercase"
+                      style="border-color:${t.gold}; color:${textMain};">
+                Copy Address
+              </button>
+            </div>
+          </section>
+
+          <!-- RSVP & CLOSING -->
+          <section class="px-5 pt-8 pb-16 text-center">
+            <p class="text-[9.5px] tracking-[0.26em] uppercase font-semibold" style="color:${t.gold};">Kindly Respond</p>
+            <h2 style="font-family:${t.hFont}; color:${textMain};" class="text-3xl mt-1 mb-4">Will You Join Us?</h2>
+            <form id="sim-rsvp-form" class="space-y-2.5 max-w-[280px] mx-auto">
+              <input id="sim-rsvp-name" type="text" required placeholder="Your Full Name"
+                     class="w-full px-4 py-2.5 rounded-full border text-xs bg-white/90 text-gray-900 focus:outline-none" style="border-color:${t.gold}77;" />
+              <div class="grid grid-cols-2 gap-2">
+                <button type="submit" data-ans="Attending" class="rsvp-act py-2.5 rounded-full text-[10px] font-semibold uppercase tracking-wider text-white shadow" style="background:${t.main};">Attending</button>
+                <button type="submit" data-ans="Can't make it" class="rsvp-act py-2.5 rounded-full border text-[10px] font-semibold uppercase tracking-wider" style="border-color:${t.gold}; color:${textMain};">Can't Make It</button>
+              </div>
+              <p id="sim-rsvp-msg" class="hidden text-[11px] font-medium pt-1" style="color:${t.gold};"></p>
+            </form>
+
+            <div class="mt-10 pt-6 border-t" style="border-color:${t.gold}33;">
+              <svg class="w-9 h-9 mx-auto mb-2" style="color:${t.gold};"><use href="#ganesh-icon"></use></svg>
+              <p style="font-family:${t.hFont}; color:${textMain};" class="italic text-lg">We can't wait to celebrate with you</p>
+              <p class="text-[10px] tracking-[0.2em] uppercase mt-2 opacity-80" style="color:${t.gold};">${DEMO.closing}</p>
+            </div>
+          </section>
+        `;
+
+        // 4. Mount Opening Stage & Tap Handler
+        openingStage.className = '';
+        openingStage.innerHTML = buildOpeningHTML(t);
+        const tapTarget = document.getElementById('opening-tap-target');
+        let isOpened = false;
+
+        tapTarget.addEventListener('click', () => {
+          if (isOpened) return;
+          isOpened = true;
+          openingStage.classList.add('opened');
+          const med = openingStage.querySelector('.open-medallion');
+          if (med) med.style.opacity = '0';
+          const hint = openingStage.querySelector('.open-hint-wrap');
+          if (hint) hint.style.opacity = '0';
+
+          burstPhoneFx(t, 52);
+
+          openingTimers.push(setTimeout(() => {
+            openingStage.classList.add('zooming');
+          }, 1150));
+
+          openingTimers.push(setTimeout(() => {
+            openingStage.classList.add('done');
+            phoneScroll.classList.remove('locked');
+            animateTypedNames();
+          }, 1850));
+        });
+
+        // 5. Wire Interactive Components inside Phone
+        wireDateReveal(t);
+        wireFunctions(t);
+        wireStoryCarousel(t);
+        wireCountdown();
+
+        document.getElementById('sim-ics-btn').addEventListener('click', () => {
+          const ics = [
+            'BEGIN:VCALENDAR', 'VERSION:2.0', 'BEGIN:VEVENT',
+            'DTSTART:20270212T170000Z', 'DTEND:20270213T180000Z',
+            'SUMMARY:Aarav & Ananya Wedding',
+            'LOCATION:Raj Vilas Palace, Amer Road, Jaipur 302002',
+            'END:VEVENT', 'END:VCALENDAR'
+          ].join('\r\n');
+          const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = `Aarav-Ananya-${t.name.replace(/\s+/g, '-')}.ics`;
+          a.click();
+          showToast('Calendar invite (.ics) downloaded!');
+        });
+
+        document.getElementById('sim-copy-addr').addEventListener('click', () => {
+          copyToClipboard(`${DEMO.venueName}, ${DEMO.venueAddress}`);
+        });
+
+        let rsvpChoice = 'Attending';
+        phoneScroll.querySelectorAll('.rsvp-act').forEach(btn => {
+          btn.addEventListener('click', () => { rsvpChoice = btn.dataset.ans; });
+        });
+        document.getElementById('sim-rsvp-form').addEventListener('submit', e => {
+          e.preventDefault();
+          const nm = document.getElementById('sim-rsvp-name').value.trim();
+          const msg = document.getElementById('sim-rsvp-msg');
+          msg.textContent = rsvpChoice === 'Attending'
+            ? `Thank you, ${nm}! We look forward to celebrating with you.`
+            : `Thank you for letting us know, ${nm}. You will be missed!`;
+          msg.classList.remove('hidden');
+          if (rsvpChoice === 'Attending') burstPhoneFx(t, 36);
+          showToast('RSVP response recorded!');
+        });
+      }
+
+      /* -------------------------------------------------------------------
+       * 12. TYPED LETTER-BY-LETTER NAMES, OUR STORY & LIVE COUNTDOWN
+       * ------------------------------------------------------------------- */
+      function animateTypedNames() {
+        ['sim-groom', 'sim-bride'].forEach((id, groupIdx) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          const txt = el.textContent.trim();
+          el.textContent = '';
+          [...txt].forEach((ch, i) => {
+            const sp = document.createElement('span');
+            sp.className = 'char-pop';
+            sp.textContent = ch === ' ' ? '\u00A0' : ch;
+            el.appendChild(sp);
+            openingTimers.push(setTimeout(() => sp.classList.add('show'), groupIdx * 420 + i * 42));
+          });
+        });
+      }
+
+      function wireStoryCarousel(t) {
+        let sIdx = 0;
+        const slot = document.getElementById('sim-story-slot');
+        const dots = document.getElementById('sim-st-dots');
+        const frameClass = {
+          circle: 'rounded-full w-52 h-52',
+          arch: 'rounded-t-[110px] rounded-b-2xl w-52 h-60',
+          oval: 'rounded-[50%] w-48 h-60',
+          polaroid: 'rounded-lg bg-white p-2.5 pb-7 w-52',
+          gallery: 'rounded-md bg-white p-3 w-52',
+          octagon: 'rounded-3xl w-52 h-52',
+          'gold-frame': 'rounded-xl w-52 h-56',
+          rounded: 'rounded-3xl w-52 h-56'
+        }[t.storyFrame] || 'rounded-2xl w-52 h-56';
+
+        const renderStory = () => {
+          const item = DEMO.story[sIdx];
+          slot.innerHTML = `
+            <div class="mx-auto border-2 overflow-hidden shadow-lg flex flex-col items-center justify-end relative ${frameClass}"
+                 style="border-color:${t.gold}; background:${t.storyFrame==='polaroid'||t.storyFrame==='gallery'?'#ffffff':item.grad};">
+              ${t.storyFrame==='polaroid'||t.storyFrame==='gallery'
+                ? `<div class="w-full h-44 rounded flex items-center justify-center text-white/90 text-3xl" style="background:${item.grad};">&#10024;</div>
+                   <p class="mt-2 font-serif italic text-xs text-gray-800">${item.title}</p>`
+                : `<div class="absolute inset-0 flex items-center justify-center text-4xl opacity-85">&#10024;</div>
+                   <div class="relative z-10 w-full py-2.5 bg-black/35 backdrop-blur-[2px] text-white">
+                     <p style="font-family:${t.hFont};" class="text-sm italic">${item.title}</p>
+                     <p class="text-[8.5px] uppercase tracking-widest opacity-80">${item.sub}</p>
+                   </div>`
+              }
+            </div>`;
+          dots.innerHTML = DEMO.story.map((_, i) =>
+            `<span class="h-1.5 rounded-full transition-all" style="width:${i===sIdx?'16px':'6px'}; background:${i===sIdx?t.gold:t.gold+'44'};"></span>`
+          ).join('');
+        };
+        renderStory();
+        document.getElementById('sim-st-prev').addEventListener('click', () => { sIdx = (sIdx - 1 + DEMO.story.length) % DEMO.story.length; renderStory(); });
+        document.getElementById('sim-st-next').addEventListener('click', () => { sIdx = (sIdx + 1) % DEMO.story.length; renderStory(); });
+      }
+
+      function wireCountdown() {
+        const target = new Date('2027-02-12T22:30:00+05:30').getTime();
+        const tick = () => {
+          const diff = Math.max(0, target - Date.now());
+          const d = Math.floor(diff / 86400000);
+          const h = Math.floor((diff / 3600000) % 24);
+          const m = Math.floor((diff / 60000) % 60);
+          const s = Math.floor((diff / 1000) % 60);
+          const elD = document.getElementById('sim-cd-d');
+          if (!elD) return;
+          elD.textContent = String(d).padStart(2, '0');
+          document.getElementById('sim-cd-h').textContent = String(h).padStart(2, '0');
+          document.getElementById('sim-cd-m').textContent = String(m).padStart(2, '0');
+          document.getElementById('sim-cd-s').textContent = String(s).padStart(2, '0');
+        };
+        tick();
+        countdownInterval = setInterval(tick, 1000);
+      }
+    })();
+  </script>
+</body>
+</html>

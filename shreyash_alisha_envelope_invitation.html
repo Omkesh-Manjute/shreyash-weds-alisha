@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Shreyash &amp; Alisha — Royal Envelope Wedding Invitation</title>
+  <link rel="icon" href="data:," />
+
+  <!-- Google Fonts: Romantic Calligraphy, Editorial Serif & Clean Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS v4 Browser Build -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --font-serif: "Cormorant Garamond", Georgia, serif;
+      --font-script: "Great Vibes", cursive;
+      --font-sans: "Montserrat", -apple-system, BlinkMacSystemFont, sans-serif;
+
+      --color-alabaster: #faf6f0;
+      --color-cream: #f4ece1;
+      --color-blush: #f2e4df;
+      --color-champagne: #d6b67d;
+      --color-gold: #b89146;
+      --color-gold-dark: #8e6c2b;
+      --color-gold-light: #edd7a6;
+      --color-espresso: #433228;
+      --color-taupe: #7a6558;
+      --color-wine: #6e1f2f;
+    }
+  </style>
+
+  <style>
+    :root {
+      --alabaster: #faf6f0;
+      --cream: #f4ece1;
+      --champagne: #d6b67d;
+      --gold: #b89146;
+      --gold-dark: #8e6c2b;
+      --gold-light: #edd7a6;
+      --espresso: #433228;
+      --taupe: #7a6558;
+      --wine: #6e1f2f;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: #ece3d7;
+      color: var(--espresso);
+      font-family: "Montserrat", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(214, 182, 125, 0.22), transparent 55%),
+        linear-gradient(180deg, #ede4d8 0%, #e5dacb 100%);
+    }
+
+    body.envelope-locked {
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Hidden YouTube IFrame Player Container (220x220 inside viewport prevents browser throttling) */
+    #yt-player-wrap {
+      position: fixed;
+      width: 220px;
+      height: 220px;
+      left: -9999px;
+      top: -9999px;
+      opacity: 0.001;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: -1;
+    }
+
+    /* Main Mobile-First Luxury Shell */
+    .invite-shell {
+      width: 100%;
+      max-width: 460px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(237, 215, 166, 0.18), transparent 45%),
+        radial-gradient(circle at 85% 48%, rgba(242, 228, 223, 0.45), transparent 48%),
+        linear-gradient(180deg, #fcf9f4 0%, #faf5ed 50%, #f7efe5 100%);
+      box-shadow: 0 0 65px rgba(67, 50, 40, 0.14);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Subtle Paper Grain Overlay */
+    .invite-shell::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 460px;
+      pointer-events: none;
+      opacity: 0.04;
+      background-image: radial-gradient(#6e5538 0.65px, transparent 0.65px);
+      background-size: 16px 16px;
+      z-index: 40;
+    }
+
+    /* ==================== 1. EMBOSSED 4-FLAP ENVELOPE OVERLAY ==================== */
+    #envelope-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #e9dfd1;
+      transition: opacity 0.85s ease, visibility 0.85s ease;
+    }
+
+    #envelope-overlay.done {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .envelope-stage {
+      position: relative;
+      width: 100%;
+      max-width: 460px;
+      height: 100vh;
+      max-height: 920px;
+      overflow: hidden;
+      background: linear-gradient(160deg, #faf5ee 0%, #efe6db 55%, #e8ddd0 100%);
+      box-shadow: 0 24px 70px rgba(67, 50, 40, 0.25);
+      perspective: 1400px;
+      cursor: pointer;
+    }
+
+    /* Warm golden glow radiating from center seam on open */
+    .envelope-inner-glow {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 48%, rgba(255, 244, 214, 0.96) 0%, rgba(227, 193, 124, 0.55) 34%, rgba(250, 246, 240, 0.95) 75%);
+      opacity: 0;
+      transform: scale(0.75);
+      transition: opacity 0.7s ease, transform 0.9s ease;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .envelope-stage.opening .envelope-inner-glow {
+      opacity: 1;
+      transform: scale(1.08);
+    }
+
+    /* Individual 4 Triangular Envelope Flaps */
+    .env-flap {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.85s ease;
+      will-change: transform, opacity;
+    }
+
+    .env-flap-left {
+      z-index: 2;
+      clip-path: polygon(0 0, 50.2% 48.5%, 0 100%);
+      background: linear-gradient(105deg, #f3ebe0 0%, #ebe0d2 70%, #e0d3c2 100%);
+      filter: drop-shadow(3px 0 10px rgba(80, 58, 36, 0.14));
+    }
+
+    .env-flap-right {
+      z-index: 2;
+      clip-path: polygon(100% 0, 49.8% 48.5%, 100% 100%);
+      background: linear-gradient(255deg, #f3ebe0 0%, #ebe0d2 70%, #e0d3c2 100%);
+      filter: drop-shadow(-3px 0 10px rgba(80, 58, 36, 0.14));
+    }
+
+    .env-flap-bottom {
+      z-index: 3;
+      clip-path: polygon(0 100%, 50% 47.5%, 100% 100%);
+      background: linear-gradient(0deg, #ede3d6 0%, #f5eee4 65%, #fbf7f1 100%);
+      filter: drop-shadow(0 -6px 14px rgba(80, 58, 36, 0.14));
+    }
+
+    .env-flap-top {
+      z-index: 5;
+      clip-path: polygon(0 0, 100% 0, 50% 53%);
+      background: linear-gradient(180deg, #faf5ee 0%, #f2e9dd 68%, #ebe0d2 100%);
+      transform-origin: top center;
+      filter: drop-shadow(0 12px 22px rgba(72, 52, 34, 0.22));
+      transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.75s ease 0.25s;
+    }
+
+    /* Embossed Lace Pattern Overlay inside flaps */
+    .emboss-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.72;
+    }
+
+    /* Gold inner rim highlight on top flap */
+    .flap-gold-edge {
+      position: absolute;
+      inset: 0;
+      z-index: 6;
+      pointer-events: none;
+      transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.75s ease 0.25s;
+      transform-origin: top center;
+    }
+
+    /* Opening Animation Sequence (matching video 6.2s - 7.7s) */
+    .envelope-stage.opening .env-flap-top,
+    .envelope-stage.opening .flap-gold-edge {
+      transform: translateY(-38%) rotateX(48deg) scaleY(0.75);
+      opacity: 0;
+    }
+
+    .envelope-stage.opening .env-flap-left {
+      transform: translateX(-14%);
+      opacity: 0;
+      transition: transform 0.85s ease 0.28s, opacity 0.75s ease 0.3s;
+    }
+
+    .envelope-stage.opening .env-flap-right {
+      transform: translateX(14%);
+      opacity: 0;
+      transition: transform 0.85s ease 0.28s, opacity 0.75s ease 0.3s;
+    }
+
+    .envelope-stage.opening .env-flap-bottom {
+      transform: translateY(14%);
+      opacity: 0;
+      transition: transform 0.85s ease 0.28s, opacity 0.75s ease 0.3s;
+    }
+
+    /* Pearlescent Cream Wax Seal "S&A" */
+    .wax-seal-btn {
+      position: absolute;
+      left: 50%;
+      top: 50.5%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      width: 96px;
+      height: 96px;
+      border-radius: 9999px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.65s ease 0.2s;
+      animation: sealBreath 2.8s ease-in-out infinite;
+    }
+
+    @keyframes sealBreath {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); filter: drop-shadow(0 8px 18px rgba(72, 52, 34, 0.22)); }
+      50% { transform: translate(-50%, -50%) scale(1.04); filter: drop-shadow(0 12px 24px rgba(184, 145, 70, 0.34)); }
+    }
+
+    .envelope-stage.opening .wax-seal-btn {
+      animation: none;
+      transform: translate(-50%, -195%) scale(0.88);
+      opacity: 0;
+    }
+
+    /* Twinkling sparkles on embossed envelope */
+    @keyframes envSparkle {
+      0%, 100% { opacity: 0.2; transform: scale(0.7) rotate(0deg); }
+      50% { opacity: 0.95; transform: scale(1.15) rotate(18deg); }
+    }
+
+    .env-sparkle {
+      position: absolute;
+      z-index: 8;
+      color: #c8a258;
+      pointer-events: none;
+      animation: envSparkle 2.6s ease-in-out infinite;
+    }
+
+    /* ==================== 2. ORNATE SCALLOPED ARCH & HERO ==================== */
+    .arch-frame {
+      position: relative;
+      border: 1px solid rgba(184, 145, 70, 0.45);
+      border-radius: 220px 220px 24px 24px;
+      padding: 8px;
+      background: linear-gradient(180deg, rgba(255, 252, 247, 0.96), rgba(248, 240, 230, 0.92));
+      box-shadow: 0 20px 45px rgba(96, 72, 46, 0.1);
+    }
+
+    .arch-frame-inner {
+      position: relative;
+      border: 1px solid rgba(184, 145, 70, 0.28);
+      border-radius: 212px 212px 18px 18px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 40%, rgba(246, 224, 179, 0.48) 0%, rgba(250, 245, 237, 0.96) 72%);
+    }
+
+    /* ==================== 3. GOLD-FOIL SCRATCH-TO-REVEAL CARDS ==================== */
+    .scratch-box {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      border-radius: 14px;
+      border: 1.4px solid rgba(184, 145, 70, 0.55);
+      background: linear-gradient(160deg, #fffdf9 0%, #f8efe2 100%);
+      box-shadow: 0 10px 24px rgba(105, 78, 45, 0.12), inset 0 0 14px rgba(214, 182, 125, 0.18);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+      touch-action: none;
+    }
+
+    .scratch-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+      touch-action: none;
+      transition: opacity 0.5s ease;
+    }
+
+    .scratch-canvas.cleared {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* ==================== 4. VERTICAL TIMELINE ==================== */
+    .timeline-line {
+      position: absolute;
+      left: 50%;
+      top: 10px;
+      bottom: 10px;
+      width: 1.5px;
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, transparent, rgba(184, 145, 70, 0.65) 8%, rgba(184, 145, 70, 0.65) 92%, transparent);
+    }
+
+    @keyframes timelineFlowerGlide {
+      0% {
+        top: 0%;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.72) rotate(0deg);
+      }
+      8% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotate(28deg);
+      }
+      50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.04) rotate(180deg);
+      }
+      92% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotate(332deg);
+      }
+      100% {
+        top: 100%;
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.72) rotate(360deg);
+      }
+    }
+
+    .timeline-flower {
+      position: absolute;
+      left: 50%;
+      top: 0%;
+      width: 22px;
+      height: 22px;
+      z-index: 20;
+      pointer-events: none;
+      filter: drop-shadow(0 2px 5px rgba(184, 145, 70, 0.38));
+      animation: timelineFlowerGlide 9.5s linear infinite;
+    }
+
+    /* ==================== 5. FLOATING COMPACT MUSIC ICON BUTTON ==================== */
+    .music-pill {
+      position: fixed;
+      bottom: 16px;
+      right: max(14px, calc(50% - 216px));
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3px;
+      border-radius: 9999px;
+      background: rgba(255, 250, 244, 0.94);
+      backdrop-filter: blur(8px);
+      border: 1.3px solid rgba(184, 145, 70, 0.7);
+      box-shadow: 0 8px 20px rgba(90, 64, 34, 0.22);
+    }
+
+    @keyframes musicPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.13); }
+    }
+
+    #music-toggle.playing svg {
+      animation: musicPulse 1.1s ease-in-out infinite;
+    }
+
+    #music-toggle.playing {
+      background: rgba(184, 145, 70, 0.18);
+      box-shadow: 0 0 0 2px rgba(184, 145, 70, 0.35);
+    }
+
+    /* ==================== 6. SCROLL REVEAL & CHEVRON ==================== */
+    .reveal-item {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(5px); }
+    }
+
+    .scroll-cue-anim {
+      animation: floatSlow 2.1s ease-in-out infinite;
+    }
+
+    /* ==================== 7. TOAST & SPARKLE CANVAS ==================== */
+    #fx-canvas {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      width: 100%;
+      height: 100%;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 74px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: rgba(67, 50, 40, 0.94);
+      color: #faf6f0;
+      border: 1px solid rgba(214, 182, 125, 0.6);
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 11.5px;
+      letter-spacing: 0.04em;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 130;
+      white-space: nowrap;
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body class="envelope-locked">
+
+  <!-- Hidden YouTube Player -->
+  <div id="yt-player-wrap" aria-hidden="true">
+    <div id="yt-player"></div>
+  </div>
+
+  <!-- Sparkle / Petal Celebration Canvas -->
+  <canvas id="fx-canvas" aria-hidden="true"></canvas>
+
+  <!-- Toast Feedback -->
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Reusable SVG Definitions (Lord Ganesha + Corner Rose Cluster + 4-Point Sparkle) -->
+  <svg class="hidden" aria-hidden="true">
+    <defs>
+      <symbol id="ganesh-emblem" viewBox="0 0 64 64">
+        <!-- Crown / Mukut -->
+        <path d="M32 6c-2.6 0-4.6 2-4.6 4.4 0 1.4.6 2.6 1.6 3.4h6c1-.8 1.6-2 1.6-3.4C36.6 8 34.6 6 32 6z" fill="currentColor"/>
+        <path d="M25 14.5h14c.8 0 1.5.7 1.5 1.5v1.6c0 .8-.7 1.4-1.5 1.4H25c-.8 0-1.5-.6-1.5-1.4V16c0-.8.7-1.5 1.5-1.5z" fill="currentColor"/>
+        <!-- Large Ears -->
+        <path d="M22.5 20.5c-5.5-1-10.5 2.5-11 7.8-.4 4.6 2.8 8.4 7.6 8.4 1.8 0 3.3-.6 4.4-1.6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M41.5 20.5c5.5-1 10.5 2.5 11 7.8.4 4.6-2.8 8.4-7.6 8.4-1.8 0-3.3-.6-4.4-1.6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+        <!-- Head & Curved Trunk -->
+        <path d="M22 21c0-3.2 4.4-5.2 10-5.2s10 2 10 5.2c0 4.5-2.6 8-6.4 9.6-1.3.6-2 1.8-1.8 3.6.3 2.8 2 5.4 4.5 7 2.2 1.4 3.4 3.6 3.1 6-.4 3.1-3.1 5.3-6.4 5.3-2.9 0-5.2-1.8-5.7-4.4-.3-1.4.6-2.8 2-3 1.2-.2 2.4.6 2.6 1.8.2.8.8 1.3 1.6 1.3 1 0 1.8-.8 1.9-1.8.2-1.3-.5-2.5-1.9-3.3-3.6-2.2-5.9-5.8-6.3-10.2-.2-2-.9-3.5-2.3-4.6C23.4 26.8 22 24.1 22 21z" fill="currentColor"/>
+        <!-- Forehead Tilak & Eyes -->
+        <path d="M32 19.6v3.2" stroke="#faf6f0" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M25.5 24.4c1.3-.9 3-.9 4.2 0M34.3 24.4c1.3-.9 3-.9 4.2 0" stroke="#faf6f0" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        <!-- Lotus Base Arc -->
+        <path d="M18 55c4.2-2.2 8.9-3.3 14-3.3s9.8 1.1 14 3.3" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" fill="none"/>
+        <path d="M23 58.2c2.8-1.1 5.8-1.6 9-1.6s6.2.5 9 1.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+      </symbol>
+
+      <symbol id="floral-corner" viewBox="0 0 110 110">
+        <path d="M18 76 C 12 50, 24 25, 52 18" stroke="#a6b28f" stroke-width="1.4" fill="none"/>
+        <path d="M24 52 C 8 44, 6 28, 22 24 C 30 32, 32 42, 24 52 Z" fill="#c7d1b4" opacity="0.85"/>
+        <path d="M46 24 C 48 8, 66 6, 72 20 C 62 28, 54 30, 46 24 Z" fill="#c7d1b4" opacity="0.8"/>
+        <circle cx="38" cy="36" r="17" fill="#f2dfd9"/>
+        <circle cx="38" cy="36" r="12" fill="#e6c4bd"/>
+        <circle cx="38" cy="36" r="6" fill="#cfa299"/>
+        <circle cx="60" cy="24" r="11" fill="#f7ebe4"/>
+        <circle cx="60" cy="24" r="6" fill="#e5c8b4"/>
+        <circle cx="22" cy="60" r="10" fill="#f6e7e2"/>
+        <circle cx="22" cy="60" r="5" fill="#ddb4aa"/>
+        <circle cx="78" cy="18" r="3" fill="#d6b67d"/>
+        <circle cx="16" cy="78" r="2.8" fill="#d6b67d"/>
+      </symbol>
+
+      <symbol id="sparkle-4" viewBox="0 0 24 24">
+        <path d="M12 1.5L14.4 9.6L22.5 12L14.4 14.4L12 22.5L9.6 14.4L1.5 12L9.6 9.6L12 1.5Z" fill="currentColor"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ===================================================================== -->
+  <!-- 1. EMBOSSED FLORAL ENVELOPE + PEARLESCENT "S&A" WAX SEAL OPENING      -->
+  <!-- ===================================================================== -->
+  <div id="envelope-overlay" role="dialog" aria-modal="true" aria-label="Open Shreyash and Alisha Wedding Envelope">
+    <div id="envelope-stage" class="envelope-stage">
+      <!-- Inner Warm Gold Backlight -->
+      <div class="envelope-inner-glow"></div>
+
+      <!-- Left Triangular Flap with Blind-Embossed Floral Pattern -->
+      <div class="env-flap env-flap-left">
+        <svg class="emboss-svg" viewBox="0 0 460 840" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <pattern id="emboss-lace-l" width="140" height="140" patternUnits="userSpaceOnUse">
+              <circle cx="70" cy="70" r="28" fill="none" stroke="#ffffff" stroke-opacity="0.7" stroke-width="1.6"/>
+              <circle cx="70" cy="70" r="28" fill="none" stroke="#c8b8a4" stroke-opacity="0.35" stroke-width="1" transform="translate(1.5,1.5)"/>
+              <path d="M70 22 C82 40, 82 54, 70 70 C58 54, 58 40, 70 22 Z" fill="#ffffff" fill-opacity="0.32" stroke="#c8b8a4" stroke-opacity="0.3"/>
+              <path d="M70 118 C82 100, 82 86, 70 70 C58 86, 58 100, 70 118 Z" fill="#ffffff" fill-opacity="0.32" stroke="#c8b8a4" stroke-opacity="0.3"/>
+              <path d="M22 70 C40 58, 54 58, 70 70 C54 82, 40 82, 22 70 Z" fill="#ffffff" fill-opacity="0.32" stroke="#c8b8a4" stroke-opacity="0.3"/>
+              <path d="M118 70 C100 58, 86 58, 70 70 C86 82, 100 82, 118 70 Z" fill="#ffffff" fill-opacity="0.32" stroke="#c8b8a4" stroke-opacity="0.3"/>
+              <circle cx="24" cy="24" r="9" fill="none" stroke="#c8b8a4" stroke-opacity="0.35" stroke-width="1.2"/>
+              <circle cx="116" cy="116" r="9" fill="none" stroke="#c8b8a4" stroke-opacity="0.35" stroke-width="1.2"/>
+            </pattern>
+          </defs>
+          <rect width="460" height="840" fill="url(#emboss-lace-l)"/>
+        </svg>
+      </div>
+
+      <!-- Right Triangular Flap -->
+      <div class="env-flap env-flap-right">
+        <svg class="emboss-svg" viewBox="0 0 460 840" preserveAspectRatio="xMidYMid slice">
+          <rect width="460" height="840" fill="url(#emboss-lace-l)"/>
+        </svg>
+      </div>
+
+      <!-- Bottom Triangular Flap -->
+      <div class="env-flap env-flap-bottom">
+        <svg class="emboss-svg" viewBox="0 0 460 840" preserveAspectRatio="xMidYMid slice">
+          <rect width="460" height="840" fill="url(#emboss-lace-l)"/>
+        </svg>
+      </div>
+
+      <!-- Top Triangular Flap -->
+      <div class="env-flap env-flap-top">
+        <svg class="emboss-svg" viewBox="0 0 460 840" preserveAspectRatio="xMidYMid slice">
+          <rect width="460" height="840" fill="url(#emboss-lace-l)"/>
+        </svg>
+      </div>
+
+      <!-- Crisp Subtle Gold Edge Along Top Flap -->
+      <svg class="flap-gold-edge" viewBox="0 0 460 840" preserveAspectRatio="none">
+        <polyline points="0,0 230,445 460,0" fill="none" stroke="rgba(184,145,70,0.38)" stroke-width="1.6"/>
+      </svg>
+
+      <!-- Subtle Twinkling Golden Sparkles on Envelope -->
+      <svg class="env-sparkle w-4 h-4" style="top: 22%; left: 24%; animation-delay: 0s;"><use href="#sparkle-4"/></svg>
+      <svg class="env-sparkle w-3 h-3" style="top: 32%; right: 20%; animation-delay: 0.9s;"><use href="#sparkle-4"/></svg>
+      <svg class="env-sparkle w-3.5 h-3.5" style="bottom: 24%; left: 28%; animation-delay: 1.4s;"><use href="#sparkle-4"/></svg>
+      <svg class="env-sparkle w-4 h-4" style="bottom: 14%; right: 14%; animation-delay: 0.4s;"><use href="#sparkle-4"/></svg>
+
+      <!-- Center Pearlescent Cream Wax Seal "S&A" -->
+      <button id="wax-seal-btn" class="wax-seal-btn" type="button" aria-label="Tap wax seal to open wedding invitation">
+        <svg class="w-full h-full" viewBox="0 0 120 120">
+          <defs>
+            <radialGradient id="pearl-wax" cx="35%" cy="30%" r="70%">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="52%" stop-color="#f5ede2"/>
+              <stop offset="88%" stop-color="#e3d5c3"/>
+              <stop offset="100%" stop-color="#cbb89f"/>
+            </radialGradient>
+          </defs>
+          <!-- Organic wax rim -->
+          <path d="M60,6 C73,5 85,10 95,18 C105,27 113,40 114,55 C115,71 108,86 98,96 C88,107 74,114 59,114 C44,114 29,107 19,96 C9,85 5,70 6,55 C7,40 14,25 25,17 C35,9 48,7 60,6 Z"
+                fill="url(#pearl-wax)" stroke="rgba(184,145,70,0.45)" stroke-width="1.2"/>
+          <!-- Inner debossed wax ring -->
+          <circle cx="60" cy="60" r="40" fill="none" stroke="rgba(176,143,93,0.48)" stroke-width="1.5"/>
+          <circle cx="60" cy="60" r="37" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="0.9"/>
+          <!-- Monogram S&A -->
+          <text x="60" y="67" text-anchor="middle" font-family="'Cormorant Garamond', Georgia, serif" font-style="italic" font-weight="600" font-size="28" fill="#7a5e3a" letter-spacing="0.5">
+            S&amp;A
+          </text>
+        </svg>
+      </button>
+
+      <!-- Subtle Tap Prompt at Bottom -->
+      <div id="env-prompt" class="absolute bottom-8 left-0 right-0 z-10 text-center pointer-events-none transition-opacity duration-500">
+        <p class="text-[10px] tracking-[0.28em] uppercase text-taupe font-medium">Tap the Seal to Open</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- FLOATING COMPACT MUSIC ICON BUTTON (44x44 Icon-Only)                  -->
+  <!-- ===================================================================== -->
+  <div class="music-pill" aria-label="Wedding music controls">
+    <button id="music-toggle" type="button" aria-label="Play or pause wedding music" title="Play / Pause Music"
+            class="w-9 h-9 rounded-full bg-gold/10 hover:bg-gold/20 active:scale-90 transition-all flex items-center justify-center cursor-pointer">
+      <svg class="w-4 h-4 text-gold-dark" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MAIN INVITATION CONTENT (MATCHING VIDEO SCREEN ORDER)                 -->
+  <!-- ===================================================================== -->
+  <main class="invite-shell relative z-10">
+
+    <!-- ------------------------------------------------------------------- -->
+    <!-- SCREEN 1: HERO ARCH CARD ("Welcome to the Wedding of Shreyash & Alisha") -->
+    <!-- ------------------------------------------------------------------- -->
+    <section id="hero" class="px-4 pt-5 pb-10 min-h-[96vh] flex flex-col justify-center">
+      <div class="arch-frame">
+        <div class="arch-frame-inner px-5 pt-10 pb-7 text-center flex flex-col items-center relative">
+          <!-- Top-Left & Bottom-Right Watercolor Floral Accents -->
+          <svg class="absolute -top-2 -left-2 w-24 h-24 pointer-events-none opacity-90"><use href="#floral-corner"/></svg>
+          <svg class="absolute -top-2 -right-2 w-24 h-24 pointer-events-none opacity-90 -scale-x-100"><use href="#floral-corner"/></svg>
+          <svg class="absolute -bottom-2 -right-2 w-24 h-24 pointer-events-none opacity-85 rotate-180"><use href="#floral-corner"/></svg>
+
+          <!-- Realistic Motion Couple Video inside Dreamy Champagne Arch -->
+          <div class="w-full max-w-[270px] mx-auto mb-4 relative">
+            <div class="relative overflow-hidden rounded-t-[140px] rounded-b-2xl border border-gold/55 shadow-[0_14px_34px_rgba(95,70,40,0.16)] bg-[#f7ecdb] aspect-[3/4]">
+              <video class="w-full h-full object-cover object-top block"
+                     src="assets/hero-couple.mp4"
+                     poster="assets/hero-couple-poster.jpg"
+                     autoplay loop muted playsinline preload="auto"
+                     aria-label="Shreyash and Alisha walking together in ivory wedding attire under warm hanging lights">
+              </video>
+              <div class="absolute inset-0 pointer-events-none"
+                   style="background: radial-gradient(circle at 50% 45%, transparent 56%, rgba(250,245,237,0.38) 100%), linear-gradient(to top, rgba(250,245,237,0.55) 0%, transparent 24%);">
+              </div>
+            </div>
+          </div>
+
+          <p class="text-[10px] tracking-[0.28em] uppercase text-gold-dark font-semibold">Welcome To The</p>
+          <p class="font-script text-[40px] sm:text-[44px] leading-tight text-espresso mt-1">Wedding Celebration</p>
+          <p class="text-[10px] tracking-[0.28em] uppercase text-taupe font-medium mt-0.5">Of</p>
+          <h1 class="font-serif text-[32px] sm:text-[36px] text-wine font-semibold tracking-wide mt-1">
+            Shreyash &amp; Alisha
+          </h1>
+
+          <a href="#the-date" class="mt-6 inline-flex flex-col items-center gap-1 text-taupe hover:text-espresso transition-colors">
+            <span class="text-[9.5px] tracking-[0.26em] uppercase font-medium">Scroll Down</span>
+            <svg class="w-4 h-4 scroll-cue-anim" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+              <path d="M7 9l5 5 5-5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------- -->
+    <!-- SCREEN 2: "THE DATE" — 3 METALLIC GOLD SCRATCH-TO-REVEAL CARDS      -->
+    <!-- ------------------------------------------------------------------- -->
+    <section id="the-date" class="px-6 py-14 text-center">
+      <div class="reveal-item">
+        <h2 class="font-script text-[48px] text-gold-dark leading-none">The Date</h2>
+        <div class="inline-flex items-center justify-center gap-2 mt-2 text-[10.5px] tracking-[0.22em] uppercase text-taupe font-medium">
+          <svg class="w-3 h-3 text-gold" aria-hidden="true"><use href="#sparkle-4"/></svg>
+          <span>Scratch to reveal the date</span>
+          <svg class="w-3 h-3 text-gold" aria-hidden="true"><use href="#sparkle-4"/></svg>
+        </div>
+      </div>
+
+      <!-- 3 Side-by-Side Scratch Foil Boxes -->
+      <div class="reveal-item mt-8 flex items-start justify-center gap-3.5 sm:gap-4">
+        <!-- DAY -->
+        <div class="flex flex-col items-center">
+          <div class="scratch-box" data-label="DAY">
+            <span class="text-[9px] tracking-[0.2em] uppercase text-gold-dark font-semibold">Fri</span>
+            <span class="font-serif text-[36px] leading-none text-wine font-semibold mt-0.5">04</span>
+            <canvas class="scratch-canvas" width="96" height="96" aria-label="Scratch to reveal day"></canvas>
+          </div>
+          <span class="text-[9.5px] tracking-[0.22em] uppercase text-taupe font-semibold mt-2.5">Day</span>
+        </div>
+
+        <!-- MONTH -->
+        <div class="flex flex-col items-center">
+          <div class="scratch-box" data-label="MONTH">
+            <span class="font-serif italic text-[22px] text-wine font-semibold leading-tight">December</span>
+            <canvas class="scratch-canvas" width="96" height="96" aria-label="Scratch to reveal month"></canvas>
+          </div>
+          <span class="text-[9.5px] tracking-[0.22em] uppercase text-taupe font-semibold mt-2.5">Month</span>
+        </div>
+
+        <!-- YEAR -->
+        <div class="flex flex-col items-center">
+          <div class="scratch-box" data-label="YEAR">
+            <span class="font-serif text-[30px] leading-none text-wine font-semibold">2026</span>
+            <canvas class="scratch-canvas" width="96" height="96" aria-label="Scratch to reveal year"></canvas>
+          </div>
+          <span class="text-[9.5px] tracking-[0.22em] uppercase text-taupe font-semibold mt-2.5">Year</span>
+        </div>
+      </div>
+
+      <p id="scratch-hint" class="reveal-item text-[11px] text-taupe/85 mt-4">
+        Swipe or tap each gold foil square to reveal
+      </p>
+    </section>
+
+    <!-- ------------------------------------------------------------------- -->
+    <!-- SCREEN 3: FORMAL INVITATION & FAMILY DETAILS (SCALLOPED ARCH CARD)  -->
+    <!-- ------------------------------------------------------------------- -->
+    <section id="formal-invite" class="px-5 py-8">
+      <div class="reveal-item arch-frame">
+        <div class="arch-frame-inner px-6 py-11 text-center relative">
+          <svg class="absolute -bottom-2 -left-2 w-24 h-24 pointer-events-none opacity-85 -scale-y-100"><use href="#floral-corner"/></svg>
+          <svg class="absolute -bottom-2 -right-2 w-24 h-24 pointer-events-none opacity-85 rotate-180"><use href="#floral-corner"/></svg>
+
+          <!-- Crisp Lord Ganesha Emblem -->
+          <div class="w-12 h-12 mx-auto rounded-full border border-gold/45 bg-alabaster flex items-center justify-center mb-3 shadow-sm">
+            <svg class="w-8 h-8 text-gold-dark" aria-label="Lord Ganesha Emblem"><use href="#ganesh-emblem"/></svg>
+          </div>
+          <p class="text-[9.5px] tracking-[0.26em] uppercase text-gold-dark font-semibold">
+            You Are Invited To The Wedding Of
+          </p>
+
+          <h2 class="font-script text-[46px] text-wine leading-tight mt-4">Shreyash Itankar</h2>
+          <p class="text-[9.5px] tracking-[0.2em] uppercase text-taupe mt-0.5 font-medium">
+            Son of Mr. Ajay Itankar &amp; Mrs. Sandhya Itankar
+          </p>
+
+          <p class="font-serif italic text-[18px] text-gold-dark my-3">with</p>
+
+          <h2 class="font-script text-[46px] text-wine leading-tight">Alisha Tidke</h2>
+          <p class="text-[9.5px] tracking-[0.2em] uppercase text-taupe mt-0.5 font-medium">
+            Daughter of Mr. Kishor Tidke &amp; Mrs. Kiran Tidke
+          </p>
+
+          <div class="w-16 h-[1px] bg-gold/40 mx-auto my-6"></div>
+
+          <h3 class="font-script text-[32px] text-gold-dark leading-tight">Dear Friends and Family</h3>
+          <p class="font-serif text-[15.5px] text-espresso/90 leading-relaxed mt-2 max-w-[300px] mx-auto">
+            Join us for celebrations filled with love, sacred rituals, laughter, and unforgettable memories as we begin our forever together.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------- -->
+    <!-- SCREEN 4: VERTICAL "WEDDING TIMELINE" (ALTERNATING GOLD CENTERLINE) -->
+    <!-- ------------------------------------------------------------------- -->
+    <section id="timeline" class="px-5 py-14">
+      <div class="reveal-item text-center mb-10">
+        <p class="text-[10px] tracking-[0.28em] uppercase text-gold-dark font-semibold">Schedule</p>
+        <h2 class="font-script text-[48px] text-espresso leading-tight mt-1">Wedding Timeline</h2>
+      </div>
+
+      <div class="relative max-w-[390px] mx-auto py-2">
+        <div class="timeline-line" aria-hidden="true">
+          <svg class="timeline-flower" viewBox="0 0 32 32" fill="none">
+            <g transform="translate(16 16)">
+              <ellipse cx="0" cy="-7" rx="4.2" ry="6.2" fill="#f2d5d0" stroke="#c89e52" stroke-width="0.7"/>
+              <ellipse cx="0" cy="-7" rx="4.2" ry="6.2" fill="#f7e4df" stroke="#c89e52" stroke-width="0.7" transform="rotate(72)"/>
+              <ellipse cx="0" cy="-7" rx="4.2" ry="6.2" fill="#f2d5d0" stroke="#c89e52" stroke-width="0.7" transform="rotate(144)"/>
+              <ellipse cx="0" cy="-7" rx="4.2" ry="6.2" fill="#f7e4df" stroke="#c89e52" stroke-width="0.7" transform="rotate(216)"/>
+              <ellipse cx="0" cy="-7" rx="4.2" ry="6.2" fill="#f2d5d0" stroke="#c89e52" stroke-width="0.7" transform="rotate(288)"/>
+              <circle cx="0" cy="0" r="3.4" fill="#d4ab5c" stroke="#9e7832" stroke-width="0.6"/>
+              <circle cx="0" cy="0" r="1.4" fill="#fff7e2"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- Event 1 (Left Text / Right Icon) -->
+        <div class="reveal-item grid grid-cols-[1fr_28px_1fr] items-center gap-2 mb-9">
+          <div class="text-right pr-2">
+            <p class="font-script text-[26px] text-gold-dark leading-none">11:00 am</p>
+            <p class="text-[9px] tracking-[0.18em] uppercase text-taupe mt-1">Fri, 4 Dec 2026</p>
+            <p class="font-serif text-[16px] font-semibold text-espresso mt-0.5">Haldi Ceremony</p>
+            <p class="text-[11px] text-taupe">Sunlit Courtyard</p>
+          </div>
+          <div class="relative z-10 flex justify-center">
+            <span class="w-3 h-3 rounded-full bg-alabaster border-2 border-gold shadow-sm"></span>
+          </div>
+          <div class="pl-2 flex justify-start">
+            <svg class="w-11 h-11 text-gold-dark/80" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4">
+              <path d="M12 24h24c-1 8-6 13-12 13s-11-5-12-13z" fill="#f7e8be" fill-opacity="0.65"/>
+              <path d="M19 16c2-3 4-3 5-6 1 3 3 3 5 6" stroke-linecap="round"/>
+              <path d="M14 40h20" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Event 2 (Left Icon / Right Text) -->
+        <div class="reveal-item grid grid-cols-[1fr_28px_1fr] items-center gap-2 mb-9">
+          <div class="pr-2 flex justify-end">
+            <svg class="w-11 h-11 text-gold-dark/80" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4">
+              <path d="M10 38h28M14 38V20M34 38V20M12 20c4-6 8-9 12-9s8 3 12 9H12z" stroke-linecap="round" stroke-linejoin="round" fill="#f4e6d2" fill-opacity="0.5"/>
+              <circle cx="24" cy="28" r="3" fill="#d6b67d"/>
+            </svg>
+          </div>
+          <div class="relative z-10 flex justify-center">
+            <span class="w-3 h-3 rounded-full bg-alabaster border-2 border-gold shadow-sm"></span>
+          </div>
+          <div class="text-left pl-2">
+            <p class="font-script text-[26px] text-gold-dark leading-none">2:00 pm</p>
+            <p class="text-[9px] tracking-[0.18em] uppercase text-taupe mt-1">Fri, 4 Dec 2026</p>
+            <p class="font-serif text-[16px] font-semibold text-espresso mt-0.5">Mandap Poojan</p>
+            <p class="text-[11px] text-taupe">Sacred Pavilion</p>
+          </div>
+        </div>
+
+        <!-- Event 3 (Left Text / Right Icon) -->
+        <div class="reveal-item grid grid-cols-[1fr_28px_1fr] items-center gap-2 mb-9">
+          <div class="text-right pr-2">
+            <p class="font-script text-[26px] text-gold-dark leading-none">7:00 pm</p>
+            <p class="text-[9px] tracking-[0.18em] uppercase text-taupe mt-1">Fri, 4 Dec 2026</p>
+            <p class="font-serif text-[16px] font-semibold text-espresso mt-0.5">Sangeet Night</p>
+            <p class="text-[11px] text-taupe">Music, Dance &amp; Dinner</p>
+          </div>
+          <div class="relative z-10 flex justify-center">
+            <span class="w-3 h-3 rounded-full bg-alabaster border-2 border-gold shadow-sm"></span>
+          </div>
+          <div class="pl-2 flex justify-start">
+            <svg class="w-11 h-11 text-gold-dark/80" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4">
+              <path d="M18 33V15l16-4v18" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="14" cy="34" r="4" fill="#f2dfd9"/>
+              <circle cx="30" cy="30" r="4" fill="#f2dfd9"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Event 4 (Left Icon / Right Text) -->
+        <div class="reveal-item grid grid-cols-[1fr_28px_1fr] items-center gap-2 mb-9">
+          <div class="pr-2 flex justify-end">
+            <svg class="w-11 h-11 text-gold-dark/80" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4">
+              <path d="M24 14c4 5 5 9 3 13-2 3-4 4-3 6-4-2-6-6-5-10 1-3 3-6 5-9z" fill="#f7e2b2"/>
+              <path d="M14 36h20l-3 5H17l-3-5z" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="relative z-10 flex justify-center">
+            <span class="w-3 h-3 rounded-full bg-alabaster border-2 border-gold shadow-sm"></span>
+          </div>
+          <div class="text-left pl-2">
+            <p class="font-script text-[26px] text-gold-dark leading-none">11:00 am</p>
+            <p class="text-[9px] tracking-[0.18em] uppercase text-taupe mt-1">Sat, 5 Dec 2026</p>
+            <p class="font-serif text-[16px] font-semibold text-espresso mt-0.5">Wedding Muhurat</p>
+            <p class="text-[11px] text-taupe">Pheras &amp; Blessings</p>
+          </div>
+        </div>
+
+        <!-- Event 5 (Left Text / Right Icon) -->
+        <div class="reveal-item grid grid-cols-[1fr_28px_1fr] items-center gap-2">
+          <div class="text-right pr-2">
+            <p class="font-script text-[26px] text-gold-dark leading-none">7:00 pm</p>
+            <p class="text-[9px] tracking-[0.18em] uppercase text-taupe mt-1">Sat, 5 Dec 2026</p>
+            <p class="font-serif text-[16px] font-semibold text-espresso mt-0.5">Varmala &amp; Reception</p>
+            <p class="text-[11px] text-taupe">Dinner &amp; Celebration</p>
+          </div>
+          <div class="relative z-10 flex justify-center">
+            <span class="w-3 h-3 rounded-full bg-wine border-2 border-gold-light shadow-sm"></span>
+          </div>
+          <div class="pl-2 flex justify-start">
+            <svg class="w-11 h-11 text-gold-dark/80" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4">
+              <circle cx="20" cy="25" r="7" fill="#f2dfd9" fill-opacity="0.5"/>
+              <circle cx="28" cy="25" r="7" fill="#f7e8be" fill-opacity="0.5"/>
+              <path d="M24 11l1.5 3.5L29 16l-3.5 1.5L24 21l-1.5-3.5L19 16l3.5-1.5L24 11z" fill="#d6b67d" stroke="none"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------- -->
+    <!-- SCREEN 5: "THE CELEBRATION BEGINS" COUNTDOWN + LOCATION HEADER      -->
+    <!-- ------------------------------------------------------------------- -->
+    <section id="countdown-location" class="px-6 py-12 text-center relative">
+      <div class="reveal-item">
+        <h2 class="font-script text-[44px] text-espresso leading-tight">The Celebration Begins</h2>
+
+        <div class="mt-6 flex items-baseline justify-center gap-3 sm:gap-5">
+          <div>
+            <span id="cd-days" class="font-serif text-[34px] sm:text-[38px] text-gold-dark font-semibold">00</span>
+            <p class="text-[9px] tracking-[0.2em] uppercase text-taupe mt-1">Days</p>
+          </div>
+          <span class="font-serif text-[26px] text-champagne">:</span>
+          <div>
+            <span id="cd-hours" class="font-serif text-[34px] sm:text-[38px] text-gold-dark font-semibold">00</span>
+            <p class="text-[9px] tracking-[0.2em] uppercase text-taupe mt-1">Hours</p>
+          </div>
+          <span class="font-serif text-[26px] text-champagne">:</span>
+          <div>
+            <span id="cd-mins" class="font-serif text-[34px] sm:text-[38px] text-gold-dark font-semibold">00</span>
+            <p class="text-[9px] tracking-[0.2em] uppercase text-taupe mt-1">Minutes</p>
+          </div>
+          <span class="font-serif text-[26px] text-champagne">:</span>
+          <div>
+            <span id="cd-secs" class="font-serif text-[34px] sm:text-[38px] text-gold-dark font-semibold">00</span>
+            <p class="text-[9px] tracking-[0.2em] uppercase text-taupe mt-1">Seconds</p>
+          </div>
+        </div>
+
+        <!-- Add to Calendar Picker -->
+        <div class="mt-6 flex flex-col items-center">
+          <button id="add-calendar-btn" type="button" aria-expanded="false" aria-controls="calendar-options"
+                  class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-gold/65 bg-white/80 text-espresso text-[10.5px] font-medium tracking-[0.18em] uppercase hover:bg-wine hover:text-alabaster hover:border-wine transition-all shadow-sm cursor-pointer">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+              <rect x="3" y="5" width="18" height="16" rx="3"/>
+              <path d="M16 3v4M8 3v4M3 10h18M12 14v4M10 16h4" stroke-linecap="round"/>
+            </svg>
+            Add to Calendar
+          </button>
+
+          <div id="calendar-options" class="hidden mt-3 flex-wrap items-center justify-center gap-2.5">
+            <a id="google-calendar-link"
+               href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Shreyash+%26+Alisha+Wedding+Celebrations&dates=20261204T053000Z%2F20261205T173000Z&details=Join+us+in+celebrating+the+wedding+of+Shreyash+Itankar+%26+Alisha+Tidke!+Ceremonies+begin+4th+December+2026+at+11%3A00+AM+IST%2C+followed+by+Varmala+Ceremony+%26+Reception+on+5th+December+2026.&location=Jalaram+Lawns%2C+Gondia%2C+MH%2C+441601"
+               target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-wine text-alabaster text-[10.5px] font-medium tracking-[0.12em] uppercase shadow-sm hover:opacity-90 transition-opacity">
+              Google Calendar
+            </a>
+            <button id="download-ics-btn" type="button"
+                    class="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-gold/70 bg-white text-espresso text-[10.5px] font-medium tracking-[0.12em] uppercase shadow-sm hover:bg-cream transition-colors cursor-pointer">
+              Apple / Outlook (.ics)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gold Divider + Location Header -->
+      <div class="reveal-item mt-12 pt-8 border-t border-gold/25">
+        <h2 class="font-script text-[44px] text-espresso leading-tight">Location</h2>
+        <p class="text-[11px] tracking-[0.34em] uppercase text-gold-dark font-semibold mt-1">GONDIA</p>
+        <p class="font-serif text-[19px] text-espresso mt-1.5">Jalaram Lawns, Gondia, MH, 441601</p>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------- -->
+    <!-- SCREEN 6: REAL JALARAM LAWNS PHOTO + LIVE INTERACTIVE GOOGLE MAP    -->
+    <!-- ------------------------------------------------------------------- -->
+    <section id="venue-map" class="px-6 pb-14 text-center">
+      <!-- Real Jalaram Lawns, Gondia Venue Photograph -->
+      <div class="reveal-item relative rounded-2xl overflow-hidden border border-gold/45 shadow-[0_14px_34px_rgba(95,70,40,0.14)] bg-[#f7ecdd] mb-5">
+        <div class="relative h-52 w-full overflow-hidden">
+          <img src="assets/jalaram-lawns-gondia.jpg"
+               alt="Jalaram Lawns wedding venue exterior and lush green lawn in Gondia"
+               class="w-full h-full object-cover object-center block"
+               loading="lazy" />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#2a1912]/75 via-[#2a1912]/10 to-transparent pointer-events-none"></div>
+          <div class="absolute bottom-3 left-4 right-4 flex items-end justify-between text-left">
+            <div>
+              <p class="text-[9.5px] tracking-[0.24em] uppercase text-gold-light font-semibold">Wedding Venue</p>
+              <p class="font-serif text-[20px] text-white leading-tight drop-shadow-sm">Jalaram Lawns, Gondia</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-white/90 text-espresso text-[9.5px] font-semibold tracking-wider uppercase shadow-sm">
+              MH 441601
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real Live Embedded Google Map -->
+      <div class="reveal-item relative rounded-2xl overflow-hidden border border-gold/45 bg-white shadow-[0_12px_30px_rgba(95,70,40,0.12)]">
+        <div class="relative w-full h-56 bg-[#f4efe6]">
+          <iframe title="Google Map of Jalaram Lawns, Gondia"
+                  src="https://www.google.com/maps?q=Jalaram+Lawns,+Gondia,+Maharashtra+441601&output=embed"
+                  class="w-full h-full border-0 block"
+                  loading="lazy"
+                  referrerpolicy="no-referrer-when-downgrade"
+                  allowfullscreen>
+          </iframe>
+        </div>
+
+        <div class="px-4 py-3 bg-alabaster/95 border-t border-gold/25 flex items-center justify-between gap-2">
+          <p class="text-[11px] text-taupe text-left truncate">Jalaram Lawns, Gondia, MH 441601</p>
+          <div class="shrink-0 flex items-center gap-1.5">
+            <a href="https://www.google.com/maps/search/?api=1&query=Jalaram+Lawns+Gondia+441601"
+               target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-wine text-alabaster text-[10px] font-medium tracking-[0.12em] uppercase hover:opacity-90 transition-opacity">
+              Directions
+            </a>
+            <button id="copy-address-btn" type="button"
+                    class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-gold/60 bg-white text-espresso text-[10px] font-medium tracking-[0.12em] uppercase hover:bg-wine hover:text-alabaster hover:border-wine transition-colors cursor-pointer">
+              <span id="copy-btn-label">Copy</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------- -->
+    <!-- SCREEN 7: "DRESS CODE" (EDITORIAL FAMILY PORTRAIT + SHADE SWATCHES) -->
+    <!-- ------------------------------------------------------------------- -->
+    <section id="dress-code" class="px-6 py-12 text-center border-t border-gold/20">
+      <div class="reveal-item">
+        <h2 class="font-script text-[46px] text-espresso leading-tight">Dress Code</h2>
+
+        <!-- Realistic Indian Wedding Family Attire Inspiration -->
+        <div class="my-5 max-w-[290px] mx-auto rounded-2xl overflow-hidden border border-gold/45 shadow-[0_14px_34px_rgba(95,70,40,0.14)] bg-[#f7ecdd]">
+          <img src="assets/family-attire-sample.jpg"
+               alt="Indian wedding family dressed in coordinated ivory, champagne gold, emerald, and deep wine traditional festive attire"
+               class="w-full h-auto block object-cover"
+               loading="lazy" />
+        </div>
+
+        <p class="font-serif text-[15px] text-espresso/90 max-w-[300px] mx-auto leading-relaxed">
+          We kindly invite our guests to dress in Traditional Indian Attire in soft pastel &amp; jewel tones.
+        </p>
+
+        <p class="font-script text-[28px] text-gold-dark mt-6">Recommended shades</p>
+        <div class="mt-3 flex items-center justify-center gap-3.5">
+          <span class="w-9 h-9 rounded-full border border-gold/45 shadow-sm" style="background: #f2e0b6;" title="Champagne Gold"></span>
+          <span class="w-9 h-9 rounded-full border border-gold/45 shadow-sm" style="background: #f1d3cb;" title="Peach Blush"></span>
+          <span class="w-9 h-9 rounded-full border border-gold/45 shadow-sm" style="background: #d9cde3;" title="Soft Lavender"></span>
+          <span class="w-9 h-9 rounded-full border border-gold/45 shadow-sm" style="background: #1d5b49;" title="Emerald Green"></span>
+          <span class="w-9 h-9 rounded-full border border-gold/45 shadow-sm" style="background: #6e1f2f;" title="Royal Wine"></span>
+        </div>
+
+        <p class="text-[11px] text-taupe mt-4 max-w-[280px] mx-auto leading-relaxed">
+          For the Saturday evening Varmala &amp; Reception, jewel tones and festive glamour are warmly welcomed.
+        </p>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------- -->
+    <!-- SCREEN 8: RSVP & FAMILY CONTACTS                                    -->
+    <!-- ------------------------------------------------------------------- -->
+    <section id="rsvp" class="px-6 pt-10 pb-24 text-center border-t border-gold/20">
+      <div class="reveal-item">
+        <p class="text-[10px] tracking-[0.28em] uppercase text-gold-dark font-semibold">Kindly Respond</p>
+        <h2 class="font-script text-[44px] text-espresso leading-tight mt-1">Will You Join Us?</h2>
+
+        <button id="rsvp-confirm-btn" type="button"
+                class="mt-5 inline-flex items-center gap-2 px-7 py-3 rounded-full bg-wine text-alabaster text-[11px] font-medium tracking-[0.2em] uppercase shadow-[0_10px_24px_rgba(110,31,47,0.25)] hover:opacity-95 active:scale-[0.98] transition-all cursor-pointer">
+          <svg class="w-4 h-4 text-gold-light" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+          <span id="rsvp-btn-text">Joyfully Accepts</span>
+        </button>
+        <p id="rsvp-confirmed-note" class="hidden text-[11.5px] text-wine mt-2.5 font-medium">
+          Thank you! We are thrilled to celebrate with you.
+        </p>
+      </div>
+
+      <div class="reveal-item grid grid-cols-1 gap-3 mt-7 max-w-[330px] mx-auto">
+        <a href="tel:+918788028638"
+           class="flex items-center justify-between px-5 py-3.5 rounded-2xl bg-white/85 border border-gold/40 shadow-sm hover:border-wine/50 transition-all group">
+          <div class="text-left">
+            <p class="text-[9px] tracking-[0.2em] uppercase text-gold-dark font-semibold">RSVP Contact</p>
+            <p class="font-serif text-[18px] text-espresso leading-tight mt-0.5">Ajay Itankar</p>
+            <p class="text-[11.5px] text-taupe mt-0.5">+91 87880 28638</p>
+          </div>
+          <span class="w-9 h-9 rounded-full bg-gold/15 text-gold-dark flex items-center justify-center group-hover:bg-wine group-hover:text-alabaster transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+            </svg>
+          </span>
+        </a>
+
+        <a href="tel:+918668234109"
+           class="flex items-center justify-between px-5 py-3.5 rounded-2xl bg-white/85 border border-gold/40 shadow-sm hover:border-wine/50 transition-all group">
+          <div class="text-left">
+            <p class="text-[9px] tracking-[0.2em] uppercase text-gold-dark font-semibold">RSVP Contact</p>
+            <p class="font-serif text-[18px] text-espresso leading-tight mt-0.5">Nitish Itankar</p>
+            <p class="text-[11.5px] text-taupe mt-0.5">+91 86682 34109</p>
+          </div>
+          <span class="w-9 h-9 rounded-full bg-gold/15 text-gold-dark flex items-center justify-center group-hover:bg-wine group-hover:text-alabaster transition-colors">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+
+      <!-- Share Invitation Card -->
+      <div class="reveal-item mt-6 rounded-2xl border border-gold/35 bg-white/80 px-5 py-4 shadow-[0_6px_18px_rgba(95,70,40,0.06)]">
+        <p class="text-[10px] tracking-[0.22em] uppercase text-gold-dark font-semibold">Share With Loved Ones</p>
+        <p class="text-[11.5px] text-taupe mt-1">Forward this invitation to family &amp; friends</p>
+        <div class="mt-3.5 flex items-center justify-center gap-2.5 flex-wrap">
+          <a id="whatsapp-share-btn"
+             href="https://wa.me/?text=You%20are%20warmly%20invited%20to%20the%20wedding%20celebrations%20of%20Shreyash%20%26%20Alisha%20on%204%E2%80%935%20Dec%202026%20at%20Jalaram%20Lawns%2C%20Gondia.%20Open%20your%20royal%20invitation%3A%20https%3A%2F%2Fshreyash-weds-alisha.netlify.app"
+             target="_blank" rel="noopener noreferrer"
+             class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-wine text-alabaster text-[10.5px] font-semibold tracking-[0.14em] uppercase shadow-[0_6px_16px_rgba(110,31,47,0.22)] hover:opacity-90 active:scale-[0.98] transition-all">
+            <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12.03 2C6.5 2 2 6.48 2 12c0 1.88.52 3.7 1.51 5.29L2 22l4.85-1.48A9.97 9.97 0 0 0 12.03 22C17.55 22 22 17.52 22 12S17.55 2 12.03 2zm5.79 14.13c-.24.68-1.42 1.3-1.97 1.38-.52.08-1.18.11-1.91-.12-.44-.14-1-.33-1.72-.64-3.03-1.31-5-4.37-5.15-4.57-.15-.2-1.23-1.64-1.23-3.13 0-1.49.78-2.22 1.06-2.52.27-.3.6-.38.8-.38h.58c.18 0 .43-.07.68.52.25.6.85 2.08.92 2.23.08.15.13.33.03.53-.1.2-.15.33-.3.5-.15.18-.32.4-.45.54-.15.15-.3.31-.13.61.18.3.78 1.29 1.67 2.08 1.15 1.03 2.12 1.35 2.42 1.5.3.15.48.13.66-.08.18-.2.75-.88.95-1.18.2-.3.4-.25.68-.15.28.1 1.75.83 2.05.98.3.15.5.22.58.35.07.12.07.72-.17 1.4z"/>
+            </svg>
+            Share on WhatsApp
+          </a>
+          <button id="copy-invite-link-btn" type="button"
+                  class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full border border-gold/60 bg-white text-espresso text-[10.5px] font-semibold tracking-[0.14em] uppercase hover:bg-gold/10 active:scale-[0.98] transition-all cursor-pointer">
+            <svg class="w-3.5 h-3.5 text-gold-dark shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span id="copy-link-label">Copy Link</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Polished Editorial Footer -->
+      <footer class="reveal-item mt-10 pt-6 pb-8">
+        <div class="flex items-center justify-center gap-3 mb-6">
+          <span class="h-[1px] w-16 bg-gradient-to-r from-transparent to-gold/60"></span>
+          <svg class="w-3.5 h-3.5 text-gold" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z"/>
+          </svg>
+          <span class="h-[1px] w-16 bg-gradient-to-l from-transparent to-gold/60"></span>
+        </div>
+
+        <div class="w-12 h-12 mx-auto rounded-full border border-gold/45 bg-white flex items-center justify-center mb-3 shadow-sm">
+          <svg class="w-7 h-7 text-gold-dark" aria-hidden="true"><use href="#ganesh-emblem"/></svg>
+        </div>
+        <p class="font-serif italic text-[21px] text-wine">We can&rsquo;t wait to celebrate with you!</p>
+        <p class="text-[10px] tracking-[0.22em] uppercase text-gold-dark mt-2 font-semibold">
+          With love, The Itankar &amp; Tidke Families
+        </p>
+        <p class="text-[10.5px] tracking-[0.14em] uppercase text-taupe/90 mt-1.5">
+          4th &ndash; 5th December 2026 &bull; Gondia, Maharashtra
+        </p>
+
+        <a href="#hero"
+           class="mt-5 inline-flex items-center gap-1.5 text-[9.5px] tracking-[0.22em] uppercase text-taupe hover:text-espresso transition-colors font-medium">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M18 15l-6-6-6 6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Back to Top
+        </a>
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* -------------------------------------------------------------------
+       * 1. TOAST HELPER
+       * ------------------------------------------------------------------- */
+      let toastTimer = null;
+      function showToast(message) {
+        const toast = document.getElementById('toast');
+        if (!toast) return;
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+      }
+
+      /* -------------------------------------------------------------------
+       * 2. YOUTUBE MUSIC PLAYER (Video ID: qbgXpKVZVnE)
+       * ------------------------------------------------------------------- */
+      const YT_VIDEO_ID = 'qbgXpKVZVnE';
+      const musicToggleBtn = document.getElementById('music-toggle');
+      const isFileProtocol = window.location.protocol === 'file:';
+
+      const YouTubeMusic = {
+        player: null,
+        isReady: false,
+        isPlaying: false,
+        pendingPlay: false,
+        hasError: false,
+        errorCode: null,
+        verifyTimer: null,
+
+        initScript() {
+          const tag = document.createElement('script');
+          tag.src = 'https://www.youtube.com/iframe_api';
+          tag.onerror = () => { this.hasError = true; };
+          document.head.appendChild(tag);
+        },
+
+        onAPIReady() {
+          if (typeof YT === 'undefined' || !YT.Player) return;
+          const playerVars = {
+            autoplay: 0,
+            controls: 0,
+            loop: 1,
+            playlist: YT_VIDEO_ID,
+            playsinline: 1,
+            rel: 0,
+            modestbranding: 1,
+            enablejsapi: 1
+          };
+          if (!isFileProtocol && window.location.origin && window.location.origin !== 'null') {
+            playerVars.origin = window.location.origin;
+          }
+
+          this.player = new YT.Player('yt-player', {
+            height: '220',
+            width: '220',
+            videoId: YT_VIDEO_ID,
+            playerVars,
+            events: {
+              onReady: () => {
+                this.isReady = true;
+                try {
+                  this.player.setVolume(75);
+                  if (this.pendingPlay) {
+                    this.pendingPlay = false;
+                    this.play();
+                  }
+                } catch (e) {}
+              },
+              onError: (event) => {
+                this.hasError = true;
+                this.errorCode = event?.data ?? null;
+                this.isPlaying = false;
+                this.pendingPlay = false;
+                clearTimeout(this.verifyTimer);
+                musicToggleBtn?.classList.remove('playing');
+                if (isFileProtocol || this.errorCode === 153 || this.errorCode === 150 || this.errorCode === 101) {
+                  showToast('Open via http:// server or live URL for music');
+                }
+              },
+              onStateChange: (event) => {
+                if (event.data === YT.PlayerState.PLAYING) {
+                  clearTimeout(this.verifyTimer);
+                  this.hasError = false;
+                  this.isPlaying = true;
+                  musicToggleBtn?.classList.add('playing');
+                } else if (event.data === YT.PlayerState.PAUSED) {
+                  clearTimeout(this.verifyTimer);
+                  this.isPlaying = false;
+                  musicToggleBtn?.classList.remove('playing');
+                } else if (event.data === YT.PlayerState.ENDED) {
+                  try {
+                    this.player.seekTo(0);
+                    this.player.playVideo();
+                  } catch (e) {}
+                }
+              }
+            }
+          });
+        },
+
+        play(fromUserGesture = false) {
+          if (this.hasError) {
+            showToast(isFileProtocol ? 'Open via http:// server or live URL for music' : 'Audio unavailable on this browser');
+            return;
+          }
+          if (!this.isReady || !this.player) {
+            this.pendingPlay = true;
+            return;
+          }
+          try {
+            this.player.unMute();
+            this.player.setVolume(75);
+            this.player.playVideo();
+            clearTimeout(this.verifyTimer);
+            this.verifyTimer = setTimeout(() => {
+              if (!this.player || typeof this.player.getPlayerState !== 'function') return;
+              const st = this.player.getPlayerState();
+              if (st !== YT.PlayerState.PLAYING && st !== YT.PlayerState.BUFFERING) {
+                this.isPlaying = false;
+                musicToggleBtn?.classList.remove('playing');
+                if (fromUserGesture) showToast('Tap music icon to start audio');
+              }
+            }, 1800);
+          } catch (e) {
+            this.isPlaying = false;
+            musicToggleBtn?.classList.remove('playing');
+          }
+        },
+
+        pause() {
+          this.pendingPlay = false;
+          clearTimeout(this.verifyTimer);
+          if (!this.isReady || !this.player) return;
+          try {
+            this.player.pauseVideo();
+            this.isPlaying = false;
+            musicToggleBtn?.classList.remove('playing');
+          } catch (e) {}
+        },
+
+        toggle() {
+          if (this.isPlaying) {
+            this.pause();
+            showToast('Music paused');
+          } else {
+            this.play(true);
+            if (!this.hasError) showToast('Playing wedding music...');
+          }
+        }
+      };
+
+      window.onYouTubeIframeAPIReady = function () {
+        YouTubeMusic.onAPIReady();
+      };
+      YouTubeMusic.initScript();
+      musicToggleBtn?.addEventListener('click', () => YouTubeMusic.toggle());
+
+      /* -------------------------------------------------------------------
+       * 3. SPARKLE / PETAL CONFETTI CANVAS
+       * ------------------------------------------------------------------- */
+      const fxCanvas = document.getElementById('fx-canvas');
+      const fxCtx = fxCanvas.getContext('2d');
+      let bursts = [];
+      let rafId = null;
+
+      function resizeFx() {
+        fxCanvas.width = window.innerWidth;
+        fxCanvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeFx);
+      resizeFx();
+
+      function spawnSparkleBurst(x, y, count = 42) {
+        const colors = ['#d6b67d', '#edd7a6', '#f2dfd9', '#b89146', '#fff7e2'];
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = 1.6 + Math.random() * 4.5;
+          bursts.push({
+            kind: 'petal',
+            x, y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 1.5,
+            size: 3 + Math.random() * 4.5,
+            rot: Math.random() * 360,
+            vRot: (Math.random() - 0.5) * 8,
+            alpha: 1,
+            decay: 0.015,
+            color: colors[Math.floor(Math.random() * colors.length)]
+          });
+        }
+        if (!rafId) tickFx();
+      }
+
+      function spawnFlowerBurst(x, y, count = 18, gentle = false) {
+        const petalColors = ['#f4d1ca', '#e9b8b4', '#f9ebe4', '#edd7a6', '#d8b46e'];
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = gentle ? (0.8 + Math.random() * 2.1) : (1.5 + Math.random() * 4.2);
+          const isBlossom = i % (gentle ? 2 : 3) === 0;
+          bursts.push({
+            kind: isBlossom ? 'flower' : 'petal',
+            x, y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - (gentle ? 1.1 : 1.9),
+            size: isBlossom ? (gentle ? 5.2 + Math.random() * 2.5 : 6.8 + Math.random() * 3.8) : (3.4 + Math.random() * 4.2),
+            rot: Math.random() * 360,
+            vRot: (Math.random() - 0.5) * 7,
+            alpha: 1,
+            decay: gentle ? 0.022 : 0.014,
+            color: petalColors[Math.floor(Math.random() * petalColors.length)]
+          });
+        }
+        if (!rafId) tickFx();
+      }
+
+      function drawBlossom(ctx, r, petalColor) {
+        for (let k = 0; k < 5; k++) {
+          ctx.save();
+          ctx.rotate((k * Math.PI * 2) / 5);
+          ctx.fillStyle = petalColor;
+          ctx.beginPath();
+          ctx.ellipse(0, -r * 0.65, r * 0.42, r * 0.68, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+        ctx.fillStyle = '#d4ab5c';
+        ctx.beginPath();
+        ctx.arc(0, 0, r * 0.34, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function tickFx() {
+        fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+        for (let i = bursts.length - 1; i >= 0; i--) {
+          const p = bursts[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.075;
+          p.vx *= 0.985;
+          p.rot += p.vRot;
+          p.alpha -= (p.decay || 0.015);
+          if (p.alpha <= 0) {
+            bursts.splice(i, 1);
+            continue;
+          }
+          fxCtx.save();
+          fxCtx.globalAlpha = Math.max(0, p.alpha);
+          fxCtx.translate(p.x, p.y);
+          fxCtx.rotate((p.rot * Math.PI) / 180);
+          if (p.kind === 'flower') {
+            drawBlossom(fxCtx, p.size, p.color);
+          } else {
+            fxCtx.fillStyle = p.color;
+            fxCtx.beginPath();
+            fxCtx.ellipse(0, 0, p.size, p.size * 0.55, 0, 0, Math.PI * 2);
+            fxCtx.fill();
+          }
+          fxCtx.restore();
+        }
+        if (bursts.length > 0) {
+          rafId = requestAnimationFrame(tickFx);
+        } else {
+          rafId = null;
+        }
+      }
+
+      /* -------------------------------------------------------------------
+       * 4. ENVELOPE OPENING SEQUENCE
+       * ------------------------------------------------------------------- */
+      const envelopeOverlay = document.getElementById('envelope-overlay');
+      const envelopeStage = document.getElementById('envelope-stage');
+      const envPrompt = document.getElementById('env-prompt');
+      let envelopeOpened = false;
+
+      function openEnvelope() {
+        if (envelopeOpened) return;
+        envelopeOpened = true;
+        YouTubeMusic.play(true);
+        if (envPrompt) envPrompt.style.opacity = '0';
+        envelopeStage.classList.add('opening');
+
+        setTimeout(() => {
+          spawnSparkleBurst(window.innerWidth / 2, window.innerHeight * 0.48, 48);
+        }, 280);
+
+        setTimeout(() => {
+          envelopeOverlay.classList.add('done');
+          document.body.classList.remove('envelope-locked');
+          triggerVisibleReveals();
+        }, 1050);
+      }
+
+      envelopeStage?.addEventListener('click', openEnvelope);
+
+      /* -------------------------------------------------------------------
+       * 5. SCROLL REVEAL OBSERVER
+       * ------------------------------------------------------------------- */
+      const revealItems = document.querySelectorAll('.reveal-item');
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+
+      revealItems.forEach((el) => revealObserver.observe(el));
+
+      function triggerVisibleReveals() {
+        revealItems.forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 0.95) {
+            el.classList.add('visible');
+          }
+        });
+      }
+
+      /* -------------------------------------------------------------------
+       * 6. GOLD-FOIL SCRATCH-TO-REVEAL CARDS (DAY / MONTH / YEAR)
+       * ------------------------------------------------------------------- */
+      const scratchBoxes = document.querySelectorAll('.scratch-box');
+      let revealedCount = 0;
+
+      scratchBoxes.forEach((box) => {
+        const canvas = box.querySelector('.scratch-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let isCleared = false;
+        let pointerMoved = false;
+        let lastFlowerSpawn = 0;
+
+        // Paint metallic champagne-gold foil texture
+        function paintFoil() {
+          const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+          grad.addColorStop(0, '#e8cf9a');
+          grad.addColorStop(0.35, '#caa358');
+          grad.addColorStop(0.65, '#f2dfb3');
+          grad.addColorStop(1, '#b88f45');
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // Subtle foil grain lines
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.22)';
+          ctx.lineWidth = 1;
+          for (let i = -20; i < 120; i += 9) {
+            ctx.beginPath();
+            ctx.moveTo(i, 0);
+            ctx.lineTo(i + 35, canvas.height);
+            ctx.stroke();
+          }
+        }
+        paintFoil();
+
+        function clearAll() {
+          if (isCleared) return;
+          isCleared = true;
+          canvas.classList.add('cleared');
+          revealedCount++;
+          const rect = box.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
+          spawnFlowerBurst(cx, cy, revealedCount === 3 ? 38 : 22, false);
+          if (revealedCount === 3) {
+            const hint = document.getElementById('scratch-hint');
+            if (hint) hint.textContent = 'Friday, 4th December 2026 — Save the Date!';
+            showToast('4th December 2026 — Save the Date!');
+          }
+        }
+
+        function checkClearedRatio() {
+          if (isCleared) return;
+          const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+          let transparent = 0;
+          for (let i = 3; i < pixels.length; i += 16) {
+            if (pixels[i] < 128) transparent++;
+          }
+          const ratio = transparent / (pixels.length / 16);
+          if (ratio > 0.36) clearAll();
+        }
+
+        function scratchAt(clientX, clientY) {
+          const rect = canvas.getBoundingClientRect();
+          const x = ((clientX - rect.left) / rect.width) * canvas.width;
+          const y = ((clientY - rect.top) / rect.height) * canvas.height;
+          ctx.globalCompositeOperation = 'destination-out';
+          ctx.beginPath();
+          ctx.arc(x, y, 16, 0, Math.PI * 2);
+          ctx.fill();
+
+          const now = performance.now();
+          if (now - lastFlowerSpawn > 55) {
+            lastFlowerSpawn = now;
+            spawnFlowerBurst(clientX, clientY, 4, true);
+          }
+        }
+
+        canvas.addEventListener('pointerdown', (e) => {
+          isDrawing = true;
+          pointerMoved = false;
+          canvas.setPointerCapture?.(e.pointerId);
+          scratchAt(e.clientX, e.clientY);
+        });
+
+        canvas.addEventListener('pointermove', (e) => {
+          if (!isDrawing) return;
+          pointerMoved = true;
+          scratchAt(e.clientX, e.clientY);
+        });
+
+        canvas.addEventListener('pointerup', () => {
+          if (!isDrawing) return;
+          isDrawing = false;
+          if (!pointerMoved) {
+            // Simple tap also smoothly reveals for accessibility
+            clearAll();
+          } else {
+            checkClearedRatio();
+          }
+        });
+
+        canvas.addEventListener('pointercancel', () => { isDrawing = false; });
+      });
+
+      /* -------------------------------------------------------------------
+       * 7. LIVE COUNTDOWN TO 4 DEC 2026, 11:00 AM IST
+       * ------------------------------------------------------------------- */
+      const targetTime = new Date('2026-12-04T11:00:00+05:30').getTime();
+      const cdDays = document.getElementById('cd-days');
+      const cdHours = document.getElementById('cd-hours');
+      const cdMins = document.getElementById('cd-mins');
+      const cdSecs = document.getElementById('cd-secs');
+
+      function updateCountdown() {
+        const diff = Math.max(0, targetTime - Date.now());
+        const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        const m = Math.floor((diff / (1000 * 60)) % 60);
+        const s = Math.floor((diff / 1000) % 60);
+        if (cdDays) cdDays.textContent = String(d).padStart(2, '0');
+        if (cdHours) cdHours.textContent = String(h).padStart(2, '0');
+        if (cdMins) cdMins.textContent = String(m).padStart(2, '0');
+        if (cdSecs) cdSecs.textContent = String(s).padStart(2, '0');
+      }
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+
+      /* -------------------------------------------------------------------
+       * 8. ADD TO CALENDAR + COPY ADDRESS + RSVP
+       * ------------------------------------------------------------------- */
+      const addCalendarBtn = document.getElementById('add-calendar-btn');
+      const calendarOptions = document.getElementById('calendar-options');
+      const downloadIcsBtn = document.getElementById('download-ics-btn');
+
+      addCalendarBtn?.addEventListener('click', () => {
+        if (!calendarOptions) return;
+        const isHidden = calendarOptions.classList.contains('hidden');
+        calendarOptions.classList.toggle('hidden', !isHidden);
+        calendarOptions.classList.toggle('flex', isHidden);
+        addCalendarBtn.setAttribute('aria-expanded', String(isHidden));
+      });
+
+      downloadIcsBtn?.addEventListener('click', () => {
+        const icsLines = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//Shreyash & Alisha//Wedding Invitation//EN',
+          'CALSCALE:GREGORIAN',
+          'METHOD:PUBLISH',
+          'BEGIN:VEVENT',
+          'UID:shreyash-alisha-wedding-2026@shreyash-weds-alisha.netlify.app',
+          'DTSTAMP:20261125T180000Z',
+          'DTSTART:20261204T053000Z',
+          'DTEND:20261205T173000Z',
+          'SUMMARY:Shreyash & Alisha Wedding Celebrations',
+          'DESCRIPTION:Join us in celebrating the wedding of Shreyash Itankar & Alisha Tidke! Ceremonies begin 4th Dec 2026 at 11:00 AM IST.',
+          'LOCATION:Jalaram Lawns, Gondia, MH, 441601',
+          'STATUS:CONFIRMED',
+          'END:VEVENT',
+          'END:VCALENDAR'
+        ].join('\r\n');
+
+        const blob = new Blob([icsLines], { type: 'text/calendar;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'Shreyash-Alisha-Wedding.ics';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+        showToast('Calendar file downloaded');
+      });
+
+      async function copyTextToClipboard(text) {
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch (err) {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          ta.remove();
+        }
+      }
+
+      const copyAddressBtn = document.getElementById('copy-address-btn');
+      const copyBtnLabel = document.getElementById('copy-btn-label');
+      copyAddressBtn?.addEventListener('click', async () => {
+        await copyTextToClipboard('Jalaram Lawns, Gondia, MH, 441601');
+        if (copyBtnLabel) copyBtnLabel.textContent = 'Copied!';
+        showToast('Venue address copied');
+        setTimeout(() => { if (copyBtnLabel) copyBtnLabel.textContent = 'Copy'; }, 2400);
+      });
+
+      const liveInviteUrl = window.location.protocol.startsWith('http') && !['127.0.0.1', 'localhost'].includes(window.location.hostname)
+        ? window.location.href.split('#')[0]
+        : 'https://shreyash-weds-alisha.netlify.app';
+
+      const whatsappShareBtn = document.getElementById('whatsapp-share-btn');
+      if (whatsappShareBtn) {
+        const shareText = `You are warmly invited to the wedding celebrations of Shreyash & Alisha on 4–5 Dec 2026 at Jalaram Lawns, Gondia. Open your royal invitation: ${liveInviteUrl}`;
+        whatsappShareBtn.href = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+      }
+
+      const copyInviteLinkBtn = document.getElementById('copy-invite-link-btn');
+      const copyLinkLabel = document.getElementById('copy-link-label');
+      copyInviteLinkBtn?.addEventListener('click', async () => {
+        const linkToCopy = window.location.protocol.startsWith('http') ? window.location.href.split('#')[0] : liveInviteUrl;
+        await copyTextToClipboard(linkToCopy);
+        if (copyLinkLabel) copyLinkLabel.textContent = 'Copied!';
+        showToast('Invite link copied');
+        setTimeout(() => { if (copyLinkLabel) copyLinkLabel.textContent = 'Copy Link'; }, 2400);
+      });
+
+      const rsvpBtn = document.getElementById('rsvp-confirm-btn');
+      const rsvpText = document.getElementById('rsvp-btn-text');
+      const rsvpNote = document.getElementById('rsvp-confirmed-note');
+      let rsvpDone = false;
+
+      rsvpBtn?.addEventListener('click', (e) => {
+        if (!rsvpDone) {
+          rsvpDone = true;
+          if (rsvpText) rsvpText.textContent = 'Celebration Confirmed';
+          rsvpNote?.classList.remove('hidden');
+          const rect = e.currentTarget.getBoundingClientRect();
+          spawnSparkleBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 42);
+          showToast('Thank you for confirming!');
+        } else {
+          showToast('We look forward to celebrating with you!');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
